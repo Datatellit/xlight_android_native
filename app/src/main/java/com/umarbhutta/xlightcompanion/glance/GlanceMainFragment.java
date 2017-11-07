@@ -621,7 +621,8 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                                     }
                                     SlidingMenuMainActivity.m_mainDevice = m_XltDevice;
                                     if (SlidingMenuMainActivity.m_mainDevice != null) {
-                                        setHandlerMessage();//设置handler监听，获取数据室内温湿度
+                                        //设置handler监听，获取数据室内温湿度
+                                        setHandlerMessage();
                                     }
                                 }
                             }
