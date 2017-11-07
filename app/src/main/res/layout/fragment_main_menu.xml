@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/btn_login_color"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_header_height"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/padding_top">
+
+        <com.umarbhutta.xlightcompanion.views.CircleImageView
+            android:id="@+id/userIcon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/ic_account_circle" />
+
+        <LinearLayout
+            android:id="@+id/llPerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:singleLine="true"
+                android:text="Welcome, Umar"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="umar.bh@datatellit.com"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@drawable/btn_login"
+            android:text="@string/login_text"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nav_glance"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:drawableLeft="@drawable/home"
+            android:drawablePadding="20dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pickerview_topbar_paddingright"
+            android:text="@string/first_page"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/nav_control"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:drawableLeft="@drawable/home_nav_control"
+            android:drawablePadding="20dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pickerview_topbar_paddingright"
+            android:text="@string/rule"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/nav_scenario"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:drawableLeft="@drawable/home_scenario"
+            android:drawablePadding="20dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pickerview_topbar_paddingright"
+            android:text="@string/scene"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/nav_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:drawableLeft="@drawable/home_schedule"
+            android:drawablePadding="20dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pickerview_topbar_paddingright"
+            android:text="@string/report"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/nav_settings"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:drawableLeft="@drawable/home_setting"
+            android:drawablePadding="20dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pickerview_topbar_paddingright"
+            android:text="@string/setting"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/nav_help"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:drawableLeft="@drawable/home_help"
+            android:drawablePadding="20dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/pickerview_topbar_paddingright"
+            android:text="@string/help"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+            android:background="@color/line_color" />
+    </LinearLayout>
+</LinearLayout>

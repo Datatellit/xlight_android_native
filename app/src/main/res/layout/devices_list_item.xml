@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_item"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/home_device_list" />
+
+        <TextView
+            android:id="@+id/deviceName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/iv"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:text="@string/living_room_lamp"
+            android:textColor="@color/textDarkGrey" />
+
+        <TextView
+            android:id="@+id/devicePlan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/deviceName"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:text="@string/has_start_plan"
+            android:textColor="@color/textDarkGrey" />
+
+        <TextView
+            android:id="@+id/main_device"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/devicePlan"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="@string/main_device"
+            android:textColor="@color/textDarkGrey"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:id="@+id/deviceSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/switch_selector"
+            android:gravity="center"
+            android:button="@null"
+            android:paddingRight="22dp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

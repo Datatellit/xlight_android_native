@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/top_layout" />
+
+    <LinearLayout
+        android:id="@+id/mainLightsLL"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ll_top_edit"
+        android:background="@android:color/transparent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/lightImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/aquabg_noring" />
+
+            <ToggleButton
+                android:id="@+id/ring1Button"
+                android:layout_width="120dp"
+                android:layout_height="110dp"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="40dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/transparent" />
+
+            <ToggleButton
+                android:id="@+id/ring2Button"
+                android:layout_width="135dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="165dp"
+                android:layout_marginTop="60dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/transparent" />
+
+            <ToggleButton
+                android:id="@+id/ring3Button"
+                android:layout_width="90dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="285dp"
+                android:layout_marginTop="40dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/transparent" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_below="@+id/ll_top_edit"
+        android:background="@color/textDarkGrey"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingLeft="20dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/deviceRingLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:text="LIVING ROOM, ALL RINGS"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/mainLightsLL"
+        android:orientation="vertical"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/scenarioNameLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mainLightsLL"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="left|start"
+                    android:text="@string/mingcheng"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/textColorPrimary" />
+
+                <TextView
+                    android:id="@+id/scenarioName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:hint="@string/please_select" />
+
+                <ImageView
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/arraw" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/scenarioLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="left|start"
+                    android:text="Scenario"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/textColorPrimary" />
+
+                <Spinner
+                    android:id="@+id/scenarioSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="right"
+                    android:paddingRight="20dp">
+
+                </Spinner>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/line9"
+                style="@style/LineStyle"
+                android:layout_below="@+id/scenarioNameLL" />
+
+            <LinearLayout
+                android:id="@+id/scenarioNoneLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/line9"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/nameLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line1"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="16dp">
+
+                    <TextView
+                        android:id="@+id/powerLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="left|start"
+                        android:text="@string/power"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/textColorPrimary" />
+
+                    <CheckBox
+                        android:id="@+id/powerSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/switch_selector"
+                        android:button="@null" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line2"
+                    style="@style/LineStyle"
+                    android:layout_below="@+id/nameLL" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_scenario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/line2"
+                    android:orientation="horizontal"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        android:id="@+id/tv_scenario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="left|start"
+                        android:text="@string/scene"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/textColorPrimary" />
+
+                    <HorizontalScrollView
+                        android:id="@+id/hor_scroll_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_scenario"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/ll_horizontal_scrollview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@+id/tv_scenario"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line1"
+                    style="@style/LineStyle"
+                    android:layout_below="@+id/rl_scenario" />
+
+
+                <RelativeLayout
+                    android:id="@+id/brightnessLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line1"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:id="@+id/brightnessLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="left|start"
+                        android:text="@string/brightness"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/textColorPrimary" />
+
+                    <com.jaygoo.widget.RangeSeekBar
+                        android:id="@+id/brightnessSeekBar"
+                        app:cellMode="number"
+                        app:lineColorEdge="@color/colorSeekBarDefault"
+                        app:lineColorSelected="@color/bar_color"
+                        app:markTextArray="@array/markArray"
+                        app:seekBarMode="single"
+                        app:seekBarResId="@drawable/seekbar_thumb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/brightnessLabel" />
+
+                    <SeekBar
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="30dp"
+                        android:layout_toRightOf="@+id/brightnessLabel"
+                        android:backgroundTint="@color/blue"
+                        android:max="100"
+                        android:maxHeight="5dp"
+                        android:minHeight="5dp"
+                        android:progress="80"
+                        android:progressDrawable="@drawable/video_seekbar"
+                        android:secondaryProgress="0"
+                        android:thumb="@drawable/thumb"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line8"
+                    style="@style/LineStyle"
+                    android:layout_below="@+id/brightnessLL" />
+
+                <LinearLayout
+                    android:id="@+id/colorTemperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line8"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="16dp">
+
+                    <TextView
+                        android:id="@+id/cctLabel"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="left|start"
+                        android:text="@string/color_temp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/textColorPrimary" />
+
+                    <TextView
+                        android:id="@+id/cctLabelColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="2dp"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="left|start"
+                        android:text="@string/cold_color"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="14sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp">
+
+                        <ImageView
+                            android:id="@+id/bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/white_seek"
+                            android:scaleType="matrix" />
+
+                        <SeekBar
+                            android:id="@+id/cctSeekBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/bg"
+                            android:layout_alignParentRight="true"
+                            android:paddingTop="8dp"
+                            android:progressDrawable="@drawable/seekbar_thumb_color"
+                            android:thumb="@drawable/thumb" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/line3"
+                    style="@style/LineStyle"
+                    android:layout_below="@+id/colorTemperature" />
+
+
+                <LinearLayout
+                    android:id="@+id/colorLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line3"
+                    android:orientation="horizontal"
+                    android:paddingBottom="22dp"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="22dp">
+
+                    <TextView
+                        android:id="@+id/colorLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="left|start"
+                        android:text="@string/color"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/textColorPrimary" />
+
+                    <RelativeLayout
+                        android:id="@+id/colorLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/colorTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="13dp"
+                            android:layout_toLeftOf="@+id/iv"
+                            android:text="@string/select"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/arraw" />
+
+                        <RelativeLayout
+                            android:id="@+id/dotLayout"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:layout_toLeftOf="@id/colorTextView" />
+
+
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

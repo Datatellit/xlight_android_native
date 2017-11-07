@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/top_main_layout" />
+
+    <RelativeLayout
+        android:id="@+id/rl_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_main_top">
+        <TextView
+            android:id="@+id/tv_no_scenario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:text="@string/no_add_scene"
+            android:textSize="@dimen/text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_have"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll_main_top"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:text="@string/all_scene"
+            android:textSize="@dimen/text_size" />
+
+        <View
+            android:id="@+id/view"
+            style="@style/subscribe_seperate_line"
+            android:layout_below="@id/tv"
+            android:layout_marginLeft="0dp" />
+
+        <ListView
+            android:id="@+id/scenarioListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:divider="@drawable/line_divider"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/view"
+            android:layout_marginTop="5dp" />
+    </RelativeLayout>
+</RelativeLayout>

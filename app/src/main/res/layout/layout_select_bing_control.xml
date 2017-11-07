@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingLeft="22.5dp"
+    android:paddingRight="22.5dp"
+    android:paddingTop="46dp" >
+
+    <Button
+        android:id="@+id/btn_choose_add_wifi_device"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:text="@string/scan_device_add_first"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_choose_scan_add_device"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="12dip"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:text="@string/scan_qr_add"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+    <Button
+        android:id="@+id/btn_choose_add_line_device"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="12dip"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:text="@string/input_order_add"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:layout_marginTop="12dip"
+        android:background="@android:color/holo_blue_light"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -1,0 +1,96 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        release {
+            keyAlias 'key'
+            keyPassword 'android'
+            storeFile file('F:/keyStore/release.jks')
+            storePassword 'android'
+        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        applicationId "com.umarbhutta.xlightcompanion"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 3
+        versionName "1.4"
+        multiDexEnabled true
+    }
+    useLibrary 'org.apache.http.legacy'
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['assets']
+        }
+        dexOptions {
+            javaMaxHeapSize "2g"
+        }
+    }
+    aaptOptions
+            {
+                cruncherEnabled = false
+            }
+    productFlavors {
+    }
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include 'x86', 'armeabi-v7a'
+//            universalApk true
+//        }
+//    }
+}
+
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':slidingmenu_library')
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.github.clans:fab:1.6.4'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'io.particle:cloudsdk:0.3.4'
+    compile 'io.particle:devicesetup:0.3.6'
+    compile 'me.priyesh:chroma:1.0.2'
+    compile 'com.larswerkman:HoloColorPicker:1.5'
+    compile 'com.google.code.gson:gson:2.2.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile 'com.android.support.constraint:constraint-layout:+'
+    testCompile 'junit:junit:4.12'
+    compile project(':slidingmenu_library')
+    // BY DEFAULT, BUILD APP AGAINST THE LOCAL SDK SOURCE
+    // (i.e.: make modifications to the SDK source in the local repo show up in this app
+    // just by rebuilding)
+    compile project(':cloudsdk')
+    compile project(':PushSDK')
+    compile 'com.amap.api:location:latest.integration'
+    compile 'com.mikhaellopez:circularprogressbar:1.1.1'
+    compile 'com.kaopiz:kprogresshud:1.0.2'
+    compile 'com.baoyz.actionsheet:library:1.1.7'
+    //
+    // **OR**
+    //
+    // comment out the above, and
+    // UNCOMMENT THE FOLLOWING TO USE A PUBLISHED VERSION OF THE SDK:
+    //compile 'io.particle:cloudsdk:0.3.4'
+    compile 'io.particle:devicesetup:0.3.6'
+    compile 'me.priyesh:chroma:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
+    compile project(':RangeSeekBar')
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_main_layout" />
+
+    <LinearLayout
+        android:id="@+id/no_relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:text="@string/no_add_rules"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="left|start"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:text="@string/all_rules"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp" />
+
+        <View
+            style="@style/subscribe_seperate_line"
+            android:layout_marginLeft="0dp" />
+
+        <ListView
+            android:id="@+id/rulesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:divider="@color/dividerColor"
+            android:dividerHeight="1dp"
+            android:paddingLeft="20dp"
+            android:scrollbars="none" />
+    </LinearLayout>
+
+</LinearLayout>

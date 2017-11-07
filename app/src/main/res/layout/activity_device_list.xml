@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_layout" />
+
+    <TextView
+        android:id="@+id/tv_select_main_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+        android:paddingTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/please_select_main_device"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_no_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:text="@string/you_have_no_device"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <View android:id="@+id/view_top_line"
+        style="@style/subscribe_seperate_line"
+        android:layout_marginLeft="0dp" />
+
+    <ListView
+        android:id="@+id/lv_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/dividerColor"
+        android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
+        android:dividerHeight="1dp" />
+    <View
+        android:id="@+id/view_bottom_line"
+        style="@style/subscribe_seperate_line" />
+</LinearLayout>

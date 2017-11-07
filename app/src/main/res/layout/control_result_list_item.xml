@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingBottom="2dp"
+    android:id="@+id/ll_item"
+    android:paddingRight="20dp"
+    android:paddingTop="2dp">
+
+    <ImageView
+        android:id="@+id/iv_lift_img"
+        android:layout_width="40dp"
+        android:layout_height="@dimen/item_height"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerInside"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_setting_name"
+        style="@style/SettingsItem"
+        android:layout_width="0dp"
+        android:paddingLeft="5dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingRight="5dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center|left"
+        android:text="@string/persion_center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_left_arrow" />
+
+</LinearLayout>

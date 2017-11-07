@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#33000000"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+        android:id="@+id/personal_center_pop_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="46.66dp"
+            android:background="@drawable/select_pic_title"
+            android:gravity="center"
+            android:text="@string/select_pic"
+            android:textSize="13sp" />
+
+        <RelativeLayout
+            android:id="@+id/btn_take_photo"
+            android:layout_width="match_parent"
+            android:layout_height="46.66dp"
+            android:background="@android:color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/camera"
+                android:textColor="@color/blue"
+                android:textSize="17.33sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/little_gray_1" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_pick_photo"
+            android:layout_width="match_parent"
+            android:layout_height="46.66dp"
+            android:background="@drawable/select_pic_from_gallery">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/calary_select"
+                android:textColor="@color/blue"
+                android:textSize="17.33sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/little_gray_1" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="46.66dp"
+            android:layout_marginBottom="13.33dp"
+            android:layout_marginTop="13.33dp"
+            android:background="@drawable/select_pic_cancel">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/cancel"
+                android:textColor="@color/blue"
+                android:textSize="17.33sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

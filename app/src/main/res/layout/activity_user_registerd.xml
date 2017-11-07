@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_layout" />
+
+    <RelativeLayout
+        android:id="@+id/rl_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:id="@+id/et_user_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/edt_bg"
+            android:drawableLeft="@drawable/icon_user"
+            android:drawablePadding="10dp"
+            android:singleLine="true"
+            android:gravity="center_vertical"
+            android:hint="@string/login_text_user"
+            android:paddingLeft="6dp"
+            android:textColorHint="@color/edit_login_color" />
+
+        <EditText
+            android:id="@+id/et_verification_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_user_account"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edt_bg"
+            android:drawableLeft="@drawable/icon_password"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:hint="@string/input_verifycode"
+            android:paddingLeft="8dp"
+            android:textColorHint="@color/edit_login_color" />
+
+        <EditText
+            android:id="@+id/et_user_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_verification_code"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edt_bg"
+            android:lines="1"
+            android:drawableLeft="@drawable/icon_password"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:hint="@string/input_new_pwd"
+            android:paddingLeft="8dp"
+            android:inputType="textPassword"
+            android:textColorHint="@color/edit_login_color" />
+
+
+        <Button
+            android:id="@+id/btn_finash_registered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_user_password"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bt_bg"
+            android:text="@string/regist"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_line"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:backgroundTint="@color/red"
+            android:background="@drawable/icon_checked"
+            android:visibility="gone"
+            android:button="@null"
+            android:checked="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/has_agree"
+            android:textColor="@color/textDarkGrey" />
+
+        <TextView
+            android:id="@+id/tv_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/regist_protocal"
+            android:textColor="@color/bar_color" />
+    </LinearLayout>
+</RelativeLayout>
