@@ -191,6 +191,18 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
         return super.dispatchKeyEvent(event);
     }
 
+    private long startTime = 0;
+
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+        if ((currentTime - startTime) >= 2000) {
+            ToastUtil.showToast(this, R.string.again_exit);
+            startTime = currentTime;
+        } else {
+            finish();
+        }
+    }
 
     private SensorManager sensorManager;
     private Vibrator vibrator;
@@ -200,7 +212,6 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
         super.onResume();
         MobclickAgent.onResume(this);
         getShakeInfo();
-
     }
 
     public void onPause() {

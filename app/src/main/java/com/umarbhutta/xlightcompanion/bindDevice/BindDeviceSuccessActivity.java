@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -42,12 +43,6 @@ public class BindDeviceSuccessActivity extends BaseActivity implements View.OnCl
             getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
         }
 
-        RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.rootLayout);
-
-        ViewGroup.LayoutParams params = rootLayout.getLayoutParams();
-        params.height = DisplayUtils.getScreenHeight(this) - 100;
-        rootLayout.setLayoutParams(params);
-
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +57,7 @@ public class BindDeviceSuccessActivity extends BaseActivity implements View.OnCl
         tvTitle.setText(R.string.find_devices);
         coreID = getIntent().getStringExtra("coreID");
         Log.d("XLight", "coreID:" + coreID);
-        EditText et = (EditText)findViewById(R.id.etControllerName);
+        EditText et = (EditText) findViewById(R.id.etControllerName);
         et.setSelection(et.getText().length());
     }
 
@@ -73,7 +68,7 @@ public class BindDeviceSuccessActivity extends BaseActivity implements View.OnCl
 
     public void nextClick(View v) {
         EditText et = (EditText) findViewById(R.id.etControllerName);
-        Log.d("XLight",et.getText().toString());
+        Log.d("XLight", et.getText().toString());
         if (et.getText().toString().trim().equals("")) {
             ToastUtil.showToast(this, getResources().getString(R.string.add_device_success_name));
             return;
@@ -82,6 +77,7 @@ public class BindDeviceSuccessActivity extends BaseActivity implements View.OnCl
         Intent intent = new Intent(this, BindDeviceBulbActivity.class);
         intent.putExtra("coreID", coreID);
         intent.putExtra("deviceName", et.getText().toString());
+        intent.putExtra("mainDevice", (((CheckBox) findViewById(R.id.chkMain)).isChecked() ? 1 : 0));
         startActivity(intent);
     }
 }

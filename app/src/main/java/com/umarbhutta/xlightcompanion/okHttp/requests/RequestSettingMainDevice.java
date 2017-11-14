@@ -29,25 +29,22 @@ public class RequestSettingMainDevice implements HttpUtils.OnHttpRequestCallBack
      * @param context
      * @param maindevice             主设备标识字段，传值1，代表为主设备
      * @param deviceId               设备id
-     * @param userId                 要设置主设备的用户id
      * @param mCommentRequstCallback
      */
-    public void settingDevice(Context context, int maindevice, int deviceId, int userId, CommentRequstCallback mCommentRequstCallback) {
+    public void settingDevice(Context context, int maindevice, int deviceId, CommentRequstCallback mCommentRequstCallback) {
         this.context = context;
         this.mCommentRequstCallback = mCommentRequstCallback;
-        if (UserUtils.isLogin(context)) {
-
-            try {
-                JSONObject object = new JSONObject();
-                object.put("maindevice", maindevice);
-                object.put("userId", userId);
-                HttpUtils.getInstance().putRequestInfo(NetConfig.URL_SET_MAIN_DEVICE + deviceId + "/setmaindevice?access_token=" + UserUtils.getUserInfo(context).getAccess_token(),
-                        object.toString(), null, this);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+//        if (UserUtils.isLogin(context)) {
+        try {
+            JSONObject object = new JSONObject();
+            object.put("maindevice", maindevice);
+            //object.put("userId", userId);
+            HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_SET_MAIN_DEVICE, deviceId, UserUtils.getAccessToken(context)),
+                    object.toString(), null, this);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+//        }
     }
 
     @Override

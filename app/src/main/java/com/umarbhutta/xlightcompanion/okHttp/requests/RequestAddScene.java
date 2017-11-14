@@ -37,7 +37,7 @@ public class RequestAddScene implements HttpUtils.OnHttpRequestCallBack {
             Gson gson = new Gson();
             String paramStr = gson.toJson(params);
 
-            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ADD_SCENE + UserUtils.getUserInfo(context).getAccess_token(),
+            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ADD_SCENE + UserUtils.getAccessToken(context),
                     paramStr, null, this);
 
         }

@@ -27,7 +27,7 @@ public class RequestDeleteScene implements HttpUtils.OnHttpRequestCallBack {
         this.context = context;
         this.mCommentRequstCallback = mCommentRequstCallback;
         if (UserUtils.isLogin(context))
-            HttpUtils.getInstance().deleteRequestInfo(NetConfig.URL_DELETE_SCENE + deviceId + "?access_token=" + UserUtils.getUserInfo(context).getAccess_token(),
+            HttpUtils.getInstance().deleteRequestInfo(NetConfig.URL_DELETE_SCENE + deviceId + "?access_token=" + UserUtils.getAccessToken(context),
                     null, null, this);
     }
 

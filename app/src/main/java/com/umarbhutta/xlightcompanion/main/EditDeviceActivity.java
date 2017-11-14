@@ -36,6 +36,7 @@ import com.umarbhutta.xlightcompanion.Tools.StatusReceiver;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
+import com.umarbhutta.xlightcompanion.help.DeviceInfo;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.DeviceInfoResult;
@@ -188,6 +189,8 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
         }
 
         mCurrentDevice = SlidingMenuMainActivity.xltDeviceMaps.get(deviceInfo.coreid);
+        if (mCurrentDevice == null)
+            return;
         mscenarioName.setText(deviceInfo.devicenodename);
         if (mCurrentDevice.getEnableEventSendMessage()) {
             upUIDateAddHandler();
@@ -356,15 +359,18 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                 int intValue = msg.getData().getInt("State", -255);
                 if (intValue != -255) {
                     powerSwitch.setChecked(intValue > 0);
+                    deviceInfo.ison = intValue > 0 ? xltDevice.STATE_ON : xltDevice.STATE_OFF;
                 }
 
                 intValue = msg.getData().getInt("BR", -255);
                 if (intValue != -255) {
 //                    brightnessSeekBar.setProgress(intValue);
                     brightnessSeekBar.setValue(intValue);
+                    deviceInfo.brightness = intValue;
                 }
                 intValue = msg.getData().getInt("CCT", -255);
                 if (intValue != -255) {
+                    deviceInfo.cct = intValue;
                     cctSeekBar.setProgress(intValue - 2700);
                 }
                 //颜色
@@ -386,6 +392,8 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                 int color = Color.rgb(R, G, B);
                 circleIcon.setColor(color);
                 colorTextView.setText("RGB(" + R + "," + G + "," + B + ")");
+                GlanceMainFragment.devicenodes.remove(mPositon);
+                GlanceMainFragment.devicenodes.add(mPositon, deviceInfo);
                 codeChange = false;
             }
         };
@@ -417,7 +425,8 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onDestroy() {
-        mCurrentDevice.removeDeviceEventHandler(m_handlerControl);
+        if (mCurrentDevice != null)
+            mCurrentDevice.removeDeviceEventHandler(m_handlerControl);
         //mCurrentDevice.Disconnect();
         super.onDestroy();
     }
@@ -504,20 +513,6 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                         ToastUtil.showToast(EditDeviceActivity.this, "" + errMsg);
                     }
                 });
-            }
-        });
-
-
-        // 场景列表跳到对应的位置
-        RequestDeviceDetailInfo.getInstance().getDeviceInfo(this, deviceInfo.id, new RequestDeviceDetailInfo.OnRequestFirstPageInfoCallback() {
-            @Override
-            public void onRequestFirstPageInfoSuccess(DeviceInfoResult mDeviceInfoResult) {
-                Logger.i("详细信息 = " + mDeviceInfoResult.toString());
-            }
-
-            @Override
-            public void onRequestFirstPageInfoFail(int code, String errMsg) {
-
             }
         });
     }
@@ -615,8 +610,7 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
             mView.setBackgroundResource(R.drawable.add_scenario_blue_bg);
             TextView mText = textViews.get(index);
             mText.setTextColor(getResources().getColor(R.color.white));
-            editDeViceInfo(null);
-
+            //editDeViceInfo(null);
         }
     };
 
@@ -684,48 +678,15 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 
         JSONObject jsonObject = new JSONObject();
         try {
+            jsonObject.put("devicenodename", deviceName);
             jsonObject.put("ison", powerSwitch.isChecked() ? 1 : 0);
-            jsonObject.put("userId", UserUtils.getUserInfo(this).getId());
-//            jsonObject.put("devicename", deviceName);。。。。。。。。。
-            JSONArray devicenodes = new JSONArray();
-            jsonObject.put("devicenodes", devicenodes);
-
-            JSONObject devicenodesJSONObject = new JSONObject();
-            devicenodes.put(devicenodesJSONObject);
-
-            devicenodesJSONObject.put("devicenodeId", deviceInfo.id);
-            devicenodesJSONObject.put("devicenodename", deviceName);
-            devicenodesJSONObject.put("ison", powerSwitch.isChecked() ? 1 : 0);
-            if (null == curSene) {
-                devicenodesJSONObject.put("scenarioId", 0);  // 场景id,自定义场景
-            } else {
-                devicenodesJSONObject.put("scenarioId", curSene.id);  // 场景id
-            }
-            JSONArray deviceringsArr = new JSONArray();
-            devicenodesJSONObject.put("devicerings", deviceringsArr);
-
-
-            for (int i = 0; i < 3; i++) {
-
-                JSONObject deviceringsObj = new JSONObject();
-                deviceringsArr.put(deviceringsObj);
-
-                deviceringsObj.put("ison", powerSwitch.isChecked() ? 1 : 0);
-                deviceringsObj.put("R", red);
-                deviceringsObj.put("G", green);
-                deviceringsObj.put("B", blue);
-                deviceringsObj.put("color", "rgb(" + red + "," + green + "," + blue + ")");
-                deviceringsObj.put("cct", cctSeekBar.getProgress() + 2700);
-                deviceringsObj.put("brightness", brightnessSeekBar.getCurrentRange()[0]);
-            }
-
-
+            jsonObject.put("cct", cctSeekBar.getProgress() + 2700);
+            jsonObject.put("brightness", brightnessSeekBar.getCurrentRange()[0]);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
-        HttpUtils.getInstance().putRequestInfo(NetConfig.URL_EDIT_DEVICE_INFO + deviceInfo.deviceId + "?access_token=" + UserUtils.getUserInfo(this).getAccess_token(),
+        HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_EDIT_DEVICE_INFO, deviceInfo.id, UserUtils.getAccessToken(this)),
                 jsonObject.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
                     @Override
                     public void onHttpRequestSuccess(Object result) {
@@ -736,12 +697,10 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 //                                ToastUtil.showToast(EditDeviceActivity.this, getString(R.string.modify_success));
 //                                setResult(0);
 //                                EditDeviceActivity.this.finish();
-
                                 if (!TextUtils.isEmpty(deviceName)) {
                                     deviceInfo.devicenodename = deviceName;
                                     mscenarioName.setText(deviceName);
                                 }
-
                             }
                         });
                     }

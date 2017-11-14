@@ -41,6 +41,7 @@ public class BindDeviceBulbActivity extends BaseActivity implements View.OnClick
     private String deviceName = null;
     private int deviceType = 2;
     private ViewPager mViewPager;
+    private int mainDevice = 1;
 
     private CardPagerAdapter mCardAdapter;
     private ShadowTransformer mCardShadowTransformer;
@@ -57,12 +58,6 @@ public class BindDeviceBulbActivity extends BaseActivity implements View.OnClick
             getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
         }
 
-        RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.rootLayout);
-
-        ViewGroup.LayoutParams params = rootLayout.getLayoutParams();
-        params.height = DisplayUtils.getScreenHeight(this) - 100;
-        rootLayout.setLayoutParams(params);
-
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +72,7 @@ public class BindDeviceBulbActivity extends BaseActivity implements View.OnClick
         tvTitle.setText(R.string.select_blub_type);
         deviceName = getIntent().getStringExtra("deviceName");
         coreID = getIntent().getStringExtra("coreID");
+        mainDevice = getIntent().getIntExtra("mainDevice", 1);
         Log.d("XLight", "coreID:" + coreID);
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -122,8 +118,13 @@ public class BindDeviceBulbActivity extends BaseActivity implements View.OnClick
 
     public void nextClick(View v) {
         ToastUtil.showLoading(this);
+        AddDeviceParams device;
         // 收集信息
-        AddDeviceParams device = new AddDeviceParams(coreID, deviceName, UserUtils.getUserInfo(this).id, DeviceInfo.getSign(this), 1, deviceType);
+        if (UserUtils.isLogin(this)) {
+            device = new AddDeviceParams(coreID, deviceName, UserUtils.getUserInfo(this).id, DeviceInfo.getSign(this), mainDevice, deviceType);
+        } else {
+            device = new AddDeviceParams(coreID, deviceName, DeviceInfo.getSign(this), mainDevice, deviceType);
+        }
         Gson gson = new Gson();
         String paramStr = gson.toJson(device);
         RequestAddDevice.getInstance().addDevice(this, paramStr, new RequestAddDevice.OnAddDeviceCallBack() {

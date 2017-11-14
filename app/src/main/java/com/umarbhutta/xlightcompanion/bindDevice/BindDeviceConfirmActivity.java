@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.util.concurrent.ExecutionError;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
@@ -46,12 +45,6 @@ public class BindDeviceConfirmActivity extends BaseActivity implements View.OnCl
         if (currentapiVersion >= 20) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
         }
-
-        RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.rootLayout);
-
-        ViewGroup.LayoutParams params = rootLayout.getLayoutParams();
-        params.height = DisplayUtils.getScreenHeight(this) - 100;
-        rootLayout.setLayoutParams(params);
 
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llBack.setOnClickListener(new View.OnClickListener() {

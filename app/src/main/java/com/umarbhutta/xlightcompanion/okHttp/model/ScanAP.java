@@ -5,7 +5,7 @@ package com.umarbhutta.xlightcompanion.okHttp.model;
  */
 
 public class ScanAP {
-    public String ch = null;
+    public int ch = 0;
     public int mdr;
     public int rssi;
     public int sec = 4194308;

@@ -101,10 +101,12 @@
     <string name="add_device_wifi_step7">设备配置成功</string>
     <string name="add_device_wifi_step6">正在检查设备状态</string>
     <string name="add_device_wifi_check">Wi-Fi密码至少为8位</string>
+    <string name="add_device_wifi_disconnect">控制器连接中断，请重试</string>
     <string name="add_device_success_title">连接Wi-Fi成功</string>
     <string name="add_device_success_desc">恭喜，您已成功连接控制器和Wi-Fi。</string>
     <string name="add_device_success_hint">给您的控制器起一个名字吧</string>
     <string name="add_device_success_name">请输入控制器名称</string>
+    <string name="add_device_success_master">设为我的主设备</string>
     <string name="add_device_bulb_title_rainbow">三环灯</string>
     <string name="add_device_bulb_title_sunny">面板灯</string>
     <string name="add_device_bulb_rainbow">支持亮度、色温、颜色的调节。</string>
@@ -144,6 +146,7 @@
     <string name="xingqiri">星期日</string>
     <string name="custom">自定义</string>
     <string name="device_connect_failed">设备 [%s] 连接失败</string>
+    <string name="device_disconnect">设备离线，请下拉重连</string>
 
     <string name="zhouyi">周一</string>
     <string name="zhouer">周二</string>
@@ -340,4 +343,5 @@
     <string name="code_delete_fail">删除规则失败</string>
     <string name="open_gps">请打开GPS</string>
     <string name="hint_find_pwd">请输入登录Xlight的邮箱，我们会发送验证码到您的邮箱</string>
+    <string name="again_exit">再按一次退出程序</string>
 </resources>

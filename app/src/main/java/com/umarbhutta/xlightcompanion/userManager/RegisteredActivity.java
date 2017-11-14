@@ -16,6 +16,7 @@ import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.StringUtil;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
+import com.umarbhutta.xlightcompanion.help.DeviceInfo;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
@@ -158,7 +159,7 @@ public class RegisteredActivity extends BaseActivity implements View.OnClickList
         String et_user_accountStr = et_user_account.getText().toString();
         String et_user_passwordStr = et_user_password.getText().toString();
 
-        LoginParam param = new LoginParam(et_user_accountStr, et_user_passwordStr);
+        LoginParam param = new LoginParam(et_user_accountStr, et_user_passwordStr, DeviceInfo.getSign(this));
 
         Gson gson = new Gson();
         String paramStr = gson.toJson(param);

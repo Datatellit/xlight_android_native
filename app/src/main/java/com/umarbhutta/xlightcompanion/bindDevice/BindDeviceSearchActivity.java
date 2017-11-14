@@ -64,12 +64,6 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
             getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
         }
 
-        RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.rootLayout);
-
-        ViewGroup.LayoutParams params = rootLayout.getLayoutParams();
-        params.height = DisplayUtils.getScreenHeight(this) - 100;
-        rootLayout.setLayoutParams(params);
-
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override

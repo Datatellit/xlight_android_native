@@ -26,7 +26,7 @@ public class RequestDeviceDetailInfo implements HttpUtils.OnHttpRequestCallBack 
      */
     public void getDeviceInfo(Context context, int deviceId, OnRequestFirstPageInfoCallback mOnRequestFirstPageInfoCallback) {
         this.mOnRequestFirstPageInfoCallback = mOnRequestFirstPageInfoCallback;
-        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_DEVICE_DETAIL_INFO + deviceId + "?access_token=" + UserUtils.getUserInfo(context).getAccess_token(), DeviceInfoResult.class, this);
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_DEVICE_DETAIL_INFO + deviceId + "?access_token=" + UserUtils.getAccessToken(context), DeviceInfoResult.class, this);
     }
 
     @Override

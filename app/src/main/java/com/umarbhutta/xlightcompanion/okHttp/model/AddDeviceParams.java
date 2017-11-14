@@ -20,4 +20,12 @@ public class AddDeviceParams {
         this.maindevice = maindevice;
         this.devicetype = devicetype;
     }
+
+    public AddDeviceParams(String coreID, String deviceName, String androididentify, int maindevice, int devicetype) {
+        this.coreid = coreID;
+        this.devicename = deviceName;
+        this.androididentify = androididentify;
+        this.maindevice = maindevice;
+        this.devicetype = devicetype;
+    }
 }

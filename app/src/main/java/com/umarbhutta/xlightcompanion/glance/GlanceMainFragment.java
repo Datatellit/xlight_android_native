@@ -66,8 +66,6 @@ import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,6 +73,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -115,13 +114,13 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.home_setting:
                 // 跳转到选择的主设备列表页面
-                if (UserUtils.isLogin(getContext())) {
-                    onFabPressed(DeviceListActivity.class);
-                } else {
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
-                    startActivityForResult(intent, 1);
-                    getActivity().finish();
-                }
+                //if (UserUtils.isLogin(getContext())) {
+                onFabPressed(DeviceListActivity.class);
+//                } else {
+//                    Intent intent = new Intent(getContext(), LoginActivity.class);
+//                    startActivityForResult(intent, 1);
+//                    getActivity().finish();
+//                }
 
                 break;
             case R.id.home_menu:
@@ -178,31 +177,30 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 //跳转到绑定设备页面
-                if (UserUtils.isLogin(getContext())) {
-                    ActionSheet.createBuilder(getContext(), getFragmentManager())
-                            .setCancelButtonTitle(getString(R.string.cancel))
-                            .setOtherButtonTitles(getString(R.string.add_device_bluetooth), getString(R.string.add_device_accesspoint))
-                            .setCancelableOnTouchOutside(true)
-                            .setListener(new ActionSheet.ActionSheetListener() {
-                                @Override
-                                public void onDismiss(ActionSheet actionSheet, boolean isCancel) {
+                // if (UserUtils.isLogin(getContext())) {
+                ActionSheet.createBuilder(getContext(), getFragmentManager())
+                        .setCancelButtonTitle(getString(R.string.cancel))
+                        .setOtherButtonTitles(getString(R.string.add_device_bluetooth), getString(R.string.add_device_accesspoint))
+                        .setCancelableOnTouchOutside(true)
+                        .setListener(new ActionSheet.ActionSheetListener() {
+                            @Override
+                            public void onDismiss(ActionSheet actionSheet, boolean isCancel) {
 
-                                }
+                            }
 
-                                @Override
-                                public void onOtherButtonClick(ActionSheet actionSheet, int index) {
-                                    Intent intent = new Intent(getContext(), BindDeviceConfirmActivity.class);
-                                    intent.putExtra("type", index);
-                                    startActivityForResult(intent, 1);
-                                    actionSheet.dismiss();
-                                }
-                            }).show();
-                } else {
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
-                    startActivityForResult(intent, 1);
-                    getActivity().finish();
-                }
-
+                            @Override
+                            public void onOtherButtonClick(ActionSheet actionSheet, int index) {
+                                Intent intent = new Intent(getContext(), BindDeviceConfirmActivity.class);
+                                intent.putExtra("type", index);
+                                startActivityForResult(intent, 1);
+                                actionSheet.dismiss();
+                            }
+                        }).show();
+//                } else {
+//                    Intent intent = new Intent(getContext(), LoginActivity.class);
+//                    startActivityForResult(intent, 1);
+//                    getActivity().finish();
+//                }
             }
         });
 
@@ -255,7 +253,14 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                 //加载数据
                 Log.d("XLight", "RefreshBegin");
                 initLocation();
-                refreshDeviceInfo(frame);
+                //判断是全部加在，还是局部刷新
+                if (devicesListAdapter != null) {
+                    Log.d("XLight", "Partial refresh");
+                    refreshDeviceInfo(frame);
+                } else {
+                    Log.d("XLight", "reload data refresh");
+                    getBaseInfo(frame);
+                }
             }
         });
         return view;
@@ -459,6 +464,10 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
      * 获取设备信息
      */
     public void getBaseInfo() {
+        getBaseInfo(null);
+    }
+
+    public void getBaseInfo(PtrFrameLayout ptrFrame) {
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             ToastUtil.showToast(getActivity(), R.string.net_error);
             //TODO
@@ -477,29 +486,33 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
             addDeviceMapsSDK(deviceList);
             return;
         }
-        if (!UserUtils.isLogin(getActivity())) {
-            return;
-        }
-        refreshDeviceInfo(null);
+//        if (!UserUtils.isLogin(getActivity())) {
+//            return;
+//        }
+        refreshDeviceInfo(ptrFrame);
     }
 
-    public void refreshDeviceInfo(final PtrFrameLayout ptrFrameLayout) {
-        final ProgressDialog progressDialog = ProgressDialogUtils.showProgressDialog(getContext(), getString(R.string.loading));
-        if (ptrFrameLayout == null) {
-            if (progressDialog != null) {
+    private ProgressDialog progressDialog;
+
+    public void refreshDeviceInfo(final PtrFrameLayout ptrFrameLayout1) {
+        Log.d("XLight", "refreshDeviceInfo");
+        progressDialog = ProgressDialogUtils.showProgressDialog(getContext(), getString(R.string.loading));
+        if (ptrFrameLayout1 == null) {
+            if (progressDialog != null && !progressDialog.isShowing()) {
                 progressDialog.show();
             }
         }
         RequestFirstPageInfo.getInstance(getActivity()).getBaseInfo(new RequestFirstPageInfo.OnRequestFirstPageInfoCallback() {
             @Override
             public void onRequestFirstPageInfoSuccess(final DeviceInfoResult mDeviceInfoResult) {
+                Log.d("XLight", "get first page data success");
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (progressDialog != null && ptrFrameLayout == null) {
+                        if (progressDialog != null && ptrFrameLayout1 == null) {
                             progressDialog.dismiss();
-                        } else if (ptrFrameLayout != null) {
-                            ptrFrameLayout.refreshComplete();
+                        } else if (ptrFrameLayout1 != null) {
+                            ptrFrameLayout1.refreshComplete();
                         }
                         List<Rows> devices = mDeviceInfoResult.rows;
                         if (null != devices && devices.size() > 0) {
@@ -527,18 +540,27 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onRequestFirstPageInfoFail(int code, String errMsg) {
-                //失败的处理
-                if (progressDialog != null && ptrFrameLayout == null) {
-                    progressDialog.dismiss();
-                } else if (ptrFrameLayout != null) {
-                    ptrFrameLayout.refreshComplete();
-                }
+                Log.d("XLight", "request first data error");
+                final String err = errMsg;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //失败的处理
+                        if (progressDialog != null && progressDialog.isShowing() && ptrFrameLayout1 == null) {
+                            progressDialog.dismiss();
+                        }
+                        if (ptrFrameLayout1 != null) {
+                            ptrFrameLayout1.refreshComplete();
+                        }
+                        ToastUtil.showToast(getContext(), err);
+                    }
+                });
             }
         });
     }
 
     public void getSensorInfo(List<String> devices) {
-        RequestSensorInfo.getInstance(getActivity()).getBaseInfo(new RequestSensorInfo.OnRequestSensorInfoCallback() {
+        RequestSensorInfo.getInstance(getActivity()).getBaseInfo(devices, new RequestSensorInfo.OnRequestSensorInfoCallback() {
             @Override
             public void onRequestSensorInfoSuccess(final List<Sensorsdata> mSensorsdata) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -559,7 +581,7 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
             public void onRequestSensorInfoFail(int code, String errMsg) {
 
             }
-        }, devices);
+        });
     }
 
     @Override
@@ -576,7 +598,14 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
     private int deviceSDKResCount = 0;
 
     public void addDeviceMapsSDK(final List<Rows> deviceList) {
-        if (null != deviceList && deviceList.size() > 0) {
+        if (deviceList != null && deviceList.size() == 0) {
+            devicenodes.clear();
+            default_text.setVisibility(View.VISIBLE);
+            if (devicesListAdapter != null) {
+                devicesListAdapter.notifyDataSetChanged();
+            }
+
+        } else if (null != deviceList && deviceList.size() > 0) {
             devicenodes.clear();
             Log.d("XLight", "device count:" + deviceList.size());
             default_text.setVisibility(View.GONE);
@@ -584,14 +613,20 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
             if (SlidingMenuMainActivity.xltDeviceMaps != null) {
                 SlidingMenuMainActivity.xltDeviceMaps.clear();
             }
-            LoginResult lr = UserUtils.getUserInfo(getActivity());
+            LoginResult lr = null;
+            if (UserUtils.isLogin(getContext())) {
+                lr = UserUtils.getUserInfo(getActivity());
+            }
             connectFailed.clear();
             deviceSDKResCount = 0;
             for (int i = 0; i < deviceList.size(); i++) {
                 // Initialize SmartDevice SDK
                 final xltDevice m_XltDevice = new xltDevice();
                 final Rows device = deviceList.get(i);
-                m_XltDevice.Init(getActivity(), lr.username, lr.password);
+                if (lr != null)
+                    m_XltDevice.Init(getActivity(), lr.username, lr.password);
+                else
+                    m_XltDevice.Init(getActivity());
                 if (device.devicenodes != null) {
                     for (int lv_idx = 0; lv_idx < device.devicenodes.size(); lv_idx++) {
                         m_XltDevice.addNodeToDeviceList(device.devicenodes.get(lv_idx).nodeno, xltDevice.DEFAULT_DEVICE_TYPE, device.devicenodes.get(lv_idx).devicenodename);
@@ -631,7 +666,11 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ToastUtil.showToast(getActivity(), String.format(getString(R.string.device_connect_failed), StringUtils.join(connectFailed.toArray(), ",")));
+                                        StringBuilder sb = new StringBuilder();
+                                        for (Object s : connectFailed.toArray()) {
+                                            sb.append(s.toString() + ",");
+                                        }
+                                        ToastUtil.showToast(getActivity(), String.format(getString(R.string.device_connect_failed), sb.toString().substring(0, sb.toString().length() - 1)));
                                     }
                                 });
                             }
@@ -653,6 +692,11 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                         if (codeChange)
                             return;
                         SlidingMenuMainActivity.m_mainDevice = SlidingMenuMainActivity.xltDeviceMaps.get(devicenodes.get(position).coreid);
+                        if (SlidingMenuMainActivity.m_mainDevice == null) {
+                            // 提醒设备离线
+                            ToastUtil.showToast(getContext(), R.string.device_disconnect);
+                            return;
+                        }
                         SlidingMenuMainActivity.m_mainDevice.setDeviceID(devicenodes.get(position).nodeno);
                         Log.d("XLight", "main power switch:" + checked);
                         SlidingMenuMainActivity.m_mainDevice.PowerSwitch(checked ? xltDevice.STATE_ON : xltDevice.STATE_OFF);
@@ -662,6 +706,11 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                 devicesListAdapter.setOnClickListener(new DevicesMainListAdapter.OnClickListener() {
                     @Override
                     public void onClickListener(int position) {
+                        SlidingMenuMainActivity.m_mainDevice = SlidingMenuMainActivity.xltDeviceMaps.get(devicenodes.get(position).coreid);
+                        if (SlidingMenuMainActivity.m_mainDevice == null) {
+                            ToastUtil.showToast(getContext(), R.string.device_disconnect);
+                            return;
+                        }
                         // 点击事件 跳转到编辑设备页面
                         Intent intent = new Intent(getActivity(), EditDeviceActivity.class);
                         intent.putExtra("info", devicenodes.get(position));

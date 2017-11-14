@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
@@ -22,6 +23,10 @@ import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
+import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
+import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeleteRuleDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
@@ -114,17 +119,40 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         Intent intent = new Intent(getContext(), activity);
         startActivity(intent);
     }
+
     /**
      * 退出登录
      */
     private void logout() {
-        if(GlanceMainFragment.devicenodes != null || GlanceMainFragment.devicenodes.size() > 0){
+        if (GlanceMainFragment.devicenodes != null || GlanceMainFragment.devicenodes.size() > 0) {
             GlanceMainFragment.devicenodes.clear();
         }
         SlidingMenuMainActivity.mShakeInfo = null;
         SharedPreferencesUtils.putObject(getActivity(), SharedPreferencesUtils.KEY_DEVICE_LIST, null);
         UserUtils.saveUserInfo(getActivity(), null);
-        startActivity(new Intent(getActivity(), LoginActivity.class));
+        if (UserUtils.isExpires(getContext(), SharedPreferencesUtils.KEY__ANONYMOUSINFO)) {
+            //开始匿名登录
+            AnonymousParams anonymousParams = UserUtils.getAnonymous(getContext());
+            Gson gson = new Gson();
+            String paramStr = gson.toJson(anonymousParams);
+            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ANONYMOUS_LOGIN, paramStr, AnonymousResult.class, new HttpUtils.OnHttpRequestCallBack() {
+                @Override
+                public void onHttpRequestSuccess(Object result) {
+                    //登录成功，设置到本次的UserUtils对象中
+                    AnonymousResult ar = (AnonymousResult) result;
+                    UserUtils.saveAnonymousInfo(getContext(), ar);
+                }
+
+                @Override
+                public void onHttpRequestFail(int code, String errMsg) {
+
+                }
+            });
+        }
+        //登出后回到首页
+        Intent intent = new Intent(getActivity(), SlidingMenuMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         getActivity().finish();
     }
 
@@ -147,6 +175,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             ra.toggle();
         }
     }
+
     private void showDeleteDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 //        builder.setTitle(getString(R.string.set_logout));

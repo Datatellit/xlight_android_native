@@ -98,9 +98,11 @@
     <string name="add_device_wifi_step7">Configuration device successfully</string>
     <string name="add_device_wifi_step6">Checking device status</string>
     <string name="add_device_wifi_check">Wi-Fi password is greater than or equal to 8</string>
+    <string name="add_device_wifi_disconnect">Controller connection interrupted, please try again</string>
     <string name="add_device_success_title">Connect to Wi-Fi successfully</string>
     <string name="add_device_success_desc">Congratulations, you have successfully connected the controller and Wi-Fi</string>
     <string name="add_device_success_hint">Give your controller a name</string>
+    <string name="add_device_success_master">Set as my master device</string>
     <string name="add_device_success_name">Please input controller name</string>
     <string name="find_devices">Add Controller</string>
     <string name="add_device_two_desc">Please keep the phone as close as possible to the controller</string>
@@ -145,6 +147,7 @@
     <string name="xingqiri">Sunday</string>
     <string name="custom">Custom</string>
     <string name="device_connect_failed">Device [%s] connection failed</string>
+    <string name="device_disconnect">Device disconnected,Please try to pull the reconnect</string>
 
     <string name="zhouyi">Monday</string>
     <string name="zhouer">Tuesday</string>
@@ -343,4 +346,5 @@
     <string name="open_gps">Please open GPS</string>
     <string name="lamp_tool">Lamp</string>
     <string name="hint_find_pwd">Please enter the eamil address you signed up with to receive a verification code</string>
+    <string name="again_exit">Press again to exit the program</string>
 </resources>

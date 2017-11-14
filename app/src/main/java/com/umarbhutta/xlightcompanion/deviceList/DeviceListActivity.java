@@ -2,6 +2,8 @@ package com.umarbhutta.xlightcompanion.deviceList;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +19,9 @@ import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.adapter.DeviceListAdapter;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
+import com.umarbhutta.xlightcompanion.help.DeviceInfo;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
+import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSettingMainDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestUnBindDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
@@ -51,6 +55,10 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //重新跳转
+                Intent intent = new Intent(getApplicationContext(), SlidingMenuMainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
             }
         });
@@ -63,7 +71,7 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         tv_no_device = (TextView) findViewById(R.id.tv_no_device);
         view_top_line = findViewById(R.id.view_top_line);
         view_bottom_line = findViewById(R.id.view_bottom_line);
-        if (UserUtils.isLogin(getApplicationContext()) && GlanceMainFragment.devicenodes != null && GlanceMainFragment.devicenodes.size() > 0) {
+        if (GlanceMainFragment.devicenodes != null && GlanceMainFragment.devicenodes.size() > 0) {
             tv_no_device.setVisibility(View.GONE);
             tv_select_main_device.setVisibility(View.VISIBLE);
             listView.setVisibility(View.VISIBLE);
@@ -91,7 +99,6 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         selectPosition = position;
         setMainDevice(position);
-
     }
 
     //设置主设备
@@ -103,7 +110,7 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         showProgressDialog(getString(R.string.setting));
 
         int deviceId = GlanceMainFragment.deviceList.get(position).id;
-        RequestSettingMainDevice.getInstance().settingDevice(this, 1, deviceId, UserUtils.getUserInfo(this).getId(), new CommentRequstCallback() {
+        RequestSettingMainDevice.getInstance().settingDevice(this, 1, deviceId, new CommentRequstCallback() {
             @Override
             public void onCommentRequstCallbackSuccess() {
                 runOnUiThread(new Runnable() {
@@ -179,32 +186,39 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
 
         RequestUnBindDevice.getInstance().unBindController(this, "" + GlanceMainFragment.deviceList.get(position).id,
                 new CommentRequstCallback() {
-            @Override
-            public void onCommentRequstCallbackSuccess() {
-                runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        cancelProgressDialog();
-                        ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_sucess));
+                    public void onCommentRequstCallbackSuccess() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cancelProgressDialog();
+                                ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_sucess));
+                                Rows r = GlanceMainFragment.deviceList.get(position);
+                                for (int i = 0; i < GlanceMainFragment.devicenodes.size(); ) {
+                                    if (GlanceMainFragment.devicenodes.get(i).coreid == r.coreid) {
+                                        GlanceMainFragment.devicenodes.remove(i);
+                                    } else {
+                                        i++;
+                                    }
+                                }
+                                GlanceMainFragment.deviceList.remove(position);
+                                //移除对应的node
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
 
-                        GlanceMainFragment.deviceList.remove(position);
-                        adapter.notifyDataSetChanged();
-
+                    @Override
+                    public void onCommentRequstCallbackFail(int code, final String errMsg) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cancelProgressDialog();
+                                ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_fail) + errMsg);
+                            }
+                        });
                     }
                 });
-            }
-
-            @Override
-            public void onCommentRequstCallbackFail(int code, final String errMsg) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        cancelProgressDialog();
-                        ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_fail) + errMsg);
-                    }
-                });
-            }
-        });
     }
 
 

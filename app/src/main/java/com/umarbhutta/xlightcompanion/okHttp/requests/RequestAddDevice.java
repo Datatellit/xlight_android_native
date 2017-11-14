@@ -33,14 +33,14 @@ public class RequestAddDevice implements HttpUtils.OnHttpRequestCallBack {
     public void addDevice(Context context, String jsonObject, OnAddDeviceCallBack mOnAddDeviceCallBack) {
         this.context = context;
         this.mOnAddDeviceCallBack = mOnAddDeviceCallBack;
-        if (UserUtils.isLogin(context)) {
-            try {
-                HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ADD_DEVICE + UserUtils.getUserInfo(context).getAccess_token(),
-                        jsonObject, AddDeviceResult.class, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        //if (UserUtils.isLogin(context)) {
+        try {
+            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ADD_DEVICE + UserUtils.getAccessToken(context),
+                    jsonObject, AddDeviceResult.class, this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        //}
     }
 
     @Override

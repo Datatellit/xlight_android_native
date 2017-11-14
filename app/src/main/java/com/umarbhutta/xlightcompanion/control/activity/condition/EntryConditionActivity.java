@@ -181,7 +181,7 @@ public class EntryConditionActivity extends BaseActivity {
      * 获取规则条件详细信息
      */
     private void getRuleconditions() {
-        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_RULES_RULECONDITIONS + "?access_token=" + UserUtils.getUserInfo(getApplicationContext()).getAccess_token(),
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_RULES_RULECONDITIONS + "?access_token=" + UserUtils.getAccessToken(getApplicationContext()),
                 Ruleconditions.class, new HttpUtils.OnHttpRequestCallBack() {
                     @Override
                     public void onHttpRequestSuccess(Object result) {

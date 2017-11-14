@@ -37,7 +37,7 @@ public class RequestEditScene implements HttpUtils.OnHttpRequestCallBack {
             Gson gson = new Gson();
             String paramStr = gson.toJson(params);
 
-            HttpUtils.getInstance().putRequestInfo(NetConfig.URL_EDIT_SCENE + id + "?access_token=" + UserUtils.getUserInfo(context).getAccess_token(),
+            HttpUtils.getInstance().putRequestInfo(NetConfig.URL_EDIT_SCENE + id + "?access_token=" + UserUtils.getAccessToken(context),
                     paramStr, null, this);
         }
     }

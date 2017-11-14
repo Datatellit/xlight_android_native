@@ -33,6 +33,11 @@ public class SharedPreferencesUtils {
     public static final String KEY__USERINFO = "light_userinfo_key";
 
     /**
+     * 用户信息
+     */
+    public static final String KEY__ANONYMOUSINFO = "lightanonymousinfo_key";
+
+    /**
      * 设备列表
      */
     public static final String KEY_DEVICE_LIST = "device_list_key";

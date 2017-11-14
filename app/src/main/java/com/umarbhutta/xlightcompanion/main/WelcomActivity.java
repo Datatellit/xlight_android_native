@@ -11,8 +11,11 @@ import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
+import com.umarbhutta.xlightcompanion.help.DeviceInfo;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.LoginParam;
 import com.umarbhutta.xlightcompanion.okHttp.model.LoginResult;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
@@ -27,14 +30,35 @@ public class WelcomActivity extends BaseActivity implements HttpUtils.OnHttpRequ
         AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         handler.sendEmptyMessageDelayed(100, 2000);
         if (UserUtils.isLogin(this)) {
-            if (UserUtils.isExpires(this)) {
+            if (UserUtils.isExpires(this, SharedPreferencesUtils.KEY__USERINFO)) {
                 // 即将过期，再次获取用户数据
                 LoginResult user = UserUtils.getUserInfo(this);
-                LoginParam param = new LoginParam(user.username, user.password);
+                LoginParam param = new LoginParam(user.username, user.password, DeviceInfo.getSign(this));
                 Gson gson = new Gson();
                 String paramStr = gson.toJson(param);
                 HttpUtils.getInstance().postRequestInfo(NetConfig.URL_LOGIN, paramStr, LoginResult.class, this);
             }
+        } else {
+            if (!UserUtils.isExpires(this, SharedPreferencesUtils.KEY__ANONYMOUSINFO)) {
+                return;
+            }
+            //开始匿名登录
+            AnonymousParams anonymousParams = UserUtils.getAnonymous(this);
+            Gson gson = new Gson();
+            String paramStr = gson.toJson(anonymousParams);
+            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ANONYMOUS_LOGIN, paramStr, AnonymousResult.class, new HttpUtils.OnHttpRequestCallBack() {
+                @Override
+                public void onHttpRequestSuccess(Object result) {
+                    //登录成功，设置到本次的UserUtils对象中
+                    AnonymousResult ar = (AnonymousResult) result;
+                    UserUtils.saveAnonymousInfo(getApplicationContext(), ar);
+                }
+
+                @Override
+                public void onHttpRequestFail(int code, String errMsg) {
+
+                }
+            });
         }
     }
 

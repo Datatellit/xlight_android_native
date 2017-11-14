@@ -31,14 +31,14 @@ public class RequestCheckDevice implements HttpUtils.OnHttpRequestCallBack {
     public void checkDevice(Context context, String deviceId, OnAddDeviceCallBack mOnAddDeviceCallBack) {
         this.context = context;
         this.mOnAddDeviceCallBack = mOnAddDeviceCallBack;
-        if (UserUtils.isLogin(context)) {
-            try {
-                HttpUtils.getInstance().getRequestInfo(String.format(NetConfig.URL_CHECK_DEVICE, deviceId, UserUtils.getUserInfo(context).getAccess_token()),
-                        CheckDeviceResult.class, this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        //if (UserUtils.isLogin(context)) {
+        try {
+            HttpUtils.getInstance().getRequestInfo(String.format(NetConfig.URL_CHECK_DEVICE, deviceId, UserUtils.getAccessToken(context)),
+                    CheckDeviceResult.class, this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        // }
     }
 
     @Override

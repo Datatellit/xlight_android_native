@@ -159,7 +159,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         if (mDialog != null) {
             mDialog.show();
         }
-        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_GET_REPORT_FORM + UserUtils.getUserInfo(getActivity()).getAccess_token(), null, new HttpUtils.OnHttpRequestCallBack() {
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_GET_REPORT_FORM + UserUtils.getAccessToken(getActivity()), null, new HttpUtils.OnHttpRequestCallBack() {
             @Override
             public void onHttpRequestSuccess(final Object result) {
                 if (getActivity() == null) {

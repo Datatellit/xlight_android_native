@@ -7,6 +7,7 @@ package com.umarbhutta.xlightcompanion.okHttp;
 public class NetConfig {
 
     //        public static final String SERVER_ADDRESS_DOMAIN = "https://iot.xlight.io";
+    public static final String SERVER_IP = "211.159.174.249";
     public static final String SERVER_ADDRESS_DOMAIN = "http://211.159.174.249:8082";
     public static final String DCI_ADDRESS_DOMAIN = "http://211.159.174.249:8081";
 
@@ -35,6 +36,10 @@ public class NetConfig {
      */
     public static final String URL_LOGIN = SERVER_ADDRESS_DOMAIN + "/users/login";
     /**
+     * 匿名登录
+     */
+    public static final String URL_ANONYMOUS_LOGIN = SERVER_ADDRESS_DOMAIN + "/anonymous/login";
+    /**
      * 注册
      */
     public static final String URL_REGISTER = SERVER_ADDRESS_DOMAIN + "/users";
@@ -59,7 +64,7 @@ public class NetConfig {
     /**
      * 设置主设备
      */
-    public static final String URL_SET_MAIN_DEVICE = SERVER_ADDRESS_DOMAIN + "/devices/";
+    public static final String URL_SET_MAIN_DEVICE = SERVER_ADDRESS_DOMAIN + "/devices/%s/setmaindevice?access_token=%s";
     /**
      * 设备详细信息
      */
@@ -149,7 +154,7 @@ public class NetConfig {
     /**
      * 编辑设备信息
      */
-    public static final String URL_EDIT_DEVICE_INFO = SERVER_ADDRESS_DOMAIN + "/devices/";
+    public static final String URL_EDIT_DEVICE_INFO = SERVER_ADDRESS_DOMAIN + "/devicenodes/%s?access_token=%s";
     /**
      * 配置摇一摇信息
      */

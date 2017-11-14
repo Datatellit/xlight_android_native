@@ -87,7 +87,7 @@ public class HttpUtils extends BaseHttp {
      * @param mOnHttpRequestCallBack 用于接受服务器返回数据
      */
     public void putRequestInfo(String url, String jsonParam, Class mClass, OnHttpRequestCallBack mOnHttpRequestCallBack) {
-
+        Log.v("HttpUtils", url);
         this.mClass = mClass;
         this.mOnHttpRequestCallBack = mOnHttpRequestCallBack;
 

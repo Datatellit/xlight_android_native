@@ -42,6 +42,7 @@ import com.umarbhutta.xlightcompanion.help.ClsUtils;
 import com.umarbhutta.xlightcompanion.help.WifiAdmin;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
+import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.CheckDeviceResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.ScanAP;
 import com.umarbhutta.xlightcompanion.okHttp.model.ScanAPs;
@@ -58,9 +59,27 @@ import java.io.InputStreamReader;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimerTask;
 
+import io.particle.android.sdk.devicesetup.ApConnector;
+import io.particle.android.sdk.devicesetup.commands.CommandClient;
+import io.particle.android.sdk.devicesetup.commands.ConfigureApCommand;
+import io.particle.android.sdk.devicesetup.commands.ConnectAPCommand;
+import io.particle.android.sdk.devicesetup.commands.DeviceIdCommand;
+import io.particle.android.sdk.devicesetup.commands.PublicKeyCommand;
+import io.particle.android.sdk.devicesetup.commands.ScanApCommand;
+import io.particle.android.sdk.devicesetup.commands.SetCommand;
+import io.particle.android.sdk.devicesetup.commands.data.WifiSecurity;
+import io.particle.android.sdk.devicesetup.model.ScanAPCommandResult;
+import io.particle.android.sdk.devicesetup.setupsteps.SetupStepException;
 import io.particle.android.sdk.utils.Crypto;
+import io.particle.android.sdk.utils.EZ;
+import io.particle.android.sdk.utils.Funcy;
+import io.particle.android.sdk.utils.SSID;
+
+import static io.particle.android.sdk.utils.Py.set;
+import static io.particle.android.sdk.utils.Py.truthy;
 
 /**
  * Created by 75932 on 2017/11/1.
@@ -79,7 +98,6 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
     private WifiAdmin wifiAdmin;
     private BluetoothInfo bluetoothInfo;
     private xltDevice _xltDevice = null;
-    private TextView etPassword = null;
     private TextView etSSID = null;
     private String coreID = null;
     final String ACTION_PAIRING_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
@@ -87,9 +105,11 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
     private WifiReceiver mWifiReceiver;
     private final int WIFI_PERMISSION_REQ_CODE = 100;
     private int type = 0;
-    private ScanAPs aps;
-    private ScanAP selectAp;
+    private EditText etPassword;
+    private List<ScanApCommand.Scan> aps;
+    private ScanApCommand.Scan selectAp;
     final java.util.Timer timer = new java.util.Timer(true);
+    CommandClient commandClient = null;
 
 
     public class BluetoothInfo {
@@ -131,12 +151,6 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
             getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
         }
 
-        RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.rootLayout);
-
-        ViewGroup.LayoutParams params = rootLayout.getLayoutParams();
-        params.height = DisplayUtils.getScreenHeight(this) - 100;
-        rootLayout.setLayoutParams(params);
-
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +164,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvTitle.setText(R.string.find_devices);
 
-        etPassword = (TextView) findViewById(R.id.etPassword);
+        etPassword = (EditText) findViewById(R.id.etPassword);
         etSSID = (TextView) findViewById(R.id.etWifi);
 
         type = getIntent().getIntExtra("type", 0);
@@ -164,9 +178,9 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                 // TODO Auto-generated method stub
                 String selectWifi = adapter.getItem(arg2);
                 if (type == 1) {
-                    if (aps != null && aps.scans.size() > 0) {
+                    if (aps != null && aps.size() > 0) {
                         //找到这个Wifi
-                        for (ScanAP ap : aps.scans) {
+                        for (ScanApCommand.Scan ap : aps) {
                             if (ap.ssid.equals(selectWifi)) {
                                 selectAp = ap;
                                 break;
@@ -190,12 +204,15 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
 
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
-                ((EditText) findViewById(R.id.etPassword)).setText("NONE");
+                etPassword.setText("");
                 arg0.setVisibility(View.VISIBLE);
             }
         });
         wifiAdmin = new WifiAdmin(this);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (type == 0) {
+            // 隐藏wifi不可设置
+            ((CheckBox) findViewById(R.id.chkHide)).setVisibility(View.GONE);
             // 获取xlight蓝牙信息
             Bundle bundle = getIntent().getBundleExtra("bundle");
             bluetoothInfo = new BluetoothInfo(bundle.getString("name"), bundle.getString("mac"));
@@ -217,63 +234,9 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
             updateWifiHandler.sendEmptyMessageDelayed(1, 5000);
             ReceiverBluetooth();
         } else {
-            HttpUtils.getInstance().getRequestInfo("http://192.168.0.1/device-id", null, new HttpUtils.OnHttpRequestCallBack() {
-                @Override
-                public void onHttpRequestSuccess(Object result) {
-                    try {
-                        JSONObject object = new JSONObject(result.toString());
-                        coreID = object.getString("id");
-                        JSONObject jb = new JSONObject();
-                        jb.put("k", "cc");
-                        jb.put("v", "AYKZwDUEe8ZoFL+CoujbjRa/6h1h8kmbN3roGvnFpTW/5EThZThcQ4z7o7sVZKk");
-                        HttpUtils.getInstance().postRequestInfoByForm("http://192.168.0.1/set", jb.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
-                            @Override
-                            public void onHttpRequestSuccess(Object result) {
-                                Log.d("XLight", "set:" + result.toString());
-                            }
-
-                            @Override
-                            public void onHttpRequestFail(int code, String errMsg) {
-
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.e("XLight", e.getMessage(), e);
-                    }
-                }
-
-                @Override
-                public void onHttpRequestFail(int code, String errMsg) {
-
-                }
-            });
-            //ap模式，进行获取
-            HttpUtils.getInstance().getRequestInfo("http://192.168.0.1/scan-ap", ScanAPs.class, new HttpUtils.OnHttpRequestCallBack() {
-                @Override
-                public void onHttpRequestSuccess(Object result) {
-                    try {
-                        aps = (ScanAPs) result;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (aps != null & aps.scans.size() > 0)
-                                    list.clear();
-                                // 显示Wifi信息
-                                for (ScanAP ap : aps.scans)
-                                    list.add(ap.ssid);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
-                    } catch (Exception e) {
-                        Log.e("XLight", e.getMessage(), e);
-                    }
-                }
-
-                @Override
-                public void onHttpRequestFail(int code, String errMsg) {
-                }
-            });
+            apConnector = new ApConnector(this);
+            stopScanWifi = true;
+            initAPInfo();
         }
     }
 
@@ -360,6 +323,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                             //判断状态，并传递
                             if (device.id != null && device.connected) {
                                 if (connectTimeout > 0) {
+                                    connectTimeout = 60;
                                     Message message = new Message();
                                     message.what = 2;
                                     timeoutHandler.sendMessage(message);
@@ -379,7 +343,6 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
     protected void onDestroy() {
         super.onDestroy();
         try {
-            connectTimeout = 0;
             myThread = false;
             ToastUtil.dismissLoading();
             if (type == 0) {
@@ -448,110 +411,176 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         }
     }
 
+    private PublicKey publicKey;
+
+    /********AP模式初始化开始*********/
+    public void initAPInfo() {
+        try {
+            softApSSID = SSID.from(wifiAdmin.getWifiInfo());
+            apConnector = new ApConnector(getApplicationContext());
+            WifiConfiguration config = ApConnector.buildUnsecuredConfig(softApSSID);
+            apConnector.connectToAP(config, new ApConnector.Client() {
+                @Override
+                public void onApConnectionSuccessful(WifiConfiguration config) {
+                    Log.e("XLight", "controller socket connect success");
+                    new Thread(runnableInit).start();
+                }
+
+                @Override
+                public void onApConnectionFailed(WifiConfiguration config) {
+                    Log.d("XLight", config.toString());
+                    //连接失败
+                    Log.e("XLight", "controller socket connect failed");
+                }
+            });
+        } catch (Exception e) {
+            Log.d("XLight", e.getMessage(), e);
+        }
+    }
+
+
+    private ApConnector apConnector;
+    private SSID softApSSID;
+    private int retry = 0;
+
+    private boolean isConnectedToSoftAp() {
+        return softApSSID.equals(SSID.from(wifiAdmin.getWifiInfo()));
+    }
+
+    Runnable runnableInit = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                commandClient = CommandClient.newClientUsingDefaultsForDevices(getApplicationContext(), softApSSID);
+                //1、获取coreID
+                DeviceIdCommand.Response response = commandClient.sendCommand(
+                        new DeviceIdCommand(), DeviceIdCommand.Response.class);
+                coreID = response.deviceIdHex.toLowerCase(Locale.ROOT);
+                //2、获取密钥
+                PublicKeyCommand.Response response1 = commandClient.sendCommand(
+                        new PublicKeyCommand(), PublicKeyCommand.Response.class);
+                publicKey = Crypto.readPublicKeyFromHexEncodedDerString(response1.publicKey);
+                //3、check ownership
+                SetCommand.Response response2 = commandClient.sendCommand(
+                        new SetCommand("cc", "AYKZwDUEe8ZoFL+CoujbjRa/6h1h8kmbN3roGvnFpTW/5EThZThcQ4z7o7sVZKk"), SetCommand.Response.class);
+                if (truthy(response2.responseCode)) {
+                    // a non-zero response indicates an error, ala UNIX return codes
+                    Log.e("XLight", "Received non-zero return code from set command: "
+                            + response2.responseCode);
+                }
+                //4、搜索wifi信息
+                ScanApCommand.Response response3 = commandClient.sendCommand(new ScanApCommand(), ScanApCommand.Response.class);
+                aps = response3.getScans();
+                Message message = new Message();
+                message.what = 11;
+                updateWifiHandler.sendMessage(message);
+            } catch (Exception e) {
+                if (e.getMessage() == "timeout") {
+                    retry++;
+                } else {
+                    retry = 3;
+                }
+                Message message = new Message();
+                message.what = 2;
+                updateWifiHandler.sendMessage(message);
+                Log.e("XLight", e.getMessage(), e);
+            }
+        }
+    };
+
     public void ConnectWLAN() {
-        ToastUtil.showLoading(this, null, getString(R.string.add_device_wifi_step2));
-        //获取public_key
-        HttpUtils.getInstance().getRequestInfo("http://192.168.0.1/public-key", null, new HttpUtils.OnHttpRequestCallBack() {
-            @Override
-            public void onHttpRequestSuccess(Object result) {
-                try {
-                    Log.d("XLight", "Public-key:" + result.toString());
-                    JSONObject jsonObject = new JSONObject(result.toString());
-                    Log.d("XLight", "Public-key:" + jsonObject.getString("b"));
-                    PublicKey publicKey = Crypto.readPublicKeyFromHexEncodedDerString(jsonObject.getString("b"));
-                    //获取wifi信息
-                    WifiInfo wifiInfo = getWifiInfo();
-                    final ScanAP configAp;
-                    if (wifiInfo == null) {
-                        configAp = selectAp == null ? aps.scans.get(0) : selectAp;
-                        configAp.pwd = ((EditText) findViewById(R.id.etPassword)).toString().trim();
-                    } else {
-                        //隐藏的
-                        configAp = new ScanAP();
-                        configAp.ssid = wifiInfo.ssid;
-                        configAp.pwd = wifiInfo.password;
-                    }
-                    JSONObject submitData = new JSONObject();
-                    submitData.put("idx", configAp.idx);
-                    submitData.put("ssid", configAp.ssid);
-                    submitData.put("ch", configAp.ch);
-                    submitData.put("sec", configAp.sec);
-                    if (!configAp.pwd.equals("")) {
-                        configAp.pwd = Crypto.encryptAndEncodeToHex(configAp.pwd, publicKey);
-                        submitData.put("pwd", configAp.pwd);
-                    }
-                    Log.d("XLight", submitData.toString());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.showLoading(BindDeviceWiFiActivity.this, null, getString(R.string.add_device_wifi_step4));
-                        }
-                    });
-                    //提交请求
-                    HttpUtils.getInstance().postRequestInfoByForm("http://192.168.0.1/configure-ap", submitData.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
-                        @Override
-                        public void onHttpRequestSuccess(Object result) {
-                            Log.d("XLight", "configure-ap:" + result.toString());
-                            //获取请求connect-ap
-                            try {
-                                JSONObject jb = new JSONObject();
-                                jb.put("idx", 0);
-                                HttpUtils.getInstance().postRequestInfoByForm("http://192.168.0.1/connect-ap", jb.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
-                                    @Override
-                                    public void onHttpRequestSuccess(Object result) {
-                                        //result
-                                        Log.d("XLight", "connect-ap:" + result.toString());
+        try {
+            //获取wifi信息
+            WifiInfo wifiInfo = getWifiInfo();
+            final ScanApCommand.Scan configAp;
+            String pwd = "";
+            if (wifiInfo == null) {
+                configAp = selectAp == null ? aps.get(0) : selectAp;
+                pwd = etPassword.getText().toString().trim();
+            } else {
+                //隐藏的
+                configAp = new ScanApCommand.Scan(wifiInfo.ssid, 4194308, 0);
+                pwd = wifiInfo.password;
+            }
+            if (!pwd.equals("")) {
+                pwd = Crypto.encryptAndEncodeToHex(pwd, publicKey);
+            }
+            WifiSecurity wifiSecurity = WifiSecurity.fromInteger(configAp.wifiSecurityType);
+            ConfigureApCommand.Builder builder = ConfigureApCommand.newBuilder()
+                    .setSsid(configAp.ssid)
+                    .setSecurityType(wifiSecurity)
+                    .setChannel(configAp.channel)
+                    .setIdx(0);
+            builder.setEncryptedPasswordHex(pwd);
+            final ConfigureApCommand command = builder.build();
+            if (isConnectedToSoftAp()) {
+                ToastUtil.showLoading(this, null, getString(R.string.add_device_wifi_step2));
+                Runnable settingRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final ConfigureApCommand.Response response = commandClient.sendCommand(command, ConfigureApCommand.Response.class);
+                            if (response.isOk())
+                                Log.d("XLight", "Ensuring connection to AP");
+                            else
+                                Log.e("XLight", "Ensuring connection to AP response code: " +
+                                        response.responseCode);
+                            ConnectAPCommand.Response response1 = commandClient.sendCommand(
+                                    // FIXME: is hard-coding zero here correct?  If so, document why
+                                    new ConnectAPCommand(0), ConnectAPCommand.Response.class);
+                            if (!response1.isOK()) {
+                                Log.e("XLight", "ConnectAPCommand returned non-zero response code: " +
+                                        response.responseCode);
+                            }
+                            apConnector.stop();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.showLoading(BindDeviceWiFiActivity.this, null, getString(R.string.add_device_two_title2));
+                                }
+                            });
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    //每次需要执行的代码放到这里面。
+                                    boolean result = ping();
+                                    Log.d("XLight", "ping cloud server," + result);
+                                    if (result) {
+                                        timer.cancel();
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                ToastUtil.showLoading(BindDeviceWiFiActivity.this, null, getString(R.string.add_device_two_title2));
+                                                ToastUtil.showLoading(BindDeviceWiFiActivity.this, null, getString(R.string.add_device_wifi_step6));
                                             }
                                         });
-                                        TimerTask task = new TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                //每次需要执行的代码放到这里面。
-                                                if (ping()) {
-                                                    timer.cancel();
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            ToastUtil.showLoading(BindDeviceWiFiActivity.this, null, getString(R.string.add_device_wifi_step6));
-                                                        }
-                                                    });
-                                                    StartCheckDevice();
-                                                }
-                                            }
-                                        };
-                                        timer.schedule(task, 2000, 2000);
+                                        StartCheckDevice();
                                     }
-
-                                    @Override
-                                    public void onHttpRequestFail(int code, String errMsg) {
-
-                                    }
-                                });
-                            } catch (Exception e) {
-                                Log.e("XLight", e.getMessage(), e);
-                            }
+                                }
+                            };
+                            timer.schedule(task, 2000, 2000);
+                        } catch (Exception e) {
+                            Log.e("XLight", e.getMessage(), e);
                         }
-
-                        @Override
-                        public void onHttpRequestFail(int code, String errMsg) {
-
-                        }
-                    });
-                } catch (Exception e) {
-
-                }
+                    }
+                };
+                new Thread(settingRunnable).start();
+            } else {
+                ToastUtil.showToast(this, R.string.add_device_wifi_disconnect);
             }
-
+        } catch (Exception e) {
+            ToastUtil.dismissLoading();
+            ToastUtil.showToast(this, R.string.add_device_wifi_disconnect);
+            Log.e("XLight", e.getMessage(), e);
+        }
+        runOnUiThread(new Runnable() {
             @Override
-            public void onHttpRequestFail(int code, String errMsg) {
-
+            public void run() {
+                ToastUtil.showLoading(BindDeviceWiFiActivity.this, null, getString(R.string.add_device_wifi_step4));
             }
         });
     }
+
+    /********AP模式初始化完成*********/
 
     boolean once = true;
 
@@ -655,7 +684,8 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         RequestCheckDevice.getInstance().checkDevice(getApplicationContext(), coreID, new RequestCheckDevice.OnAddDeviceCallBack() {
             @Override
             public void mOnAddDeviceCallBackFail(int code, String errMsg) {
-
+                //重试
+                StartCheckDevice();
             }
 
             @Override
@@ -709,12 +739,13 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         }
     }
 
+    private WifiManager wifiManager;
+
     /**
      * wifi列表
      */
     private void getWifiList() {
         if (isWifiContect()) {
-            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             Log.d("XLight", "get scan wifi result");
             //获取结果
             wifiScanList = wifiManager.getScanResults();
@@ -777,7 +808,6 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                 if (info.getState().equals(NetworkInfo.State.DISCONNECTED)) {
                     Log.d("XLight", "wifi网络连接断开");
                 } else if (info.getState().equals(NetworkInfo.State.CONNECTED)) {
-                    WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
                     android.net.wifi.WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                     //获取当前wifi名称
                     Log.d("XLight", "连接到网络 " + wifiInfo.getSSID());
@@ -792,9 +822,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
      * @return
      */
     private boolean isWifiContect() {
-        WifiManager wifimanager;
-        wifimanager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (wifimanager.isWifiEnabled()) {
+        if (wifiManager.isWifiEnabled()) {
             return true;
         }
         return false;
@@ -806,6 +834,26 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            switch (msg.what) {
+                case 11: {
+                    if (aps != null & aps.size() > 0)
+                        list.clear();
+                    // 显示Wifi信息
+                    for (ScanApCommand.Scan ap : aps)
+                        list.add(ap.ssid);
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+                case 2: {
+                    if (retry < 3) {
+                        Log.d("XLight", "retry connect apconnect");
+                        new Thread(runnableInit).start();
+                    } else {
+                        ToastUtil.showToast(getApplicationContext(), R.string.add_device_wifi_disconnect);
+                    }
+                }
+                break;
+            }
             if (!stopScanWifi) {
                 updateWifiHandler.postDelayed(runnable, 100);
                 updateWifiHandler.sendEmptyMessageDelayed(1, 5000);
@@ -816,7 +864,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
     public boolean ping() {
         String result = null;
         try {
-            String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
+            String ip = NetConfig.SERVER_IP;// ping 的地址，可以换成任何一种可靠的外网
             Process p = Runtime.getRuntime().exec("ping -c 1 -w 100 " + ip);// ping网址3次
             // 读取ping的内容，可以不加
             InputStream input = p.getInputStream();

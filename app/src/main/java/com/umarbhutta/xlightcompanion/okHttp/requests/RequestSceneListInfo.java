@@ -25,7 +25,7 @@ public class RequestSceneListInfo implements HttpUtils.OnHttpRequestCallBack {
      */
     public void getSceneListInfo(Context context, OnRequestFirstPageInfoCallback mOnRequestFirstPageInfoCallback) {
         this.mOnRequestFirstPageInfoCallback = mOnRequestFirstPageInfoCallback;
-        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_SCENE_LIST + UserUtils.getUserInfo(context).getAccess_token(), SceneListResult.class, this);
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_SCENE_LIST + UserUtils.getAccessToken(context), SceneListResult.class, this);
     }
 
     @Override

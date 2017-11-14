@@ -33,7 +33,7 @@ public class RequestSensorInfo implements HttpUtils.OnHttpRequestCallBack {
     /**
      * 获取信息
      */
-    public void getBaseInfo(OnRequestSensorInfoCallback mRequestSensorInfo, List<String> devices) {
+    public void getBaseInfo(List<String> devices, OnRequestSensorInfoCallback mRequestSensorInfo) {
         this.mRequestSensorInfo = mRequestSensorInfo;
         String strDevices = "";
         for (int i = 0, j = devices.size(); i < j; i++) {
@@ -43,10 +43,10 @@ public class RequestSensorInfo implements HttpUtils.OnHttpRequestCallBack {
             strDevices = strDevices.substring(0, strDevices.length() - 1);
         }
 
-        if (UserUtils.isLogin(context)) {
-            HttpUtils.getInstance().getRequestInfo(NetConfig.URL_GET_SENSOR + UserUtils.getUserInfo(context).getAccess_token() + "&" + strDevices,
-                    SensorsResult.class, this);
-        }
+        //if (UserUtils.isLogin(context)) {
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_GET_SENSOR + UserUtils.getAccessToken(context) + "&" + strDevices,
+                SensorsResult.class, this);
+        //}
     }
 
     @Override

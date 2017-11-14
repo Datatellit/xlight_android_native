@@ -36,7 +36,7 @@ public class RequestAddRules implements HttpUtils.OnHttpRequestCallBack {
         if (UserUtils.isLogin(context)) {
             Gson gson = new Gson();
             String params = gson.toJson(mRules);
-            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_CREATE_RULES + UserUtils.getUserInfo(context).getAccess_token(),
+            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_CREATE_RULES + UserUtils.getAccessToken(context),
                     params, CreateRuleResult.class, this);
 
 
@@ -58,7 +58,7 @@ public class RequestAddRules implements HttpUtils.OnHttpRequestCallBack {
             Gson gson = new Gson();
             String params = gson.toJson(rules);
             HttpUtils.getInstance().putRequestInfo(NetConfig.URL_EDIT_RULE + id + "?access_token=" +
-                            UserUtils.getUserInfo(context).getAccess_token(),
+                            UserUtils.getAccessToken(context),
                     params, null, this);
 
 

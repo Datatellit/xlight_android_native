@@ -41,7 +41,7 @@ public class RequestRuleSwitchDevice implements HttpUtils.OnHttpRequestCallBack 
             object.put("status", status);
             String params = object.toString();
             if (UserUtils.isLogin(context))
-                HttpUtils.getInstance().putRequestInfo(NetConfig.URL_RULE_SWITCH + deviceId + "/changestatus?access_token=" + UserUtils.getUserInfo(context).getAccess_token(),
+                HttpUtils.getInstance().putRequestInfo(NetConfig.URL_RULE_SWITCH + deviceId + "/changestatus?access_token=" + UserUtils.getAccessToken(context),
                         params, null, this);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -97,7 +97,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
             RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("lightscrop.jpg", file.getName(), fileBody).build();
 
             Request requestPostFile = new Request.Builder()
-                    .url(NetConfig.URL_UPLOAD_IMG + UserUtils.getUserInfo(this).getId() + "/uploadimg?access_token=" + UserUtils.getUserInfo(this).getAccess_token())
+                    .url(NetConfig.URL_UPLOAD_IMG + UserUtils.getUserInfo(this).getId() + "/uploadimg?access_token=" + UserUtils.getAccessToken(this))
                     .post(requestBody)
                     .build();
             client.newCall(requestPostFile).enqueue(new Callback() {
@@ -133,8 +133,6 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
                                 ToastUtil.showToast(UserMsgModifyActivity.this, getString(R.string.avar_setting_fail));
                                 e.printStackTrace();
                             }
-
-
                         }
                     });
                 }

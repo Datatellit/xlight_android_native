@@ -27,7 +27,7 @@ public class RequestUnBindDevice implements HttpUtils.OnHttpRequestCallBack {
         this.context = context;
         this.mCommentRequstCallback = mCommentRequstCallback;
         if (UserUtils.isLogin(context))
-            HttpUtils.getInstance().putRequestInfo(NetConfig.URL_UNBIND_DEVICE + deviceId + "/unbind?access_token=" + UserUtils.getUserInfo(context).getAccess_token(),
+            HttpUtils.getInstance().putRequestInfo(NetConfig.URL_UNBIND_DEVICE + deviceId + "/unbind?access_token=" + UserUtils.getAccessToken(context),
                     null, null, this);
     }
 
@@ -37,9 +37,8 @@ public class RequestUnBindDevice implements HttpUtils.OnHttpRequestCallBack {
     public void unBindController(Context context, String deviceId, CommentRequstCallback mCommentRequstCallback) {
         this.context = context;
         this.mCommentRequstCallback = mCommentRequstCallback;
-        if (UserUtils.isLogin(context))
-            HttpUtils.getInstance().putRequestInfo(NetConfig.URL_UNBIND_CONTROLLER + deviceId + "/unbind?access_token=" + UserUtils.getUserInfo(context).getAccess_token(),
-                    null, null, this);
+        HttpUtils.getInstance().putRequestInfo(NetConfig.URL_UNBIND_CONTROLLER + deviceId + "/unbind?access_token=" + UserUtils.getAccessToken(context),
+                null, null, this);
     }
 
 

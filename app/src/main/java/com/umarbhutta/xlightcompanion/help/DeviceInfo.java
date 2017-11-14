@@ -8,6 +8,12 @@ import android.telephony.TelephonyManager;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.os.Build;
+
+import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
+
+import org.json.JSONObject;
+
 import static android.content.Context.TELEPHONY_SERVICE;
 
 /**
@@ -27,7 +33,7 @@ public class DeviceInfo {
     获取网卡地址
      */
     public static String getWlanMAC(Context context) {
-        WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm =  (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         return wm.getConnectionInfo().getMacAddress();
     }
 
@@ -70,5 +76,41 @@ public class DeviceInfo {
         }   // hex string to uppercase
         m_szUniqueID = m_szUniqueID.toUpperCase();
         return m_szUniqueID;
+    }
+
+    public static String getSystemInfo() {
+        try {
+            JSONObject jb = new JSONObject();
+            jb.put("SDK", Build.VERSION.SDK);
+            jb.put("SDK_INT", Build.VERSION.SDK_INT);
+            jb.put("RELEASE", Build.VERSION.RELEASE);
+            jb.put("BASE_OS", Build.VERSION.BASE_OS);
+            jb.put("CODENAME", Build.VERSION.CODENAME);
+            jb.put("INCREMENTAL", Build.VERSION.INCREMENTAL);
+            return jb.toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static String getHardwareInfo() {
+        try {
+            JSONObject jb = new JSONObject();
+            jb.put("BRAND", Build.BRAND);
+            jb.put("MODEL", Build.MODEL);
+            jb.put("ID", Build.ID);
+            jb.put("DISPLAY", Build.DISPLAY);
+            jb.put("PRODUCT", Build.PRODUCT);
+            jb.put("MANUFACTURER", Build.MANUFACTURER);
+            jb.put("DEVICE", Build.DEVICE);
+            jb.put("HARDWARE", Build.HARDWARE);
+            jb.put("SERIAL", Build.SERIAL);
+            jb.put("USER", Build.USER);
+            jb.put("CPU", Build.CPU_ABI);
+            jb.put("BOARD", Build.BOARD);
+            return jb.toString();
+        } catch (Exception e) {
+            return "";
+        }
     }
 }
