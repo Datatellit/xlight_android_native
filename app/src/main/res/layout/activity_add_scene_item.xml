@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/layout_radius"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:id="@+id/imgLight"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/rainbow" />
+
+    <TextView
+        android:id="@+id/txtBrightness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="0%"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/txtSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text=""
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Rainbow" />
+</LinearLayout>

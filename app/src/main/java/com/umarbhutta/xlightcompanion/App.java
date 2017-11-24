@@ -3,14 +3,22 @@ package com.umarbhutta.xlightcompanion;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
 import android.support.multidex.MultiDex;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.umarbhutta.xlightcompanion.Tools.Logger;
+import com.umarbhutta.xlightcompanion.Tools.UserUtils;
+import com.umarbhutta.xlightcompanion.help.DeviceInfo;
 import com.umarbhutta.xlightcompanion.imgloader.ImageLoaderUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,25 +39,42 @@ public class App extends Application {
         Inst = this;
         //初始化APP
         ImageLoaderUtils.initImageLoader(getApplicationContext());
-        PushAgent mPushAgent = PushAgent.getInstance(this);
-//        mPushAgent.setDebugMode(true);
-        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        Log.d("XLight", "init umeng");
+        final PushAgent mPushAgent = PushAgent.getInstance(this);
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
-
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
-//                Logger.i("ument push register success deviceToken = " + deviceToken);
-//                Log.e(TAG, "deviceToken=" + deviceToken);
+                Logger.d("XLight", "ument push register success deviceToken = " + deviceToken);
+                if (UserUtils.isLogin(getApplicationContext())) {
+                    //设置别名
+                    mPushAgent.addAlias(UserUtils.getUserInfo(getApplicationContext()).username, "XLight", new UTrack.ICallBack() {
+                        @Override
+                        public void onMessage(boolean b, String s) {
+                            Log.d("XLight", "umeng set alias success ,message:" + s);
+                        }
+                    });
+                }
             }
 
             @Override
             public void onFailure(String s, String s1) {
-//                Logger.i("ument push register fail s = " + s + ", s1 = " + s1);
+                Logger.d("XLight", "ument push register fail s = " + s + ", s1 = " + s1);
 //                Log.e(TAG, "s=" + s + "::s1=" + s1);
             }
         });
+        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+            //点击通知的自定义行为
+            @Override
+            public void dealWithCustomAction(Context context, UMessage msg) {
+                if (msg.custom.equals("xxx") && mOnChangeViewCallback != null) {
+                    Log.d("XLight", "open share page");
+                    mOnChangeViewCallback.onChangeViewListener(R.id.nav_share);
+                }
+            }
+        };
+        mPushAgent.setNotificationClickHandler(notificationClickHandler);
     }
 
     @Override
@@ -73,5 +98,15 @@ public class App extends Application {
                 activity.finish();
             }
         }
+    }
+
+    private static ChangeViewListener mOnChangeViewCallback;
+
+    public static void setChangeViewListener(ChangeViewListener changeViewListener) {
+        mOnChangeViewCallback = changeViewListener;
+    }
+
+    public interface ChangeViewListener {
+        void onChangeViewListener(int id);
     }
 }

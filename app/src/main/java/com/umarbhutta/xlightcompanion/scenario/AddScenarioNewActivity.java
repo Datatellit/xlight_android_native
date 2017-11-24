@@ -68,7 +68,7 @@ public class AddScenarioNewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_scenario_new);
+        setContentView(R.layout.activity_add_scenario);
         AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
 
 //        getSupportActionBar().hide();

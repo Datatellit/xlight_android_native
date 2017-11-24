@@ -3,6 +3,7 @@ package com.umarbhutta.xlightcompanion.glance;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,6 +56,7 @@ import com.umarbhutta.xlightcompanion.control.adapter.DevicesMainListAdapter;
 import com.umarbhutta.xlightcompanion.deviceList.DeviceListActivity;
 import com.umarbhutta.xlightcompanion.main.EditDeviceActivity;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
 import com.umarbhutta.xlightcompanion.okHttp.model.DeviceInfoResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
 import com.umarbhutta.xlightcompanion.okHttp.model.LoginResult;
@@ -92,6 +95,7 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
     WeatherDetails mWeatherDetails;
 
     private Handler m_handlerGlance;
+    private Handler m_deviceHandler;
 
     private Bitmap icoDefault, icoClearDay, icoClearNight, icoRain, icoSnow, icoSleet, icoWind, icoFog;
     private Bitmap icoCloudy, icoPartlyCloudyDay, icoPartlyCloudyNight;
@@ -263,6 +267,58 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                 }
             }
         });
+        m_deviceHandler = new Handler(this.getContext().getMainLooper()) {
+            public void handleMessage(Message msg) {
+                Log.e(TAG, "GlanceMainFragment_msg=" + msg.getData().toString());
+                if (deviceList != null && deviceList.size() > 0) {
+                    // 寻找设备
+                    for (Devicenodes d : devicenodes) {
+                        if (d.coreid.equals(msg.getData().getString("coreId")) && d.nodeno == msg.getData().getInt("nd", -1)) {
+                            // 设置值
+                            codeChange = true;
+                            int intValue = msg.getData().getInt("State", -255);
+                            if (intValue != -255) {
+                                d.ison = intValue > 0 ? xltDevice.STATE_ON : xltDevice.STATE_OFF;
+                            }
+                            intValue = msg.getData().getInt("BR", -255);
+                            if (intValue != -255) {
+                                d.brightness = intValue;
+                            }
+                            intValue = msg.getData().getInt("CCT", -255);
+                            if (intValue != -255) {
+                                d.cct = intValue;
+                            }
+                            //颜色
+                            int R = 0;
+                            int G = 0;
+                            int B = 0;
+                            intValue = msg.getData().getInt("R", -255);
+                            if (intValue != -255) {
+                                R = intValue;
+                            }
+                            intValue = msg.getData().getInt("G", -255);
+                            if (intValue != -255) {
+                                G = intValue;
+                            }
+                            intValue = msg.getData().getInt("B", -255);
+                            if (intValue != -255) {
+                                B = intValue;
+                            }
+                            if (R != -255 && G != -255 && B != -255) {
+                                int[] tmpColor = {R, G, B};
+                                d.color = tmpColor;
+                            }
+                            Log.d("XLight", "device event change");
+                            codeChange = false;
+                            if (devicesListAdapter != null) {
+                                devicesListAdapter.notifyDataSetChanged();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        };
         return view;
     }
 
@@ -274,6 +330,14 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
             SlidingMenuMainActivity.m_mainDevice.setEnableEventSendMessage(true);
             updateUIHandler();
         }
+    }
+
+    private void setDeviceHandlerMessage(xltDevice xltDevice) {
+        if (!xltDevice.getEnableEventSendMessage())
+            xltDevice.setEnableEventSendMessage(true);
+        //先清除
+        xltDevice.clearDeviceEventHandlerList();
+        xltDevice.addDeviceEventHandler(m_deviceHandler);
     }
 
     private void updateUIHandler() {
@@ -356,32 +420,6 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
         } else {
         }
     }
-
-    private View.OnClickListener btnlistener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_choose_add_wifi_device: // 扫描设备添加
-                    Toast.makeText(getActivity(), getString(R.string.scan_device_add), Toast.LENGTH_SHORT).show();
-                    break;
-                //扫描二维码添加
-                case R.id.btn_choose_scan_add_device:
-                    Toast.makeText(getActivity(), getString(R.string.scan_qr_add), Toast.LENGTH_SHORT).show();
-                    break;
-                // 输入口令添加
-                case R.id.btn_choose_add_line_device:
-                    Toast.makeText(getActivity(), getString(R.string.input_order_add), Toast.LENGTH_SHORT).show();
-                    break;
-                // 取消
-                case R.id.btn_cancel:
-                    if (mSelectDialog != null) {
-                        mSelectDialog.dismiss();
-                    }
-                    break;
-            }
-        }
-    };
 
     private void updateDisplay() {
         imgWeather.setVisibility(View.VISIBLE);
@@ -625,18 +663,26 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                 final Rows device = deviceList.get(i);
                 if (lr != null)
                     m_XltDevice.Init(getActivity(), lr.username, lr.password);
-                else
-                    m_XltDevice.Init(getActivity());
+                else {
+                    // 匿名登录
+                    AnonymousParams ap = UserUtils.getAnonymousInfo(getContext());
+                    m_XltDevice.Init(getActivity(), ap.uniqueId, ap.uniqueId);
+                }
+                if (deviceList.get(i).sharedevice != null) {
+                    deviceList.get(i).isShare = 1;
+                }
                 if (device.devicenodes != null) {
                     for (int lv_idx = 0; lv_idx < device.devicenodes.size(); lv_idx++) {
                         m_XltDevice.addNodeToDeviceList(device.devicenodes.get(lv_idx).nodeno, xltDevice.DEFAULT_DEVICE_TYPE, device.devicenodes.get(lv_idx).devicenodename);
                         device.devicenodes.get(lv_idx).coreid = deviceList.get(i).coreid;
+                        if (deviceList.get(i).sharedevice != null) {
+                            device.devicenodes.get(lv_idx).isShare = 1;
+                        }
                     }
                     devicenodes.addAll(device.devicenodes);
                 }
                 if (device.coreid != null) {
                     // Connect to Controller
-                    Log.d("XLight", "current index:" + i);
                     m_XltDevice.Connect(device.coreid, new xltDevice.callbackConnect() {
                         @Override
                         public void onConnected(xltDevice.BridgeType bridge, boolean connected) {
@@ -649,17 +695,19 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                                 connectFailed.add(device.devicename);
                             } else if (connected && bridge == xltDevice.BridgeType.Cloud) {
                                 SlidingMenuMainActivity.xltDeviceMaps.put(device.coreid, m_XltDevice);
-                                if (device.maindevice == 1) {//主设备 TODO TODO  设置监听 广播回调
+                                if (device.maindevice == 1 && device.isShare == 0) {//主设备 TODO TODO  设置监听 广播回调
                                     if (SlidingMenuMainActivity.m_mainDevice != null) {
                                         SlidingMenuMainActivity.m_mainDevice.Disconnect();
                                         SlidingMenuMainActivity.m_mainDevice = null;
                                     }
                                     SlidingMenuMainActivity.m_mainDevice = m_XltDevice;
-                                    if (SlidingMenuMainActivity.m_mainDevice != null) {
+                                    if (SlidingMenuMainActivity.m_mainDevice != null && getActivity() != null) {
                                         //设置handler监听，获取数据室内温湿度
                                         setHandlerMessage();
                                     }
                                 }
+                                // 设置所有控制器的设备状态监听
+                                setDeviceHandlerMessage(m_XltDevice);
                             }
                             if (deviceList.size() == deviceSDKResCount && connectFailed.size() > 0) {
                                 //提示连接失败的设备
@@ -695,6 +743,8 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                         if (SlidingMenuMainActivity.m_mainDevice == null) {
                             // 提醒设备离线
                             ToastUtil.showToast(getContext(), R.string.device_disconnect);
+                            // 将状态切换回去
+                            devicesListAdapter.notifyDataSetChanged();
                             return;
                         }
                         SlidingMenuMainActivity.m_mainDevice.setDeviceID(devicenodes.get(position).nodeno);
@@ -709,6 +759,7 @@ public class GlanceMainFragment extends Fragment implements View.OnClickListener
                         SlidingMenuMainActivity.m_mainDevice = SlidingMenuMainActivity.xltDeviceMaps.get(devicenodes.get(position).coreid);
                         if (SlidingMenuMainActivity.m_mainDevice == null) {
                             ToastUtil.showToast(getContext(), R.string.device_disconnect);
+
                             return;
                         }
                         // 点击事件 跳转到编辑设备页面

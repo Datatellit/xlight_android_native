@@ -53,11 +53,6 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
 
         webView = (WebView) view.findViewById(R.id.helpWebview);
         pbWebView = (ProgressBar) view.findViewById(R.id.pbWebView);
-        ib_back = (ImageButton) view.findViewById(R.id.ib_back);
-        ib_back.setOnClickListener(this);
-        ib_back.setVisibility(View.INVISIBLE);
-        ib_refresh = (ImageButton) view.findViewById(R.id.ib_refresh);
-        ib_refresh.setOnClickListener(this);
         // webview加载数据
         //启用支持javascript
         WebSettings settings = webView.getSettings();
@@ -90,17 +85,6 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
                 pbWebView.setProgress(newProgress);
                 if (newProgress == 100) {
                     // 网页加载完成
-                    if(view.canGoBack()){
-                        ib_back.setFocusable(true);
-                        ib_back.setClickable(true);
-                        ib_back.setBackgroundResource(R.drawable.icon_arrow_right);
-                        ib_back.setVisibility(View.VISIBLE);
-                    }else{
-                        ib_back.setFocusable(false);
-                        ib_back.setClickable(false);
-                        ib_back.setBackgroundResource(R.drawable.icon_arrow_right_gray);
-                        ib_back.setVisibility(View.INVISIBLE);
-                    }
 
                 }  else {
                     // 加载中
@@ -156,14 +140,6 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ib_back:
-                if (webView.canGoBack()) {
-                    webView.goBack();//返回上一页面
-                }
-                break;
-            case R.id.ib_refresh:
-                webView.reload();//刷新
-                break;
             case R.id.iv_menu:
                 switchFragment();
                 break;

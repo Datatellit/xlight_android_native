@@ -86,7 +86,7 @@ public class NetConfig {
     /**
      * 场景列表
      */
-    public static final String URL_SCENE_LIST = SERVER_ADDRESS_DOMAIN + "/scenarios/?access_token=";
+    public static final String URL_SCENE_LIST = SERVER_ADDRESS_DOMAIN + "/scenes?access_token=";
     /**
      * 场景详细
      */
@@ -94,11 +94,11 @@ public class NetConfig {
     /**
      * 添加场景
      */
-    public static final String URL_ADD_SCENE = SERVER_ADDRESS_DOMAIN + "/scenarios?access_token=";
+    public static final String URL_ADD_SCENE = SERVER_ADDRESS_DOMAIN + "/scenes?access_token=";
     /**
      * 删除场景
      */
-    public static final String URL_DELETE_SCENE = SERVER_ADDRESS_DOMAIN + "/scenarios/";
+    public static final String URL_DELETE_SCENE = SERVER_ADDRESS_DOMAIN + "/scenes/";
     /**
      * 添加设备
      */
@@ -107,6 +107,10 @@ public class NetConfig {
      * 检查设备状态
      */
     public static final String URL_CHECK_DEVICE = DCI_ADDRESS_DOMAIN + "/v1/devices/%s?access_token=%s";
+    /**
+     * 切换场景
+     */
+    public static final String URL_CHANGE_SCENE = DCI_ADDRESS_DOMAIN + "/dcioperates?access_token=%s";
     /**
      * 忘记密码--发送验证码
      */
@@ -150,7 +154,7 @@ public class NetConfig {
     /**
      * 编辑场景
      */
-    public static final String URL_EDIT_SCENE = SERVER_ADDRESS_DOMAIN + "/scenarios/";
+    public static final String URL_EDIT_SCENE = SERVER_ADDRESS_DOMAIN + "/scenes/%s?access_token=%s";
     /**
      * 编辑设备信息
      */
@@ -177,4 +181,19 @@ public class NetConfig {
      * 获取传感器信息
      */
     public static final String URL_GET_SENSOR = SERVER_ADDRESS_DS + "/sensorsdatas/newdatalist?access_token=";
+
+    /**
+     * 添加共享
+     */
+    public static final String URL_ADD_SHARE = SERVER_ADDRESS_DOMAIN + "/shares?access_token=%s";
+
+    /**
+     * 获取共享
+     */
+    public static final String URL_GET_SHARE = SERVER_ADDRESS_DOMAIN + "/shares?access_token=%s&userId=%s&send=%s";
+
+    /**
+     * 更新共享
+     */
+    public static final String URL_UPDATE_SHARE = SERVER_ADDRESS_DOMAIN + "/shares/%s?access_token=%s";
 }

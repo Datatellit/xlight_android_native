@@ -32,6 +32,7 @@ import com.umarbhutta.xlightcompanion.okHttp.model.Actioncmdfield;
 import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
 import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
 import com.umarbhutta.xlightcompanion.okHttp.model.SceneListResult;
+import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSceneListInfo;
 import com.umarbhutta.xlightcompanion.scenario.ColorSelectActivity;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
@@ -447,13 +448,13 @@ public class DeviceControlSelectActivity extends BaseActivity {
      * 请求场景
      */
     private void initScenario() {
-        RequestSceneListInfo.getInstance().getSceneListInfo(this, new RequestSceneListInfo.OnRequestFirstPageInfoCallback() {
+        RequestSceneListInfo.getInstance().getSceneListInfo(this, new RequestSceneListInfo.OnRequestSceneInfoCallback() {
             @Override
-            public void onRequestFirstPageInfoSuccess(final SceneListResult mDeviceInfoResult) {
+            public void onRequestFirstPageInfoSuccess(final List<SceneResult> mDeviceInfoResult) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        DeviceControlSelectActivity.this.mDeviceInfoResult = mDeviceInfoResult;
+                        //DeviceControlSelectActivity.this.mDeviceInfoResult = mDeviceInfoResult;
                         initSceneList();
                     }
                 });

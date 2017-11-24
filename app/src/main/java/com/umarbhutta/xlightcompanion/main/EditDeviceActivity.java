@@ -51,6 +51,7 @@ import com.umarbhutta.xlightcompanion.scenario.ScenarioMainFragment;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.views.CircleDotView;
 import com.umarbhutta.xlightcompanion.views.DialogUtils;
+import com.xw.repo.BubbleSeekBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,32 +85,28 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 
     private CheckBox powerSwitch;
     //    private SeekBar brightnessSeekBar;
-    private RangeSeekBar brightnessSeekBar;
+    private BubbleSeekBar brightnessSeekBar;
 
     private SeekBar cctSeekBar;
     private TextView colorTextView;
     private Spinner scenarioSpinner;
-    private LinearLayout scenarioNoneLL;
     private ToggleButton ring1Button, ring2Button, ring3Button;
-    private TextView deviceRingLabel, powerLabel, brightnessLabel, cctLabel, colorLabel;
+    private TextView deviceRingLabel;
     private ImageView lightImageView;
 
     private LinearLayout llBack;
     private TextView btnSure;
-    private LinearLayout linear;
 
     private LayoutInflater mInflater;
 
     private ArrayList<String> scenarioDropdown;
 
-    private String colorHex;
     private boolean state = false;
     boolean ring1 = false, ring2 = false, ring3 = false;
 
     private Handler m_handlerControl;
     private CircleDotView circleIcon;
     private TextView cctLabelColor;
-    private RelativeLayout rl_scenario;
     private LinearLayout colorLL;
     private View line2;
     private boolean isScrollView = true;
@@ -117,6 +114,7 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 
     private xltDevice mCurrentDevice;
     private HorizontalScrollView mHorizontalScrollView;
+    private int selectColor = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,24 +130,15 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
         scenarioDropdown.add(0, "None");
 
         powerSwitch = (CheckBox) findViewById(R.id.powerSwitch);
-        brightnessSeekBar = (RangeSeekBar) findViewById(R.id.brightnessSeekBar);
+        brightnessSeekBar = (BubbleSeekBar) findViewById(R.id.brightnessSeekBar);
         cctSeekBar = (SeekBar) findViewById(R.id.cctSeekBar);
         cctSeekBar.setMax(6500 - 2700);
         colorTextView = (TextView) findViewById(R.id.colorTextView);
-        scenarioNoneLL = (LinearLayout) findViewById(R.id.scenarioNoneLL);
-        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.hor_scroll_view);
-        mHorizontalScrollView.setSmoothScrollingEnabled(true);
-        scenarioNoneLL.setAlpha(1);
         ring1Button = (ToggleButton) findViewById(R.id.ring1Button);
         ring2Button = (ToggleButton) findViewById(R.id.ring2Button);
         ring3Button = (ToggleButton) findViewById(R.id.ring3Button);
         deviceRingLabel = (TextView) findViewById(R.id.deviceRingLabel);
-        brightnessLabel = (TextView) findViewById(R.id.brightnessLabel);
-        cctLabel = (TextView) findViewById(R.id.cctLabel);
-        powerLabel = (TextView) findViewById(R.id.powerLabel);
-        colorLabel = (TextView) findViewById(R.id.colorLabel);
         lightImageView = (ImageView) findViewById(R.id.lightImageView);
-        linear = (LinearLayout) findViewById(R.id.ll_horizontal_scrollview);
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,16 +163,13 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 
         RelativeLayout dotLayout = (RelativeLayout) findViewById(R.id.dotLayout);
         dotLayout.addView(circleIcon);
-        rl_scenario = (RelativeLayout) findViewById(R.id.rl_scenario);
         line2 = findViewById(R.id.line2);
         colorLL = (LinearLayout) findViewById(R.id.colorLL);
 
         if (deviceInfo.devicetype == 1) {
-            rl_scenario.setVisibility(View.GONE);
             colorLL.setVisibility(View.GONE);
             line2.setVisibility(View.GONE);
         } else {
-            rl_scenario.setVisibility(View.VISIBLE);
             colorLL.setVisibility(View.VISIBLE);
             line2.setVisibility(View.VISIBLE);
         }
@@ -211,7 +197,7 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
         });
         codeChange = true;
         powerSwitch.setChecked(deviceInfo.ison == 1 ? true : false);
-        brightnessSeekBar.setValue(deviceInfo.brightness);
+        brightnessSeekBar.setProgress(deviceInfo.brightness);
         cctSeekBar.setProgress(deviceInfo.cct - 2700);
         if (deviceInfo.cct >= 2700 && deviceInfo.cct < 3500) {
             cctLabelColor.setText(com.umarbhutta.xlightcompanion.R.string.nuan_bai);
@@ -241,28 +227,35 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
         /**
          * 亮度
          */
-        brightnessSeekBar.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {
+        brightnessSeekBar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
+            }
 
             @Override
-            public void onRangeChanged(RangeSeekBar view, float min, float max, boolean isFromUser) {
-                if (!isFromUser) {
-                    if (codeChange)
-                        return;
-                    Log.e(TAG, "The brightness value is " + (int) min + "view.getCurrentRange()=" + view.getCurrentRange()[0]);
-                    int brightnessInt = mCurrentDevice.ChangeBrightness((int) min);
-                    Log.e(TAG, "brightnessInt value is= " + brightnessInt);
-                    deviceInfo.brightness = (int) min;
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                if (codeChange)
+                    return;
+                Log.e(TAG, "The brightness value is " + progress);
+                int brightnessInt = mCurrentDevice.ChangeBrightness(progress);
+                Log.e(TAG, "brightnessInt value is= " + brightnessInt);
+                deviceInfo.brightness = progress;
 
-                    if (isScrollView) {
-                        if (null != viewList && viewList.size() > 0) {
-                            viewList.get(0).callOnClick();
-                            mHorizontalScrollView.smoothScrollTo(0, 0);
-                        }
-
-                    } else {
-                        isScrollView = true;
+                if (isScrollView) {
+                    if (null != viewList && viewList.size() > 0) {
+                        viewList.get(0).callOnClick();
+                        mHorizontalScrollView.smoothScrollTo(0, 0);
                     }
+
+                } else {
+                    isScrollView = true;
                 }
+            }
+
+            @Override
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
             }
         });
         /**
@@ -271,18 +264,6 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
         cctSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (!fromUser) {
-                    int seekBarProgress = seekBar.getProgress() + 2700;
-                    if (seekBarProgress > 2700 && seekBarProgress < 3500) {
-                        cctLabelColor.setText(com.umarbhutta.xlightcompanion.R.string.nuan_bai);
-                    }
-                    if (seekBarProgress > 3500 && seekBarProgress < 5500) {
-                        cctLabelColor.setText(com.umarbhutta.xlightcompanion.R.string.zhengbai);
-                    }
-                    if (seekBarProgress > 5500 && seekBarProgress < 6500) {
-                        cctLabelColor.setText(com.umarbhutta.xlightcompanion.R.string.lengbai);
-                    }
-                }
             }
 
             @Override
@@ -291,10 +272,19 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (codeChange)
-                    return;
                 Log.d(TAG, "The CCT value is " + seekBar.getProgress() + 2700);
                 int seekBarProgress = seekBar.getProgress() + 2700;
+                if (seekBarProgress >= 2700 && seekBarProgress < 4500) {
+                    cctLabelColor.setText(com.umarbhutta.xlightcompanion.R.string.nuan_bai);
+                }
+                if (seekBarProgress >= 4500 && seekBarProgress < 5500) {
+                    cctLabelColor.setText(com.umarbhutta.xlightcompanion.R.string.zhengbai);
+                }
+                if (seekBarProgress >= 5500 && seekBarProgress < 6500) {
+                    cctLabelColor.setText(com.umarbhutta.xlightcompanion.R.string.lengbai);
+                }
+                if (codeChange)
+                    return;
                 int cctInt = mCurrentDevice.ChangeCCT(seekBarProgress);
                 deviceInfo.cct = seekBarProgress;
                 Log.e(TAG, "cctInt value is= " + cctInt);
@@ -306,23 +296,6 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                 } else {
                     isScrollView = true;
                 }
-            }
-        });
-
-        scenarioSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getItemAtPosition(position).toString() == "None") {
-                    disableEnableControls(true);
-                } else {
-                    disableEnableControls(false);
-                    mCurrentDevice.ChangeScenario(position);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -347,7 +320,6 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                 updateDeviceRingLabel();
             }
         });
-        initScenario();//初始化场景
     }
 
     //获取监听
@@ -365,7 +337,7 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                 intValue = msg.getData().getInt("BR", -255);
                 if (intValue != -255) {
 //                    brightnessSeekBar.setProgress(intValue);
-                    brightnessSeekBar.setValue(intValue);
+                    brightnessSeekBar.setProgress(intValue);
                     deviceInfo.brightness = intValue;
                 }
                 intValue = msg.getData().getInt("CCT", -255);
@@ -374,9 +346,9 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                     cctSeekBar.setProgress(intValue - 2700);
                 }
                 //颜色
-                int R = 0;
-                int G = 0;
-                int B = 0;
+                int R = -255;
+                int G = -255;
+                int B = -255;
                 intValue = msg.getData().getInt("R", -255);
                 if (intValue != -255) {
                     R = intValue;
@@ -389,16 +361,22 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                 if (intValue != -255) {
                     B = intValue;
                 }
-                int color = Color.rgb(R, G, B);
-                circleIcon.setColor(color);
-                colorTextView.setText("RGB(" + R + "," + G + "," + B + ")");
+                if (R != -255 && G != -255 && B != -255) {
+                    int[] tmpColor = {R, G, B};
+                    deviceInfo.color = tmpColor;
+                    int color = Color.rgb(R, G, B);
+                    circleIcon.setColor(color);
+                    selectColor = color;
+                    Log.d("XLight", "update auto color return");
+                    colorTextView.setText("RGB(" + R + "," + G + "," + B + ")");
+                }
+
                 GlanceMainFragment.devicenodes.remove(mPositon);
                 GlanceMainFragment.devicenodes.add(mPositon, deviceInfo);
                 codeChange = false;
             }
         };
         mCurrentDevice.addDeviceEventHandler(m_handlerControl);
-//      updateDeviceRingLabel();//这个作用是 切换灯上部图片的
     }
 
     private EditText et;
@@ -429,27 +407,6 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
             mCurrentDevice.removeDeviceEventHandler(m_handlerControl);
         //mCurrentDevice.Disconnect();
         super.onDestroy();
-    }
-
-    private void disableEnableControls(boolean isEnabled) {
-        powerSwitch.setEnabled(isEnabled);
-        colorTextView.setEnabled(isEnabled);
-        brightnessSeekBar.setEnabled(isEnabled);
-        cctSeekBar.setEnabled(isEnabled);
-
-        int selectColor = R.color.colorAccent, allLabels = R.color.textColorPrimary;
-        if (isEnabled) {
-            selectColor = R.color.colorAccent;
-            allLabels = R.color.textColorPrimary;
-        } else {
-            selectColor = R.color.colorDisabled;
-            allLabels = R.color.colorDisabled;
-        }
-        colorTextView.setTextColor(ContextCompat.getColor(this, selectColor));
-        powerLabel.setTextColor(ContextCompat.getColor(this, allLabels));
-        brightnessLabel.setTextColor(ContextCompat.getColor(this, allLabels));
-        cctLabel.setTextColor(ContextCompat.getColor(this, allLabels));
-        colorLabel.setTextColor(ContextCompat.getColor(this, allLabels));
     }
 
     private void updateDeviceRingLabel() {
@@ -489,177 +446,11 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
 
     private void onFabPressed() {
         Intent intent = new Intent(EditDeviceActivity.this, ColorSelectActivity.class);
+        intent.putExtra("color", selectColor);
         startActivityForResult(intent, 1);
     }
 
-    private void initScenario() {
-        RequestSceneListInfo.getInstance().getSceneListInfo(this, new RequestSceneListInfo.OnRequestFirstPageInfoCallback() {
-            @Override
-            public void onRequestFirstPageInfoSuccess(final SceneListResult mDeviceInfoResult) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EditDeviceActivity.this.mDeviceInfoResult = mDeviceInfoResult;
-                        initSceneList();
-                    }
-                });
-            }
-
-            @Override
-            public void onRequestFirstPageInfoFail(int code, final String errMsg) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtil.showToast(EditDeviceActivity.this, "" + errMsg);
-                    }
-                });
-            }
-        });
-    }
-
     private List<View> viewList = new ArrayList<View>();
-    private List<TextView> textViews = new ArrayList<TextView>();
-
-    private void initSceneList() {
-        for (int i = 0; i < mDeviceInfoResult.rows.size() + 1; i++) {
-            View view;
-            TextView textView;
-            if (i == 0) {
-                view = mInflater.inflate(R.layout.add_scenario_zdy_item,
-                        linear, false);
-                textView = (TextView) view.findViewById(R.id.textView);
-                view.setBackgroundResource(R.drawable.add_scenario_blue_bg);
-            } else {
-                Rows info = mDeviceInfoResult.rows.get(i - 1);
-                view = mInflater.inflate(R.layout.add_scenario_item,
-                        linear, false);
-                view.setBackgroundResource(R.drawable.add_scenario_bg);
-                textView = (TextView) view.findViewById(R.id.sceneName);
-                textView.setText(info.scenarioname);
-            }
-
-            viewList.add(view);
-            textViews.add(textView);
-            view.setTag(i);
-            view.setOnClickListener(mSceneClick);
-            linear.addView(view);
-        }
-
-        linear.invalidate();
-
-        if (deviceInfo.devicenodetype != 1 && !TextUtils.isEmpty(deviceInfo.scenarioId)) {
-//        if (deviceInfo.devicenodetype != 1) {//测试专用
-            for (int i = 0; i < viewList.size(); i++) {
-                if (i != 0 && deviceInfo.scenarioId.equals(String.valueOf(mDeviceInfoResult.rows.get(i - 1).id))) {
-//                if (i != 0 && "53".equals(String.valueOf(mDeviceInfoResult.rows.get(i - 1).id))) {
-                    View cView = viewList.get(i);
-                    cView.callOnClick();
-
-                    Message msg = Message.obtain();
-                    msg.arg1 = i;
-
-                    handler.sendMessageDelayed(msg, 100);
-                    break;
-
-                }
-            }
-        }
-    }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            int index = msg.arg1;
-
-            View cView = viewList.get(index);
-            int[] location = new int[2];
-            cView.getLocationOnScreen(location);
-//            Logger.i("left1 = " + location[0] + ", " + location[1]);
-            mHorizontalScrollView.scrollTo(location[0] - 100, 0);
-        }
-    };
-
-    /**
-     * 当前场景
-     */
-    private Rows curSene = null;
-
-    View.OnClickListener mSceneClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int index = (int) v.getTag();
-
-            if (0 == index) {
-                curSene = null;
-            } else {
-                Rows sceneInfo = mDeviceInfoResult.rows.get(index - 1);
-                curSene = sceneInfo;
-                isScrollView = false;
-                updateSceneInfo(sceneInfo);
-            }
-
-            for (int i = 0; i < viewList.size(); i++) {
-                View view = viewList.get(i);
-                TextView textView = textViews.get(i);
-                view.setBackgroundResource(R.drawable.add_scenario_bg);
-                textView.setTextColor(getResources().getColor(R.color.black));
-            }
-
-            View mView = viewList.get(index);
-            mView.setBackgroundResource(R.drawable.add_scenario_blue_bg);
-            TextView mText = textViews.get(index);
-            mText.setTextColor(getResources().getColor(R.color.white));
-            //editDeViceInfo(null);
-        }
-    };
-
-    /**
-     * 选择了某一个场景
-     *
-     * @param sceneInfo
-     */
-    private void updateSceneInfo(Rows sceneInfo) {
-        if (null == sceneInfo) {
-            return;
-        }
-//        powerSwitch.setChecked((1 == sceneInfo.ison) ? true : false);
-        if (mCurrentDevice.isSunny()) {
-//            brightnessSeekBar.setProgress(sceneInfo.brightness);
-            brightnessSeekBar.setValue(sceneInfo.brightness);
-            mCurrentDevice.ChangeBrightness(sceneInfo.brightness);
-            cctSeekBar.setProgress(sceneInfo.cct - 2700);
-            mCurrentDevice.ChangeCCT(sceneInfo.cct - 2700);
-            mCurrentDevice.ChangeScenario(sceneInfo.scenarionodes.get(0).scenarioId);
-        } else {
-            cctSeekBar.setProgress(sceneInfo.cct - 2700);
-            mCurrentDevice.ChangeCCT(sceneInfo.cct - 2700);
-            Scenarionodes currentNode = sceneInfo.scenarionodes.get(0);//当前灯
-            int R = 0;
-            int G = 0;
-            int B = 0;
-            R = currentNode.R;
-            G = currentNode.G;
-            B = currentNode.B;
-            int color = Color.rgb(R, G, B);
-            circleIcon.setColor(color);
-            colorTextView.setText("RGB(" + R + "," + G + "," + B + ")");
-            mCurrentDevice.ChangeColor(xltDevice.RING_ID_ALL, true, sceneInfo.brightness, 26, currentNode.R, currentNode.G, currentNode.B);
-        }
-//        brightnessSeekBar.setProgress(sceneInfo.brightness);
-//        cctSeekBar.setProgress(sceneInfo.cct - 2700);
-        //颜色
-//        int R = 0;
-//        int G = 0;
-//        int B = 0;
-//        Scenarionodes currentNode= sceneInfo.scenarionodes.get(0);//当前灯
-//        R = currentNode.R;
-//        G = currentNode.G;
-//        B = currentNode.B;
-//        int color = Color.rgb(R, G, B);
-//        circleIcon.setColor(color);
-//        colorTextView.setText("RGB(" + R + "," + G + "," + B + ")");
-    }
 
     /**
      * 提交编辑设备
@@ -681,7 +472,7 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
             jsonObject.put("devicenodename", deviceName);
             jsonObject.put("ison", powerSwitch.isChecked() ? 1 : 0);
             jsonObject.put("cct", cctSeekBar.getProgress() + 2700);
-            jsonObject.put("brightness", brightnessSeekBar.getCurrentRange()[0]);
+            jsonObject.put("brightness", brightnessSeekBar.getProgress());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -729,12 +520,13 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                 green = (color & 0x00ff00) >> 8;
                 blue = (color & 0x0000ff);
             }
+            Log.d("XLight", "select color return");
             circleIcon.setColor(color);
             colorTextView.setText("RGB(" + red + "," + green + "," + blue + ")");
 
-            int br = (int) brightnessSeekBar.getCurrentRange()[0];
+            int br = brightnessSeekBar.getProgress();
             int ww = 0;
-            mCurrentDevice.ChangeColor(xltDevice.RING_ID_ALL, state, br, ww, red, green, blue);
+            mCurrentDevice.ChangeColor(xltDevice.RING_ID_ALL, true, br, ww, red, green, blue);
             mCurrentDevice.setRed(xltDevice.RING_ID_ALL, red);
             mCurrentDevice.setGreen(xltDevice.RING_ID_ALL, green);
             mCurrentDevice.setBlue(xltDevice.RING_ID_ALL, blue);

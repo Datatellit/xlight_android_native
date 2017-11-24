@@ -8,28 +8,41 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.transition.Scene;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
+import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
+import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
+import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
 import com.umarbhutta.xlightcompanion.okHttp.model.SceneListResult;
+import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
+import com.umarbhutta.xlightcompanion.okHttp.model.UserScene;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeleteScene;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSceneListInfo;
 import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -42,12 +55,15 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
     public static ArrayList<String> name = new ArrayList<>(Arrays.asList("Preset 1", "Preset 2", "Turn off"));
     public static ArrayList<String> info = new ArrayList<>(Arrays.asList("A bright, party room preset", "A relaxed atmosphere with yellow tones", "Turn the chandelier rings off"));
 
-    ScenarioListAdapter scenarioListAdapter;
-    ListView scenarioListView;
+    ScenarioListAdapter sceneSysListAdapter;
+    ScenarioListAdapter sceneCusListAdapter;
+    GridView gvSystem;
+    GridView gvCustom;
     private ImageView iv_menu;
     private TextView textTitle;
     private Button btn_add;
-    private RelativeLayout rl_no, rl_hava;
+    private RelativeLayout rl_no;
+    private LinearLayout llSystem, llCustom;
 
     @Nullable
     @Override
@@ -65,11 +81,12 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
         btn_add.setOnClickListener(this);
 
         //setup recycler view
-        scenarioListView = (ListView) view.findViewById(R.id.scenarioListView);
+        gvCustom = (GridView) view.findViewById(R.id.gvCustom);
+        gvSystem = (GridView) view.findViewById(R.id.gvSystem);
         //create list adapter
         rl_no = (RelativeLayout) view.findViewById(R.id.rl_no);
-        rl_hava = (RelativeLayout) view.findViewById(R.id.rl_have);
-
+        llCustom = (LinearLayout) view.findViewById(R.id.llCustom);
+        llSystem = (LinearLayout) view.findViewById(R.id.llSystem);
         return view;
     }
 
@@ -84,6 +101,9 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
      */
     private void showDeleteSceneDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        UserScene us = mCusSceneList.get(position).userscenes.get(0);
+        if (us.userId == 0)
+            return;
         builder.setTitle(R.string.delete_scene_tap);
         builder.setMessage(R.string.sure_delete_this_scene);
         builder.setPositiveButton(getString(R.string.queding), new DialogInterface.OnClickListener() {
@@ -103,7 +123,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
     }
 
     private void deleteScene(final int position) {
-        Rows mSceneInfo = mSceneList.get(position);
+        SceneResult mSceneInfo = mCusSceneList.get(position);
         RequestDeleteScene.getInstance().deleteScene(getActivity(), mSceneInfo.id, new CommentRequstCallback() {
             @Override
             public void onCommentRequstCallbackSuccess() {
@@ -111,8 +131,8 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                     @Override
                     public void run() {
                         ToastUtil.showToast(getActivity(), R.string.delete_success);
-                        mSceneList.remove(position);
-                        scenarioListAdapter.notifyDataSetChanged();
+                        mCusSceneList.remove(position);
+                        sceneCusListAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -137,17 +157,18 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
             if (resultCode == Activity.RESULT_OK) {
                 String incomingName = data.getStringExtra(SCENARIO_NAME);
                 String incomingInfo = data.getStringExtra(SCENARIO_INFO);
-
                 name.add(incomingName);
                 info.add(incomingInfo);
-
-                scenarioListAdapter.notifyDataSetChanged();
+                if (sceneCusListAdapter != null)
+                    sceneCusListAdapter.notifyDataSetChanged();
+                if (sceneSysListAdapter != null)
+                    sceneSysListAdapter.notifyDataSetChanged();
             } else if (resultCode == Activity.RESULT_CANCELED) {
             }
         }
     }
 
-    public List<Rows> mSceneList = new ArrayList<Rows>();
+    public List<SceneResult> mSceneList = new ArrayList<SceneResult>();
     private ProgressDialog mDialog;
 
     private void getSceneList() {
@@ -155,9 +176,9 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
         if (mDialog != null) {
             mDialog.show();
         }
-        RequestSceneListInfo.getInstance().getSceneListInfo(getActivity(), new RequestSceneListInfo.OnRequestFirstPageInfoCallback() {
+        RequestSceneListInfo.getInstance().getSceneListInfo(getActivity(), new RequestSceneListInfo.OnRequestSceneInfoCallback() {
             @Override
-            public void onRequestFirstPageInfoSuccess(final SceneListResult deviceInfoResult) {
+            public void onRequestFirstPageInfoSuccess(final List<SceneResult> sceneInfoResult) {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -165,9 +186,9 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                             if (mDialog != null) {
                                 mDialog.dismiss();
                             }
-                            if (null != deviceInfoResult && null != deviceInfoResult.rows && deviceInfoResult.rows.size() > 0) {
+                            if (null != sceneInfoResult && sceneInfoResult.size() > 0) {
                                 mSceneList.clear();
-                                mSceneList.addAll(deviceInfoResult.rows);
+                                mSceneList.addAll(sceneInfoResult);
                             }
                             initList();
                         }
@@ -192,21 +213,107 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
         });
     }
 
+    public List<SceneResult> mSysSceneList = new ArrayList<SceneResult>();
+    public List<SceneResult> mCusSceneList = new ArrayList<SceneResult>();
+
     private void initList() {
         if (mSceneList.size() > 0) {
-            rl_hava.setVisibility(View.VISIBLE);
+            mSysSceneList.clear();
+            mCusSceneList.clear();
+            //进行场景分类
+            for (SceneResult sr : mSceneList) {
+                UserScene us = sr.userscenes.get(0);
+                if (us.userId == 0) {
+                    mSysSceneList.add(sr);
+                } else {
+                    mCusSceneList.add(sr);
+                }
+            }
             rl_no.setVisibility(View.GONE);
-            scenarioListAdapter = new ScenarioListAdapter(getContext(), mSceneList);
-            scenarioListAdapter.setOnLongClickCallBack(new ScenarioListAdapter.OnLongClickCallBack() {
+            if (mSysSceneList.size() > 0) {
+                llSystem.setVisibility(View.VISIBLE);
+            }
+            if (mCusSceneList.size() > 0) {
+                llCustom.setVisibility(View.VISIBLE);
+            }
+            sceneCusListAdapter = new ScenarioListAdapter(getContext(), mCusSceneList);
+            sceneCusListAdapter.setOnLongClickCallBack(new ScenarioListAdapter.OnLongClickCallBack() {
                 @Override
                 public void onLongClickCallBack(int position) {
                     showDeleteSceneDialog(position);
                 }
             });
-            scenarioListView.setAdapter(scenarioListAdapter);
+            sceneCusListAdapter.setOnClickCallBack(new ScenarioListAdapter.OnClickCallBack() {
+                @Override
+                public void onClickCallBack(int position) {
+                    resolveScene(mCusSceneList.get(position));
+                }
+            });
+            gvCustom.setAdapter(sceneCusListAdapter);
+            sceneSysListAdapter = new ScenarioListAdapter(getContext(), mSysSceneList);
+            sceneSysListAdapter.setOnClickCallBack(new ScenarioListAdapter.OnClickCallBack() {
+                @Override
+                public void onClickCallBack(int position) {
+                    resolveScene(mSysSceneList.get(position));
+                }
+            });
+            gvSystem.setAdapter(sceneSysListAdapter);
         } else {
-            rl_hava.setVisibility(View.GONE);
+            llCustom.setVisibility(View.GONE);
+            llSystem.setVisibility(View.GONE);
             rl_no.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void resolveScene(final SceneResult scene) {
+        try {
+            JSONArray ja = new JSONArray(scene.cmd);
+            Map<String, JSONArray> maps = new HashMap<>();
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject jb = ja.getJSONObject(i);
+                String deviceId = jb.getString("deviceId");
+                jb.remove("deviceId");
+                JSONArray child;
+                //开始进行命令合并
+                if (maps.containsKey(deviceId)) {
+                    //已经存在，进行命令合并
+                    child = (JSONArray) maps.get(deviceId);
+                } else {
+                    child = new JSONArray();
+                }
+                child.put(jb);
+                maps.put(deviceId, child);
+            }
+            //生成发送格式
+            ja = new JSONArray();
+            for (String key : maps.keySet()) {
+                JSONObject jb = new JSONObject();
+                JSONObject log = new JSONObject();
+                log.put("userId", UserUtils.getUserInfo(getContext()).id);
+                log.put("detail", "切换到" + scene.name + "场景");
+                log.put("logtype", 1);
+                log.put("logform", "APP");
+                jb.put("deviceid", key);
+                jb.put("args", ((JSONArray) maps.get(key)));
+                jb.put("logs", log);
+                ja.put(jb);
+            }
+            JSONObject jb = new JSONObject();
+            jb.put("data", ja);
+            HttpUtils.getInstance().postRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, UserUtils.getAccessToken(getContext())), jb.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
+                @Override
+                public void onHttpRequestSuccess(Object result) {
+                    ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
+                }
+
+                @Override
+                public void onHttpRequestFail(int code, String errMsg) {
+                    ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
+                }
+            });
+            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
+        } catch (Exception e) {
+            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
         }
     }
 
@@ -219,7 +326,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.btn_add:
                 // 跳转到添加场景页面
-                onFabPressed(AddScenarioNewActivity.class);
+                onFabPressed(AddSceneActivity.class);
                 break;
         }
     }

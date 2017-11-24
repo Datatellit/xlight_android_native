@@ -26,13 +26,15 @@ import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSettingMainDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestUnBindDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
+import com.umarbhutta.xlightcompanion.share.ShareDeviceActivity;
+import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
 
 /**
  * Created by Administrator on 2017/3/4.
  * 选择主设备列表
  */
 
-public class DeviceListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class DeviceListActivity extends BaseActivity implements AdapterView.OnItemLongClickListener {
 
     private LinearLayout llBack;
     private TextView btnSure;
@@ -77,7 +79,28 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
             listView.setVisibility(View.VISIBLE);
             adapter = new DeviceListAdapter(this, GlanceMainFragment.deviceList);
             listView.setAdapter(adapter);
-            listView.setOnItemClickListener(this);
+            adapter.setOnClickCallBack(new DeviceListAdapter.OnClickCallBack() {
+                @Override
+                public void onClickCallBack(int position) {
+                    selectPosition = position;
+                    setMainDevice(position);
+                }
+            });
+            adapter.setOnShareClickCallBack(new DeviceListAdapter.OnShareClickCallBack() {
+                @Override
+                public void OnShareClickCallBack(int position) {
+                    //分享功能
+                    if (UserUtils.isLogin(getApplicationContext())) {
+                        //打开分享页面
+                        Intent intent = new Intent(getApplicationContext(), ShareDeviceActivity.class);
+                        intent.putExtra("deviceId", GlanceMainFragment.deviceList.get(position).id);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivityForResult(intent, 1);
+                    }
+                }
+            });
             listView.setOnItemLongClickListener(this);
             view_top_line.setVisibility(View.VISIBLE);
             view_bottom_line.setVisibility(View.VISIBLE);
@@ -95,14 +118,15 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        selectPosition = position;
-        setMainDevice(position);
-    }
-
     //设置主设备
     private void setMainDevice(int position) {
+        if (GlanceMainFragment.deviceList.get(position).isShare == 1) {
+            ToastUtil.showToast(this, R.string.main_device_share);
+            return;
+        }
+        if (GlanceMainFragment.deviceList.get(position).maindevice == 1) {
+            return;
+        }
         if (!NetworkUtils.isNetworkAvaliable(this)) {
             ToastUtil.showToast(this, R.string.net_error);
             return;
@@ -224,7 +248,8 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        showDeleteSceneDialog(position);
+        if (GlanceMainFragment.deviceList.get(position).isShare == 0)
+            showDeleteSceneDialog(position);
         return true;
     }
 }

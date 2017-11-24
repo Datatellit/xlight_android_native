@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/ll_item"
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal">
 
@@ -10,10 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp">
+        android:paddingRight="15dp">
 
         <ImageView
             android:id="@+id/iv"
@@ -21,8 +18,19 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_gravity="center"
+            android:layout_marginLeft="23dp"
             android:scaleType="fitCenter"
             android:src="@drawable/home_device_list" />
+
+        <ImageView
+            android:id="@+id/ivShare"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="left"
+            android:layout_marginLeft="0dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/share_jb" />
 
         <TextView
             android:id="@+id/deviceName"
@@ -39,9 +47,10 @@
             android:id="@+id/devicePlan"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
             android:layout_toRightOf="@+id/deviceName"
             android:gravity="center"
-            android:paddingLeft="20dp"
             android:text="@string/has_start_plan"
             android:textColor="@color/textDarkGrey" />
 
@@ -63,9 +72,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/switch_selector"
-            android:gravity="center"
             android:button="@null"
-            android:paddingRight="22dp"/>
+            android:gravity="center"
+            android:paddingRight="22dp" />
 
     </RelativeLayout>
 

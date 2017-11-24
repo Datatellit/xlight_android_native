@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umarbhutta.xlightcompanion.App;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
@@ -22,21 +23,23 @@ import com.umarbhutta.xlightcompanion.report.ReportFragment;
 import com.umarbhutta.xlightcompanion.scenario.ScenarioMainFragment;
 import com.umarbhutta.xlightcompanion.settings.SettingFragment;
 import com.umarbhutta.xlightcompanion.settings.UserMsgModifyActivity;
+import com.umarbhutta.xlightcompanion.share.ShareMainFragment;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
 import com.umarbhutta.xlightcompanion.views.CircleImageView;
 
-public class MainMenuFragment extends Fragment implements View.OnClickListener {
+public class MainMenuFragment extends Fragment implements View.OnClickListener, App.ChangeViewListener {
 
     private String TAG = MainMenuFragment.class.getSimpleName();
 
     private TextView tv_userName, textView;
     private Button btnLogin;
     private LinearLayout llPerName;
-    private TextView itemGlance, itemControl, itemScenario, itemSchedule, itemSettings, itemHelp;
+    private TextView itemGlance, itemControl, itemScenario, itemSchedule, itemSettings, itemHelp, itemShare;
     private CircleImageView userIcon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        App.setChangeViewListener(this);
         return inflater.inflate(R.layout.fragment_main_menu, null);
     }
 
@@ -48,10 +51,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             btnLogin.setVisibility(View.GONE);
             llPerName.setVisibility(View.VISIBLE);
             String nickName = UserUtils.getUserInfo(getActivity()).getNickname();
-            if(null==nickName){
+            if (null == nickName) {
                 nickName = "";
             }
-            tv_userName.setText("Welcome, "+ nickName);
+            tv_userName.setText("Welcome, " + nickName);
             textView.setText(UserUtils.getUserInfo(getActivity()).getEmail());
             ImageLoader.getInstance().displayImage(userInfo.getImage(), userIcon, ImageLoaderOptions.getImageLoaderOptions());
         } else {
@@ -59,6 +62,11 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             btnLogin.setVisibility(View.VISIBLE);
             llPerName.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onChangeViewListener(int id) {
+        changeMenu(id);
     }
 
     @Override
@@ -77,11 +85,13 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         itemSchedule = (TextView) getActivity().findViewById(R.id.nav_schedule);
         itemSettings = (TextView) getActivity().findViewById(R.id.nav_settings);
         itemHelp = (TextView) getActivity().findViewById(R.id.nav_help);
+        itemShare = (TextView) getActivity().findViewById(R.id.nav_share);
         itemGlance.setOnClickListener(this);
         itemControl.setOnClickListener(this);
         itemScenario.setOnClickListener(this);
         itemSchedule.setOnClickListener(this);
         itemSettings.setOnClickListener(this);
+        itemShare.setOnClickListener(this);
         itemHelp.setOnClickListener(this);
         userIcon.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
@@ -92,6 +102,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         itemSchedule.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
         itemSettings.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
         itemHelp.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+        itemShare.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
     }
 
     // the meat of switching the above fragment
@@ -107,8 +118,12 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        changeMenu(v.getId());
+    }
+
+    private void changeMenu(int id) {
         Fragment fragment = null;
-        switch (v.getId()) {
+        switch (id) {
             case R.id.btn_login:
                 showContentView();
                 onFabPressed(LoginActivity.class);
@@ -130,6 +145,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 itemSchedule.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemSettings.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemHelp.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemShare.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 fragment = new GlanceMainFragment();//首页
                 break;
             case R.id.nav_control:
@@ -146,6 +162,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 itemSchedule.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemSettings.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemHelp.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemShare.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 fragment = new ControlRuleFragment();//规则
                 break;
             case R.id.nav_scenario:
@@ -162,6 +179,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 itemSchedule.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemSettings.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemHelp.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemShare.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 fragment = new ScenarioMainFragment();//场景
                 break;
             case R.id.nav_schedule:
@@ -178,6 +196,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 itemScenario.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemSettings.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemHelp.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemShare.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 fragment = new ReportFragment();//报表
                 break;
             case R.id.nav_settings:
@@ -194,6 +213,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 itemScenario.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemSchedule.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemHelp.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemShare.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 fragment = new SettingFragment();//设置
                 break;
             case R.id.nav_help:
@@ -204,7 +224,25 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
                 itemScenario.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemSchedule.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 itemSettings.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemShare.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
                 fragment = new HelpFragment();//帮助
+                break;
+            case R.id.nav_share:
+                if (!UserUtils.isLogin(getActivity())) {
+                    showContentView();
+                    onFabPressed(LoginActivity.class);
+                    getActivity().finish();
+                    return;
+                }
+                itemShare.setBackgroundColor(getResources().getColor(R.color.bar_color));
+
+                itemGlance.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemControl.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemScenario.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemSchedule.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemSettings.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                itemHelp.setBackgroundColor(getResources().getColor(R.color.btn_login_color));
+                fragment = new ShareMainFragment();
                 break;
         }
         if (fragment != null) {
@@ -221,6 +259,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
             ra.onActivityPressed(activity);
         }
     }
+
     private void showContentView() {
         if (getActivity() == null)
             return;

@@ -11,7 +11,7 @@ import java.util.List;
 public class SceneInfo implements Serializable{
     public int code;
     public String msg;
-    public List<Rows> data;
+    public List<SceneResult> data;
 
     @Override
     public String toString() {

@@ -70,6 +70,7 @@ public class DevicesMainListAdapter extends BaseAdapter {
             holder.devicePlan = (TextView) convertView.findViewById(devicePlan);
             holder.mDeviceSwitch = (CheckBox) convertView.findViewById(R.id.deviceSwitch);
             holder.ll_item = (LinearLayout) convertView.findViewById(R.id.ll_item);
+            holder.ivShare = (ImageView) convertView.findViewById(R.id.ivShare);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -107,7 +108,12 @@ public class DevicesMainListAdapter extends BaseAdapter {
         });
 
         holder.mDeviceName.setText(TextUtils.isEmpty(devicenodes.devicenodename) ? mActivity.getString(R.string.lamp) : devicenodes.devicenodename);
-        holder.devicePlan.setText(devicenodes.ison == 0 ? R.string.no_start_plan : R.string.has_start_plan);
+        holder.devicePlan.setText(devicenodes.devicetype > 1 ? "Rainbow" : "Sunny");
+        if (devicenodes.isShare == 1) {
+            holder.ivShare.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivShare.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -115,6 +121,7 @@ public class DevicesMainListAdapter extends BaseAdapter {
         private TextView mDeviceName, main_device, devicePlan;
         private CheckBox mDeviceSwitch;
         private LinearLayout ll_item;
+        private ImageView ivShare;
     }
 
     private OnSwitchStateChangeListener mOnSwitchStateChangeListener;

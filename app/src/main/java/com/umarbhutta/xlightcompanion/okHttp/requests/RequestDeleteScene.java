@@ -23,11 +23,11 @@ public class RequestDeleteScene implements HttpUtils.OnHttpRequestCallBack {
     /**
      * 删除场景
      */
-    public void deleteScene(Context context, int deviceId, CommentRequstCallback mCommentRequstCallback) {
+    public void deleteScene(Context context, int sceneId, CommentRequstCallback mCommentRequstCallback) {
         this.context = context;
         this.mCommentRequstCallback = mCommentRequstCallback;
         if (UserUtils.isLogin(context))
-            HttpUtils.getInstance().deleteRequestInfo(NetConfig.URL_DELETE_SCENE + deviceId + "?access_token=" + UserUtils.getAccessToken(context),
+            HttpUtils.getInstance().deleteRequestInfo(NetConfig.URL_DELETE_SCENE + sceneId + "?access_token=" + UserUtils.getAccessToken(context),
                     null, null, this);
     }
 

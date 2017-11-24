@@ -5,14 +5,18 @@ import android.content.Context;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
+import com.umarbhutta.xlightcompanion.okHttp.model.SceneInfo;
 import com.umarbhutta.xlightcompanion.okHttp.model.SceneListResult;
+import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
+
+import java.util.List;
 
 /**
  * Created by guangbinw on 2017/3/14.
  * 场景列表信息
  */
 public class RequestSceneListInfo implements HttpUtils.OnHttpRequestCallBack {
-    private OnRequestFirstPageInfoCallback mOnRequestFirstPageInfoCallback;
+    private OnRequestSceneInfoCallback mOnRequestSceneInfoCallback;
 
     public static RequestSceneListInfo getInstance() {
         return new RequestSceneListInfo();
@@ -23,28 +27,28 @@ public class RequestSceneListInfo implements HttpUtils.OnHttpRequestCallBack {
      *
      * @param context
      */
-    public void getSceneListInfo(Context context, OnRequestFirstPageInfoCallback mOnRequestFirstPageInfoCallback) {
-        this.mOnRequestFirstPageInfoCallback = mOnRequestFirstPageInfoCallback;
-        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_SCENE_LIST + UserUtils.getAccessToken(context), SceneListResult.class, this);
+    public void getSceneListInfo(Context context, OnRequestSceneInfoCallback mOnRequestSceneInfoCallback) {
+        this.mOnRequestSceneInfoCallback = mOnRequestSceneInfoCallback;
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_SCENE_LIST + UserUtils.getAccessToken(context), SceneInfo.class, this);
     }
 
     @Override
     public void onHttpRequestSuccess(Object result) {
-        SceneListResult info = (SceneListResult) result;
-        if (null != mOnRequestFirstPageInfoCallback) {
-            mOnRequestFirstPageInfoCallback.onRequestFirstPageInfoSuccess(info.data);
+        SceneInfo info = (SceneInfo) result;
+        if (null != mOnRequestSceneInfoCallback) {
+            mOnRequestSceneInfoCallback.onRequestFirstPageInfoSuccess(info.data);
         }
     }
 
     @Override
     public void onHttpRequestFail(int code, String errMsg) {
-        if (null != mOnRequestFirstPageInfoCallback) {
-            mOnRequestFirstPageInfoCallback.onRequestFirstPageInfoFail(code, errMsg);
+        if (null != mOnRequestSceneInfoCallback) {
+            mOnRequestSceneInfoCallback.onRequestFirstPageInfoFail(code, errMsg);
         }
     }
 
-    public interface OnRequestFirstPageInfoCallback {
-        void onRequestFirstPageInfoSuccess(SceneListResult mDeviceInfoResult);
+    public interface OnRequestSceneInfoCallback {
+        void onRequestFirstPageInfoSuccess(List<SceneResult> mSceneInfoResult);
 
         void onRequestFirstPageInfoFail(int code, String errMsg);
     }

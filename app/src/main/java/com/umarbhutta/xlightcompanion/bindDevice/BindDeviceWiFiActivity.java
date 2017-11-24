@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
-import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;

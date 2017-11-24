@@ -1,57 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relativeLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
 
     <include layout="@layout/top_main_layout" />
 
-    <RelativeLayout
-        android:id="@+id/rl_no"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_main_top">
-        <TextView
-            android:id="@+id/tv_no_scenario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="20dp"
-            android:text="@string/no_add_scene"
-            android:textSize="@dimen/text_size" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_have"
+    <ScrollView
+        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ll_main_top"
-        android:visibility="gone">
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:text="@string/all_scene"
-            android:textSize="@dimen/text_size" />
-
-        <View
-            android:id="@+id/view"
-            style="@style/subscribe_seperate_line"
-            android:layout_below="@id/tv"
-            android:layout_marginLeft="0dp" />
-
-        <ListView
-            android:id="@+id/scenarioListView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:divider="@drawable/line_divider"
-            android:layout_marginLeft="20dp"
-            android:layout_below="@id/view"
-            android:layout_marginTop="5dp" />
-    </RelativeLayout>
-</RelativeLayout>
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_main_top">
+
+                <TextView
+                    android:id="@+id/tv_no_scenario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="20dp"
+                    android:text="@string/no_add_scene"
+                    android:textSize="@dimen/text_size" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/llSystem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/scene_system"
+                    android:textSize="24sp" />
+
+                <com.umarbhutta.xlightcompanion.gridView.MyGridView
+                    android:id="@+id/gvSystem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:horizontalSpacing="10dp"
+                    android:numColumns="3"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="none"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="5dp">
+
+                </com.umarbhutta.xlightcompanion.gridView.MyGridView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llCustom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/scene_custom"
+                    android:textSize="24sp" />
+
+                <com.umarbhutta.xlightcompanion.gridView.MyGridView
+                    android:id="@+id/gvCustom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:horizontalSpacing="15dp"
+                    android:numColumns="3"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:scrollbars="none"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="5dp"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

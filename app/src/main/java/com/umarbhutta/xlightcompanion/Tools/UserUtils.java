@@ -39,10 +39,10 @@ public class UserUtils {
      */
     public static boolean isExpires(Context context, String key) {
         Object result = SharedPreferencesUtils.getObject(context, key, null);
-        Log.e("XLight", result.toString());
         //立即重新登录
         if (result == null)
             return true;
+        Log.e("XLight", result.toString());
         //判断是否过期
         Date curTime = new Date();
         curTime.setTime(new Date().getTime() - 86400000);

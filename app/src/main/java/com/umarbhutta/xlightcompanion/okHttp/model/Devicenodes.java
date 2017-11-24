@@ -23,6 +23,8 @@ public class Devicenodes implements Serializable {
     //    public List<String> sensorsdata;
     public List<Devicerings> devicerings;
     public List<Ruleconditions> ruleconditions;
+    public int[] color;
+    public int isShare = 0;
     public String coreid;
 
     /**

@@ -23,7 +23,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+import com.timqi.sectorprogressview.ColorfulRingProgressView;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
@@ -44,7 +44,7 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice bluetoothXlight;
     private int scanTime = 60;
-    private CircularProgressBar progressBar;
+    private ColorfulRingProgressView progressBar;
     private TextView txtTime;
     private boolean myThread = true;
     private int scanCount = 0;
@@ -79,7 +79,7 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
 
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtTime.setText("" + scanTime);
-        progressBar = (CircularProgressBar) findViewById(R.id.cpbProgress);
+        progressBar = (ColorfulRingProgressView) findViewById(R.id.spv);
         new Thread(new MyThread()).start();
         type = getIntent().getIntExtra("type", 0);
         if (type == 1) {
@@ -118,7 +118,7 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
                 case 1:
                     if (scanTime > 0) {
                         scanTime--;
-                        progressBar.setProgress((float) (scanTime * 1.66));
+                        progressBar.setPercent((float) (scanTime * 1.66));
                         txtTime.setText("" + scanTime);
                     }
                     break;

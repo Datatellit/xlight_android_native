@@ -114,28 +114,28 @@ public class SelectScenarioActivity extends BaseActivity {
     }
 
     private void getSceneList() {
-        RequestSceneListInfo.getInstance().getSceneListInfo(SelectScenarioActivity.this, new RequestSceneListInfo.OnRequestFirstPageInfoCallback() {
-            @Override
-            public void onRequestFirstPageInfoSuccess(final SceneListResult deviceInfoResult) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDeviceInfoResult = deviceInfoResult;
-                        initList();
-                    }
-                });
-            }
-
-            @Override
-            public void onRequestFirstPageInfoFail(int code, final String errMsg) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtil.showToast(SelectScenarioActivity.this, errMsg);
-                    }
-                });
-            }
-        });
+//        RequestSceneListInfo.getInstance().getSceneListInfo(SelectScenarioActivity.this, new RequestSceneListInfo.OnRequestFirstPageInfoCallback() {
+//            @Override
+//            public void onRequestFirstPageInfoSuccess(final SceneListResult deviceInfoResult) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mDeviceInfoResult = deviceInfoResult;
+//                        initList();
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onRequestFirstPageInfoFail(int code, final String errMsg) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ToastUtil.showToast(SelectScenarioActivity.this, errMsg);
+//                    }
+//                });
+//            }
+//        });
     }
 
     private void initList() {

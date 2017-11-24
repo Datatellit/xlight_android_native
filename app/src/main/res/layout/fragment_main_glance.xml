@@ -28,7 +28,7 @@
                 android:id="@+id/mainLightsLL"
                 android:layout_width="match_parent"
                 android:layout_height="265dp"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
@@ -51,7 +51,7 @@
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="13dp">
 
                             <ImageButton
                                 android:layout_width="wrap_content"
@@ -59,7 +59,9 @@
                                 android:layout_centerInParent="true"
                                 android:background="@drawable/home_menu"
                                 android:clickable="false"
-                                android:focusable="false" />
+                                android:focusable="false"
+                                android:paddingTop="10dp"
+                                android:scaleType="fitCenter" />
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -67,12 +69,13 @@
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="13dp">
 
                             <ImageButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
+                                android:scaleType="fitCenter"
                                 android:background="@drawable/home_setting"
                                 android:clickable="false"
                                 android:focusable="false" />

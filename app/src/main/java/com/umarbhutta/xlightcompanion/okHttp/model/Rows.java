@@ -21,6 +21,7 @@ public class Rows implements Serializable {
     public int userId;
     public String iphoneidentify;
     public String androididentify;
+    public int isShare = 0;
     /**
      * 是否为主设备，0否，1是
      */
@@ -41,6 +42,7 @@ public class Rows implements Serializable {
     public DeviceUser user;
     public List<Devicenodes> devicenodes;
     public List<Scenarionodes> scenarionodes;
+    public ShareDevice sharedevice;
     /**
      * 主页上展示的温度、设备列表等信息
      */

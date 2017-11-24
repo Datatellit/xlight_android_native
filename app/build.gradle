@@ -71,25 +71,39 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:+'
     testCompile 'junit:junit:4.12'
     compile project(':slidingmenu_library')
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
     // BY DEFAULT, BUILD APP AGAINST THE LOCAL SDK SOURCE
+
     // (i.e.: make modifications to the SDK source in the local repo show up in this app
+
     // just by rebuilding)
     compile project(':cloudsdk')
-    compile project(':PushSDK')
+    compile project(':push')
     compile 'com.amap.api:location:latest.integration'
-    compile 'com.mikhaellopez:circularprogressbar:1.1.1'
+    compile 'com.xw.repo:bubbleseekbar:3.10-lite'
+    compile 'com.orhanobut:dialogplus:1.11@aar'
+    compile 'com.timqi.sectorprogressview:library:2.0.1'
     compile 'com.kaopiz:kprogresshud:1.0.2'
     compile 'com.baoyz.actionsheet:library:1.1.7'
+    compile 'com.github.rtugeek:ColorSeekBar:1.5.2'
     //
+
     // **OR**
+
     //
+
     // comment out the above, and
+
     // UNCOMMENT THE FOLLOWING TO USE A PUBLISHED VERSION OF THE SDK:
+
     //compile 'io.particle:cloudsdk:0.3.4'
-//    compile 'io.particle:devicesetup:0.3.6'
+
+    //    compile 'io.particle:devicesetup:0.3.6'
     compile 'me.priyesh:chroma:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile project(':RangeSeekBar')
+    compile files('libs/umeng-common-1.4.0.jar')
+    compile files('libs/umerror_android_1.0.0.jar')
 }

@@ -34,4 +34,14 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:background="@drawable/home_add"
         android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btn_more"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/home_more"
+        android:visibility="invisible" />
 </RelativeLayout>

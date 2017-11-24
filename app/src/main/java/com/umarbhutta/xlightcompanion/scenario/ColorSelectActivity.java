@@ -37,6 +37,7 @@ public class ColorSelectActivity extends BaseActivity {
         OpacityBar opacityBar = (OpacityBar) findViewById(R.id.opacitybar);
         SaturationBar saturationBar = (SaturationBar) findViewById(R.id.saturationbar);
         ValueBar valueBar = (ValueBar) findViewById(R.id.valuebar);
+        picker.setColor(getIntent().getIntExtra("color", 0));
         findViewById(R.id.btn_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -49,11 +49,19 @@
     <string name="unbind_sucess">解绑成功</string>
     <string name="unbind_fail">解绑失败</string>
     <string name="scene_name">场景名称</string>
+    <string name="scene_wait_device">按住以调整此场景的设备</string>
+    <string name="scene_wait_last_select">请至少添加一个设备</string>
+    <string name="scene_custom">自定义场景</string>
+    <string name="scene_system">系统场景</string>
+    <string name="scene_change_success">%s场景执行成功</string>
+    <string name="scene_change_failed">%s场景执行失败</string>
     <string name="color_temp">色温</string>
     <string name="brightness">亮度</string>
     <string name="color">颜色</string>
     <string name="scene">场景</string>
+    <string name="scene_close">关闭</string>
     <string name="select">选择</string>
+
     <string name="email_error">邮箱格式不正确</string>
     <string name="input_email">请输入您的邮箱</string>
     <string name="next">下一步</string>
@@ -147,6 +155,29 @@
     <string name="custom">自定义</string>
     <string name="device_connect_failed">设备 [%s] 连接失败</string>
     <string name="device_disconnect">设备离线，请下拉重连</string>
+    <string name="share">分享</string>
+    <string name="share_title">添加分享</string>
+    <string name="share_desc">将设备分享给您的朋友或家人，共同使用</string>
+    <string name="share_hint">接受分享的账号</string>
+    <string name="share_notfound">用户不存在</string>
+    <string name="share_success">设备分享成功</string>
+    <string name="share_already">该用户已获取过此设备</string>
+    <string name="share_yourself">目标不能为自己</string>
+    <string name="share_list_form">来自:</string>
+    <string name="share_list_type_account">账号分享</string>
+    <string name="share_list_type_scan">扫码分享</string>
+    <string name="share_list_type_connect">链接分享</string>
+    <string name="share_list_state_0">待确认</string>
+    <string name="share_list_state_1">已接受</string>
+    <string name="share_list_state_2">已拒绝</string>
+    <string name="share_list_state_3">已取消</string>
+    <string name="share_list_state_4">已过期</string>
+    <string name="share_list_unknown">未知</string>
+    <string name="share_list_notfound">没有分享数据</string>
+    <string name="share_list_menu_send">我分享的设备</string>
+    <string name="share_list_menu_receive">我获得的设备</string>
+    <string name="share_list_cancel">取消设备分享</string>
+    <string name="share_list_cancel_message">确认取消对该设备的分享？</string>
 
     <string name="zhouyi">周一</string>
     <string name="zhouer">周二</string>
@@ -177,6 +208,7 @@
     <string name="create_rule">新建规则</string>
     <string name="rule_create_success">规则创建成功</string>
     <string name="main_device">主设备</string>
+    <string name="main_device_share">分享设备不能设置为主设备</string>
     <string name="rule">规则</string>
     <string name="data_is_null">数据为空</string>
     <string name="modify_success">修改成功</string>

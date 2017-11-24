@@ -35,7 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@color/dividerColor"
-        android:layout_marginLeft="@dimen/pickerview_topbar_paddingright"
         android:dividerHeight="1dp" />
     <View
         android:id="@+id/view_bottom_line"

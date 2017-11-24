@@ -1,2 +1,2 @@
-include ':app', ':HoloColorPicker-master', ':slidingmenu_library', ':cloudsdk', ':PushSDK', ':RangeSeekBar', ':devicesetup'
+include ':app', ':HoloColorPicker-master', ':slidingmenu_library', ':cloudsdk', ':RangeSeekBar', ':devicesetup', ':push'
 

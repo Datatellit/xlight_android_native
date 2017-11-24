@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/top_layout" />
+
+    <ScrollView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/sv_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/layout_radius"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <ImageButton
+                    android:id="@+id/imgButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/scene"
+                    android:onClick="changeIcon" />
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_toRightOf="@+id/imgButton"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/scene_name"
+                    android:paddingLeft="10dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/txtSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="15dp"
+                android:text="@string/scene_wait_device"
+                android:visibility="gone" />
+
+            <com.umarbhutta.xlightcompanion.gridView.MyGridView
+                android:id="@+id/gvOk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:horizontalSpacing="10dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="5dp"
+                android:visibility="gone">
+
+            </com.umarbhutta.xlightcompanion.gridView.MyGridView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="15dp"
+                android:text="@string/select_device" />
+
+            <com.umarbhutta.xlightcompanion.gridView.MyGridView
+                android:id="@+id/gvSelect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:horizontalSpacing="10dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="5dp">
+
+            </com.umarbhutta.xlightcompanion.gridView.MyGridView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

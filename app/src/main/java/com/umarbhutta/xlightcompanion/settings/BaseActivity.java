@@ -40,8 +40,7 @@ public class BaseActivity extends FragmentActivity {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mInflater = getLayoutInflater();
 
-        PushAgent.getInstance(this).onAppStart();
-
+        //PushAgent.getInstance(this).onAppStart();
     }
 
     @Override

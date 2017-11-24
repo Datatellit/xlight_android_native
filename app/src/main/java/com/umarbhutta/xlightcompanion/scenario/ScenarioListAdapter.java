@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umarbhutta.xlightcompanion.R;
-import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
+import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
+import com.umarbhutta.xlightcompanion.okHttp.model.UserScene;
 
 import java.util.List;
 
@@ -20,10 +23,10 @@ import java.util.List;
 public class ScenarioListAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<Rows> sceneList;
+    private List<SceneResult> sceneList;
     private LayoutInflater inflater;//这个一定要懂它的用法及作用
 
-    public ScenarioListAdapter(Context context, List<Rows> sceneList) {
+    public ScenarioListAdapter(Context context, List<SceneResult> sceneList) {
         this.sceneList = sceneList;
         this.mContext = context;
         this.inflater = LayoutInflater.from(mContext);
@@ -46,16 +49,23 @@ public class ScenarioListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final Rows infos = sceneList.get(position);
+        final SceneResult scene = sceneList.get(position);
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.scenario_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.activity_scene_list_item, null);
             //通过上面layout得到的view来获取里面的具体控件
-            holder.scenarioDelete = (ImageView) convertView.findViewById(R.id.scenarioDelete);
+            holder.sceneIcon = (ImageView) convertView.findViewById(R.id.imgLight);
             holder.ll_item = (LinearLayout) convertView.findViewById(R.id.ll_item);
 
-            holder.scenarioText = (TextView) convertView.findViewById(R.id.text_scenario);
+            holder.sceneName = (TextView) convertView.findViewById(R.id.txtName);
+            holder.imgButton = (RelativeLayout) convertView.findViewById(R.id.imgButton);
+            UserScene us = scene.userscenes.get(0);
+            if (us.userId == 0) {
+                holder.imgButton.setVisibility(View.GONE);
+            } else {
+                holder.imgButton.setVisibility(View.VISIBLE);
+            }
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -64,7 +74,9 @@ public class ScenarioListAdapter extends BaseAdapter {
         holder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onFabPressed(v, infos);
+                if (null != mOnClickCallBack) {
+                    mOnClickCallBack.onClickCallBack(position);
+                }
             }
         });
         holder.ll_item.setOnLongClickListener(new View.OnLongClickListener() {
@@ -76,30 +88,33 @@ public class ScenarioListAdapter extends BaseAdapter {
                 return true;
             }
         });
-        holder.scenarioDelete.setOnClickListener(new View.OnClickListener() {
+        holder.imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onFabPressed(v, infos);
+                onFabPressed(v, scene);
             }
         });
-        holder.scenarioText.setText(infos.scenarioname);
-
+        holder.sceneName.setText(scene.name);
+        holder.sceneIcon.setImageResource(AddSceneActivity.getDrawResourceID(scene.icon, mContext));
         return convertView;
     }
 
     class ViewHolder {
-        private ImageView scenarioDelete;
+        private ImageView sceneIcon;
 
-        private TextView scenarioText;
+        private TextView sceneName;
 
         private LinearLayout ll_item;
 
+        private RelativeLayout imgButton;
+
     }
 
-    private void onFabPressed(View view, Rows infos) {
-        Intent intent = new Intent(mContext, AddScenarioNewActivity.class);
+    private void onFabPressed(View view, SceneResult scene) {
+        //编辑场景
+        Intent intent = new Intent(mContext, AddSceneActivity.class);
         intent.putExtra("from", "list");
-        intent.putExtra("infos", infos);
+        intent.putExtra("scene", scene);
         mContext.startActivity(intent);
     }
 
@@ -111,5 +126,15 @@ public class ScenarioListAdapter extends BaseAdapter {
 
     public interface OnLongClickCallBack {
         void onLongClickCallBack(int position);
+    }
+
+    private OnClickCallBack mOnClickCallBack;
+
+    public void setOnClickCallBack(OnClickCallBack mOnClickCallBack) {
+        this.mOnClickCallBack = mOnClickCallBack;
+    }
+
+    public interface OnClickCallBack {
+        void onClickCallBack(int position);
     }
 }

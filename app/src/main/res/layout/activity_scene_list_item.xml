@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#F2F2F2"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="8dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/layout_radius1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgLight"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/scene" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:gravity="center"
+            android:layout_marginBottom="5dp"
+            android:text="Rainbow" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/imgButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-21dp"
+        android:padding="5dp">
+
+        <ImageButton
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/sanjiao"
+            android:padding="10dp"
+            android:scaleType="fitCenter" />
+    </RelativeLayout>
+</LinearLayout>
