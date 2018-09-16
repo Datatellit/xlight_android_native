@@ -12,7 +12,6 @@ import android.widget.ListView;
 
 import com.umarbhutta.xlightcompanion.App;
 import com.umarbhutta.xlightcompanion.R;
-import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.control.adapter.DeviceNameAdapter;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
 

@@ -26,7 +26,7 @@ public class CloudBridge extends BaseBridge {
     // misc
     private static final String TAG = CloudBridge.class.getSimpleName();
 
-    private ParticleDevice currDevice;
+    public ParticleDevice currDevice;
     private static int resultCode;
     private static long subscriptionId = 0;
 
@@ -158,7 +158,7 @@ public class CloudBridge extends BaseBridge {
                 // Make the Particle call here
                 int power = state ? 1 : 0;
 
-                String json = "{\"cmd\":" + xltDevice.CMD_COLOR + ",\"nd\":" + nodeID + ",\"ring\":[" + ring + "," + power + "," + br + "," + ww + "," + r + "," + g + "," + b + "]" + (sid != 0 ? (",\"sid\":" + sid) : "") + "}";
+                String json = "{\"cmd\":" + xltDevice.CMD_COLOR + ",\"nd\":" + nodeID + ",\"ring\":[" + ring + "," + power + "," + br + "," + ww + "," + "0," + r + "," + g + "," + b + "]" + (sid != 0 ? (",\"sid\":" + sid) : "") + "}";
                 ArrayList<String> message = new ArrayList<>();
                 message.add(json);
                 try {
@@ -430,7 +430,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     subscriptionId = currDevice.subscribeToEvents(null, new ParticleEventHandler() {
                         public void onEvent(String eventName, ParticleEvent event) {
-                            Log.i(TAG, "Received event: " + eventName + " with payload: " + event.dataPayload);
+                            Log.e(TAG, "Received event: " + eventName + " with payload: " + event.dataPayload + " by " + event.deviceId);
                             // Notes: due to bug of SDK 0.3.4, the eventName is not correct
                             /// We work around by specifying eventName
                             /*
@@ -439,7 +439,7 @@ public class CloudBridge extends BaseBridge {
                             } else {
                                 eventName = xltDevice.eventDeviceStatus;
                             }*/
-
+                            setConnect(true);
                             if (m_parentDevice != null) {
                                 // Demo option: use handler & sendMessage to inform activities
                                 // Parsing Event
@@ -482,7 +482,16 @@ public class CloudBridge extends BaseBridge {
                         }
 
                         public void onEventError(Exception e) {
-                            Log.e(TAG, "Event error: ", e);
+                            Log.e(TAG, "Event error: Event Disconnect");
+                            // 如果监听事件出现问题，那么应该按照每5秒重试一次的方式进行重新连接
+                            try {
+                                setConnect(false);
+                                Thread.sleep(5000);
+                                SubscribeDeviceEvents();
+                            } catch (Exception ex) {
+                                // 又出问题了，先忽略
+                                Log.e(TAG, "Event error: Try Again");
+                            }
                         }
                     });
                 } catch (IOException e) {

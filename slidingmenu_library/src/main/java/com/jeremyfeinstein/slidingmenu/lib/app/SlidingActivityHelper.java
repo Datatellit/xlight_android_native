@@ -58,9 +58,9 @@ public class SlidingActivityHelper {
 
 		mOnPostCreateCalled = true;
 
-		mSlidingMenu.attachToActivity(mActivity, 
+		mSlidingMenu.attachToActivity(mActivity,
 				mEnableSlide ? SlidingMenu.SLIDING_WINDOW : SlidingMenu.SLIDING_CONTENT);
-		
+
 		final boolean open;
 		final boolean secondary;
 		if (savedInstanceState != null) {
@@ -79,7 +79,7 @@ public class SlidingActivityHelper {
 						mSlidingMenu.showMenu(false);
 					}
 				} else {
-					mSlidingMenu.showContent(false);					
+					mSlidingMenu.showContent(false);
 				}
 			}
 		});
@@ -100,7 +100,7 @@ public class SlidingActivityHelper {
 
 	/**
 	 * Finds a view that was identified by the id attribute from the XML that was processed in onCreate(Bundle).
-	 * 
+	 *
 	 * @param id the resource id of the desired view
 	 * @return The view if found or null otherwise.
 	 */
@@ -117,7 +117,7 @@ public class SlidingActivityHelper {
 	/**
 	 * Called to retrieve per-instance state from an activity before being killed so that the state can be
 	 * restored in onCreate(Bundle) or onRestoreInstanceState(Bundle) (the Bundle populated by this method
-	 * will be passed to both). 
+	 * will be passed to both).
 	 *
 	 * @param outState Bundle in which to place your saved state.
 	 */

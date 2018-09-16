@@ -7,8 +7,11 @@
     <include layout="@layout/top_main_layout" />
 
     <RelativeLayout
+        android:paddingRight="@dimen/margin_l_r"
+        android:paddingLeft="@dimen/margin_l_r"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:layout_above="@+id/llBottom"
         android:layout_below="@+id/ll_main_top">
 

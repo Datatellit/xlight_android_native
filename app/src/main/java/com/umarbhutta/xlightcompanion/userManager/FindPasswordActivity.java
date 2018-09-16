@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.StringUtil;
@@ -35,6 +36,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_user_findpassword);
         AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         initViews();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
 
     private void initViews() {
@@ -55,6 +57,12 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
 
         et_user_account = (EditText) findViewById(R.id.et_user_account);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 
     @Override

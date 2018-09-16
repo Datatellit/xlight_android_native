@@ -5,78 +5,125 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/margin_l_r"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/margin_l_r"
+        android:paddingRight="@dimen/margin_l_r">
 
         <TextView
             android:id="@+id/txtSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
+            android:layout_marginRight="5dp"
             android:text="@string/kaiguan_switch" />
 
-        <CheckBox
-            android:id="@+id/chkSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/txtSwitch"
-            android:layout_centerVertical="true"
-            android:background="@drawable/switch_selector"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingRight="22dp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical">
+
+            <CheckBox
+                android:id="@+id/chkSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/txtSwitch"
+                android:layout_centerVertical="true"
+                android:background="@drawable/switch_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingRight="22dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/margin_l_r"
+        android:paddingRight="@dimen/margin_l_r">
 
         <TextView
             android:id="@+id/txtBrightness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtSwitch"
-            android:layout_marginTop="15dp"
-            android:paddingTop="5dp"
+            android:layout_marginRight="5dp"
             android:text="@string/brightness" />
 
-        <com.xw.repo.BubbleSeekBar
-            android:id="@+id/brightnessSeekBar"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_below="@id/txtSwitch"
-            android:layout_marginTop="15dp"
-            android:layout_toRightOf="@+id/txtBrightness"
-            android:paddingLeft="8dp"
-            app:bsb_bubble_color="@color/colorSeekBarDefault"
-            app:bsb_bubble_text_color="@color/white"
-            app:bsb_max="100"
-            app:bsb_min="0"
-            app:bsb_progress="0"
-            app:bsb_second_track_color="@color/bar_color"
-            app:bsb_second_track_size="8dp"
-            app:bsb_section_count="1"
-            app:bsb_show_progress_in_float="false"
-            app:bsb_show_section_mark="false"
-            app:bsb_show_section_text="true"
-            app:bsb_track_color="@color/colorSeekBarDefault" />
+            android:layout_weight="1"
+            android:gravity="center_vertical|right">
+
+            <com.xw.repo.BubbleSeekBar
+                android:id="@+id/brightnessSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:bsb_bubble_color="@color/colorSeekBarDefault"
+                app:bsb_bubble_text_color="@color/white"
+                app:bsb_max="100"
+                app:bsb_min="0"
+                app:bsb_progress="0"
+                app:bsb_second_track_color="@color/colorPrimary"
+                app:bsb_second_track_size="8dp"
+                app:bsb_section_count="1"
+                app:bsb_show_progress_in_float="false"
+                app:bsb_show_section_mark="false"
+                app:bsb_show_section_text="true"
+                app:bsb_track_color="@color/colorSeekBarDefault" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llChange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:paddingLeft="@dimen/margin_l_r"
+        android:paddingRight="@dimen/margin_l_r"
+      >
+
+        <TextView
+            android:id="@+id/txtChange"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:padding="0dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="@string/txt_cct"
+            android:textColor="#4d90fe" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_cct"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/margin_l_r"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/margin_l_r"
+        android:paddingRight="@dimen/margin_l_r">
 
         <TextView
             android:id="@+id/txtCCT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtBrightness"
-            android:layout_marginTop="22dp"
-            android:paddingTop="5dp"
+            android:layout_marginRight="5dp"
             android:text="@string/color_temp" />
 
         <RelativeLayout
-            android:id="@+id/rlcct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/brightnessSeekBar"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_toRightOf="@+id/txtCCT">
+            android:layout_gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/bg"
@@ -92,34 +139,43 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/bg"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="8dp"
                 android:max="3800"
-                android:paddingTop="8dp"
                 android:progressDrawable="@drawable/seekbar_thumb_color"
                 android:thumb="@drawable/thumb" />
         </RelativeLayout>
+    </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/rlColor"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/ll_color"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="@dimen/margin_l_r"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/margin_l_r"
+        android:paddingRight="@dimen/margin_l_r"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/txtColor"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rlcct"
-            android:layout_marginTop="15dp">
+            android:layout_marginRight="5dp"
+            android:text="@string/color" />
 
-            <TextView
-                android:id="@+id/txtColor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/color" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|right">
 
             <com.rtugeek.android.colorseekbar.ColorSeekBar
                 android:id="@+id/colorSlider"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="-7dp"
-                android:layout_toRightOf="@id/txtColor"
-                app:barHeight="12dp"
+                android:layout_height="wrap_content"
+                app:barHeight="14dp"
                 app:colorSeeds="@array/material_colors" />
-        </RelativeLayout>
-
-    </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

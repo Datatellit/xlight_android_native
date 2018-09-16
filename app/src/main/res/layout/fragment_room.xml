@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_main_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/margin_l_r"
+        android:paddingTop="@dimen/margin_l_r">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_l_r">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_room"
+                android:textColor="@color/color_menu_text"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_room"
+                android:textColor="#ff555555"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="375dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/fj_img" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.umarbhutta.xlightcompanion.gridView.MyGridView
+                        android:id="@+id/gvLight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:columnWidth="95dp"
+                        android:gravity="center"
+                        android:horizontalSpacing="30dp"
+                        android:numColumns="2"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:scrollbars="none"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="15dp"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="29dp"
+                android:layout_height="375dp"
+                android:layout_marginLeft="@dimen/margin_l_r"
+                android:src="@drawable/fj_img2" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

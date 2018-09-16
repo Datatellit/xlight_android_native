@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">XLight</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
     <!--登陆-->
     <string name="login_text_user">请输入邮箱</string>
@@ -14,8 +11,6 @@
     <string name="login_text">登录</string>
     <string name="account_is_null">账号不能为空</string>
     <string name="password_is_null">密码不能为空</string>
-    <string name="confirm_pwd_is_null">请输入确认密码</string>
-    <string name="twice_pwd_not_same">两次密码不一致</string>
     <string name="login_success">登录成功</string>
     <string name="net_error">网络异常，请检查网络</string>
     <string name="registe_success">注册成功</string>
@@ -27,9 +22,7 @@
     <string name="commit_img">提交中。。。</string>
     <string name="login_first">请先登录</string>
     <string name="internal_storage">内部存储</string>
-    <string name="pic_upload_fail_try_again">图片上传失败，请重试！</string>
     <string name="photo_set_fail">设置失败，请重试</string>
-    <string name="no_start_plan">没有启用计划</string>
 
     <string name="pickerview_cancel">取消</string>
     <string name="pickerview_submit">确定</string>
@@ -38,14 +31,10 @@
     <string name="pickerview_day">日</string>
     <string name="pickerview_hours">时</string>
     <string name="pickerview_minutes">分</string>
-    <string name="pickerview_seconds">秒</string>
     <string name="content_is_null">内容不能为空</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    <string name="has_no_permission">没有权限</string>
     <string name="setting">设置</string>
-    <string name="login_fail">登录失败</string>
-    <string name="register_fail">注册失败</string>
     <string name="unbind_sucess">解绑成功</string>
     <string name="unbind_fail">解绑失败</string>
     <string name="scene_name">场景名称</string>
@@ -58,7 +47,12 @@
     <string name="color_temp">色温</string>
     <string name="brightness">亮度</string>
     <string name="color">颜色</string>
-    <string name="scene">场景</string>
+    <string name="filter">特效</string>
+    <string name="filter_one">呼吸</string>
+    <string name="filter_two">闪烁</string>
+    <string name="filter_three">炫彩呼吸</string>
+    <string name="filter_four">炫彩闪烁</string>
+    <string name="scene">场景模式</string>
     <string name="scene_close">关闭</string>
     <string name="select">选择</string>
 
@@ -67,9 +61,7 @@
     <string name="next">下一步</string>
     <string name="loading">加载中...</string>
     <string name="commiting">提交中</string>
-    <string name="wait">提交中</string>
     <string name="lamp">灯</string>
-    <string name="link_wifi">连接Wifi</string>
     <string name="add_device_bluetooth">蓝牙</string>
     <string name="add_device_accesspoint">热点</string>
     <string name="confirm_status">确认设备状态</string>
@@ -84,7 +76,6 @@
     <string name="please_open_wifi">请打开WiFi</string>
     <string name="please_open_blue">请打开蓝牙</string>
     <string name="notfound_bluetooth">未发现蓝牙模块</string>
-    <string name="add_device_two_time">剩余时间</string>
     <string name="add_device_end_title">未发现控制器</string>
     <string name="add_device_end_desc">请尝试以下操作后，重新连接</string>
     <string name="add_device_end_list1">1、请开启手机蓝牙</string>
@@ -122,9 +113,7 @@
     <string name="select_blub_type">选择灯具类型</string>
     <string name="add_device_bulb_ok">完成</string>
     <string name="add_device_bulb_bind">设备已被其他用户绑定</string>
-    <string name="you_refuse_wifi_list">您拒绝了获取wifi列表权限</string>
     <string name="device_link_success">设备绑定完成</string>
-    <string name="device_link_fail">设备连接失败</string>
     <string name="luanch_condition">启动条件</string>
     <string name="timer">定时</string>
     <string name="detection_to_the_active">检测到活动</string>
@@ -209,7 +198,7 @@
     <string name="rule_create_success">规则创建成功</string>
     <string name="main_device">主设备</string>
     <string name="main_device_share">分享设备不能设置为主设备</string>
-    <string name="rule">规则</string>
+    <string name="rule">自动化</string>
     <string name="data_is_null">数据为空</string>
     <string name="modify_success">修改成功</string>
     <string name="delete_success">删除成功</string>
@@ -217,15 +206,9 @@
     <string name="delete_rule_tap">删除规则提示</string>
     <string name="set_logout">你确定要退出么？</string>
     <string name="queding">确定</string>
-    <string name="ssid">SSID</string>
-    <string name="wifi_password">密码</string>
     <string name="delete_this_rule">确定删除此规则吗？</string>
     <string name="select_main_device">选择主设备</string>
     <string name="setting_success">设置成功</string>
-    <string name="setting_fail">设置失败</string>
-    <string name="scan_device_add">扫描设备添加</string>
-    <string name="scan_qr_add">扫描二维码添加</string>
-    <string name="input_order_add">输入口令添加</string>
     <string name="unbind_device_tap">解绑设备提示</string>
     <string name="sure_unbind_device">确定解绑此设备吗？</string>
     <string name="edit_device">控制设备</string>
@@ -270,11 +253,9 @@
     <string name="bu_queding">保密</string>
     <string name="modify_account">修改账号</string>
     <string name="modify_nick">修改昵称</string>
-    <string name="account">账号</string>
     <string name="nick_name">昵称</string>
     <string name="touxiang">头像</string>
     <string name="sex">性别</string>
-    <string name="birthday">出生年月</string>
     <string name="find_pwd">找回密码</string>
     <string name="login">登录</string>
     <string name="input_pwd">请输入密码</string>
@@ -284,13 +265,11 @@
     <string name="wei_tianjia_tiaojian">未添加条件</string>
     <string name="jiang_zhixing_jieguo">将执行结果</string>
     <string name="wei_tianjia_jieguo">未添加结果</string>
-    <string name="name">名称</string>
     <string name="power">电源</string>
     <string name="lightness">亮度</string>
     <string name="cold_color">暖白</string>
     <string name="zidingyi">自定义</string>
     <string name="you_want_notify_content">您要的通知的内容</string>
-    <string name="please_close_device">请将路由器尽可能靠近设备,保证路由器信号覆盖到设备</string>
     <string name="please_select_main_device">请选择主设备</string>
     <string name="you_have_no_device">您还没有设备请返回到首页,点击“+”添加设备</string>
     <string name="email">您想通知的邮箱地址</string>
@@ -330,21 +309,15 @@
     <string name="this_month_has_save_money_more_two">元。</string>
     <string name="my_device">我的设备</string>
     <string name="you_have_no_device_and_add">您还没有设备，点击右上角+添加设备</string>
-    <string name="report">报表</string>
-    <string name="all_scene">全部场景</string>
     <string name="no_add_scene">您还没有添加场景</string>
-    <string name="open_life">开启智慧生活</string>
-    <string name="scan_device_add_first">扫描设备添加（适用于初次绑定设备）</string>
     <string name="excute_ad">执行动作：</string>
     <string name="adt">条件：</string>
     <string name="select_pic">选择图片</string>
     <string name="camera">拍照</string>
     <string name="calary_select">相册选择</string>
-    <string name="back">返回</string>
     <string name="title">标题</string>
     <string name="no_conditions">请设置条件</string>
     <string name="no_results">请设置结果</string>
-    <string name="lodding">加载...</string>
     <string name="select_device">请选择设备</string>
     <string name="no_device">你还没有设备</string>
     <string name="eidt_rule">编辑规则</string>
@@ -352,7 +325,6 @@
     <string name="config_success">配置成功</string>
     <string name="config_fail">配置失败</string>
     <string name="title_setting">设置</string>
-    <string name="please_input_wifi_pwd">请输入WiFi密码</string>
     <string name="no_ling_pai">没有找到令牌</string>
     <string name="ling_pai_guoqi">令牌过期</string>
     <string name="param_not_legal">参数不合法</string>
@@ -376,4 +348,74 @@
     <string name="open_gps">请打开GPS</string>
     <string name="hint_find_pwd">请输入登录Xlight的邮箱，我们会发送验证码到您的邮箱</string>
     <string name="again_exit">再按一次退出程序</string>
+
+    <string name="add_more">添加更多</string>
+    <string name="DHTt">温度</string>
+    <string name="DHTh">湿度</string>
+    <string name="CO2">二氧化碳</string>
+    <string name="PM25">PM2.5</string>
+    <string name="ALS">亮度</string>
+    <string name="CH2O">甲醛</string>
+    <string name="TVOC">TVOC</string>
+
+    <string name="room">房间</string>
+    <string name="message">消息</string>
+
+    <string name="default_room">默认房间</string>
+    <string name="add_room">暂无设备，请点击“+”为您的房间添加设备</string>
+
+    <string name="add_device_scene">编辑设备</string>
+
+    <string name="scene_desc">场景说明</string>
+
+    <string name="txt_color">彩色</string>
+    <string name="txt_cct">色温</string>
+
+    <string name="txt_family">家庭成员</string>
+    <string name="txt_myController">我的网关设备</string>
+
+    <string name="txt_family_code">家庭二维码</string>
+    <string name="txt_family_code_hint1">家庭二维码可以共享设备给家庭成员使用</string>
+    <string name="txt_family_code_hint2">家庭成员扫码登录</string>
+    <string name="txt_family_code_hint3">此码有效期10分钟</string>
+    <string name="txt_family_code_btn">分享二维码</string>
+
+    <string name="txt_family_member">家庭成员</string>
+    <string name="txt_family_member_hint1">我的家庭成员（共1位）</string>
+    <string name="txt_family_member_name">玛丽</string>
+    <string name="txt_family_member_time">扫码时间</string>
+    <string name="txt_family_member_btn">移除成员</string>
+
+    <string name="tab_1">亮度</string>
+    <string name="tab_2">色温</string>
+    <string name="tab_3">颜色</string>
+    <string name="tab_4">特效</string>
+    <string name="tab_5">延时</string>
+    <string name="tab_6">定时</string>
+
+
+    <string name="filter1">呼吸</string>
+    <string name="filter2">闪烁</string>
+    <string name="filter3">变换呼吸</string>
+    <string name="filter4">变化闪烁</string>
+    <string name="filter5">喜悦</string>
+    <string name="filter6">更多</string>
+
+    <string name="open">打开</string>
+
+    <string name="timming">您希望什么时间开启灯具？</string>
+
+    <string name="more_filter">更多特效，敬请期待...</string>
+
+    <string name="more_color">更多颜色</string>
+
+    <string name="device_name">设备名称</string>
+    <string name="device_move">设备移位</string>
+    <string name="device_remark">设备说明书</string>
+    <string name="device_remove">移除设备</string>
+
+    <string name="on">开</string>
+    <string name="off">关</string>
+
+    <string name="refresh">点击刷新</string>
 </resources>

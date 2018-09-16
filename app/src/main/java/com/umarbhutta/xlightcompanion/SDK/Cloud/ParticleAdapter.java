@@ -8,6 +8,7 @@ import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.particle.android.sdk.cloud.ApiFactory;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
@@ -49,7 +50,7 @@ public class ParticleAdapter {
             @Override
             public void run() {
                 try {
-                    Log.i("XLight", String.format("Username:%s Password:%s", user, pass));
+                    Log.e("XLight", String.format("Username:%s Password:%s", user, pass));
                     ParticleCloudSDK.getCloud().logIn(user, pass);
                     queryDevices();
                     m_bLoggedIn = true;

@@ -203,6 +203,10 @@ class EventsDelegate {
                     }
                     type = sseEventReader.next();
                 }
+                // 出问题喽，赶紧丢出去  Waroom
+                if (type == SseEventType.EOS) {
+                    handler.onEventError(new Exception("Error"));
+                }
             } catch (IOException e) {
                 handler.onEventError(e);
             }

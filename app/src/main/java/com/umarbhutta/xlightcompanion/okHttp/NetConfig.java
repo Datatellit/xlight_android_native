@@ -110,7 +110,7 @@ public class NetConfig {
     /**
      * 切换场景
      */
-    public static final String URL_CHANGE_SCENE = DCI_ADDRESS_DOMAIN + "/dcioperates?access_token=%s";
+    public static final String URL_CHANGE_SCENE = SERVER_ADDRESS_DOMAIN + "/scenes/%s/active?access_token=%s";
     /**
      * 忘记密码--发送验证码
      */
@@ -180,7 +180,7 @@ public class NetConfig {
     /**
      * 获取传感器信息
      */
-    public static final String URL_GET_SENSOR = SERVER_ADDRESS_DS + "/sensorsdatas/newdatalist?access_token=";
+    public static final String URL_GET_SENSOR = SERVER_ADDRESS_DOMAIN + "/devices/state?access_token=%s";
 
     /**
      * 添加共享

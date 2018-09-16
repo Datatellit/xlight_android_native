@@ -1,5 +1,7 @@
 package com.umarbhutta.xlightcompanion.okHttp.model;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,5 +12,5 @@ import java.util.List;
 public class SensorsResult implements Serializable {
     public int code;
     public String msg;
-    public List<Sensorsdata> data;
+    public JSONObject data;
 }

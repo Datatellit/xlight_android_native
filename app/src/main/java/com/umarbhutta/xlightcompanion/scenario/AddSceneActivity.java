@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.rtugeek.android.colorseekbar.ColorSeekBar;
@@ -54,6 +56,7 @@ import com.xw.repo.BubbleSeekBar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -72,6 +75,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
     private GridView gvSelect;
     private TextView txtSetting;
     private EditText etName;
+    private EditText etDesc;
     public static List<Rows> deviceList = new ArrayList<Rows>();
     public static List<Devicenodes> devicenodes = new ArrayList<Devicenodes>();
     public static List<Devicenodes> deviceSures = new ArrayList<Devicenodes>();
@@ -85,8 +89,9 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
     private View mIconView;
     private int curIndex;
     private ColorSeekBar colorSeekBar;
-    private RelativeLayout rlColor;
-    //private TextView txtColor;
+    private LinearLayout llColor;
+    private LinearLayout llCCT;
+    private LinearLayout llChange;
     private GridView gvIcon;
     private String selectIcon;
     private SceneResult sceneResult;
@@ -109,7 +114,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
         if (getIntent().getStringExtra("from") != null) {
             //处理这个场景
             sceneResult = (SceneResult) getIntent().getSerializableExtra("scene");
-            Log.d("XLight", "edit scene:" + sceneResult.id);
+            Log.e("XLight", "edit scene:" + sceneResult.id);
         }
         llBack = (LinearLayout) findViewById(R.id.ll_back);
         llBack.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +139,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
         gvSelect = (GridView) findViewById(R.id.gvSelect);
         txtSetting = (TextView) findViewById(R.id.txtSetting);
         etName = (EditText) findViewById(R.id.etName);
+        etDesc = (EditText) findViewById(R.id.etDesc);
         mPopupHeadViewy = View.inflate(this, R.layout.activity_add_scene_setting, null);
         mIconView = View.inflate(this, R.layout.activity_add_scene_icon, null);
         gvIcon = (GridView) mIconView.findViewById(R.id.gvIcon);
@@ -142,8 +148,12 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
         final CheckBox chkSwitch = (CheckBox) mPopupHeadViewy.findViewById(R.id.chkSwitch);
         final SeekBar cct = (SeekBar) mPopupHeadViewy.findViewById(R.id.cctSeekBar);
         final BubbleSeekBar brightness = (BubbleSeekBar) mPopupHeadViewy.findViewById(R.id.brightnessSeekBar);
+        final TextView txtChange = (TextView) mPopupHeadViewy.findViewById(R.id.txtChange);
+        final TextView txtSwitch = (TextView) mPopupHeadViewy.findViewById(R.id.txtSwitch);
         colorSeekBar = (ColorSeekBar) mPopupHeadViewy.findViewById(R.id.colorSlider);
-        rlColor = (RelativeLayout) mPopupHeadViewy.findViewById(R.id.rlColor);
+        llColor = (LinearLayout) mPopupHeadViewy.findViewById(R.id.ll_color);
+        llCCT = (LinearLayout) mPopupHeadViewy.findViewById(R.id.ll_cct);
+        llChange = (LinearLayout) mPopupHeadViewy.findViewById(R.id.llChange);
         //txtColor = (TextView) mPopupHeadViewy.findViewById(R.id.txtColor);
         dialogPlus = DialogPlus.newDialog(this)
                 .setContentHolder(new ViewHolder(mPopupHeadViewy))
@@ -184,16 +194,41 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                 chkSwitch.setChecked(deviceSures.get(position).ison == 1 ? true : false);
                 brightness.setProgress(deviceSures.get(position).brightness);
                 cct.setProgress(deviceSures.get(position).cct - 2700);
-                if (deviceSures.get(position).devicetype > 1) {
-                    rlColor.setVisibility(View.VISIBLE);
+                if (deviceSures.get(position).devicetype > 1) { // 彩灯控制
+                    llChange.setVisibility(View.VISIBLE);
+                    llColor.setVisibility(View.VISIBLE);
                     int[] color = deviceSures.get(position).color;
                     colorSeekBar.setColor(Color.rgb(color[0], color[1], color[2]));
+                    llCCT.setVisibility(View.GONE);
                 } else {
-                    rlColor.setVisibility(View.INVISIBLE);
+                    llColor.setVisibility(View.GONE);
+                    llCCT.setVisibility(View.VISIBLE);
+                    llChange.setVisibility(View.GONE);
                 }
                 // 弹出设置按钮
                 dialogPlus.show();
                 return true;
+            }
+        });
+        txtChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("XLight", "click change cct or color");
+                // 改变
+                if (txtChange.getText().toString().equals(getString(R.string.txt_cct))) {
+                    // 变为颜色
+                    txtChange.setText(getString(R.string.txt_color));
+                    // 将色温显示，颜色隐藏
+                    llCCT.setVisibility(View.VISIBLE);
+                    llColor.setVisibility(View.GONE);
+                    deviceSures.get(curIndex).scenarioId = "CCT";
+                } else {
+                    txtChange.setText(getString(R.string.txt_cct));
+                    // 将色温显示，颜色隐藏
+                    llCCT.setVisibility(View.GONE);
+                    llColor.setVisibility(View.VISIBLE);
+                    deviceSures.get(curIndex).scenarioId = null;
+                }
             }
         });
         colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
@@ -251,6 +286,13 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
         });
         selectIcon = getResources().getResourceName(R.drawable.scene);
         initDevice();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 
     @Override
@@ -303,6 +345,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+
     }
 
     public void changeIcon(View view) {
@@ -461,6 +504,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
     public void editScene() {
         //欢迎选项
         etName.setText(sceneResult.name);
+        etDesc.setText(sceneResult.remark);
         imageButton.setBackgroundResource(getDrawResourceID(sceneResult.icon, this));
         try {
             JSONArray js = new JSONArray(sceneResult.cmd);
@@ -487,10 +531,12 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                             devicenodes.get(j).ison = cmd.getInt("state");
                             break;
                         case 2:
-                            String[] ring = cmd.getString("ring").split(",");
-                            devicenodes.get(j).brightness = Integer.parseInt(ring[2]);
-                            devicenodes.get(j).color = new int[]{Integer.parseInt(ring[4]), Integer.parseInt(ring[5]), Integer.parseInt(ring[6])};
+                            JSONArray ring = cmd.getJSONArray("ring");
+                            devicenodes.get(j).ison = ring.getInt(1);
+                            devicenodes.get(j).brightness = ring.getInt(2);
+                            devicenodes.get(j).color = new int[]{ring.getInt(4), ring.getInt(5), ring.getInt(6)};
                             devicenodes.get(j).cct = 3500;
+                            Log.e("XLight", "edit scene->" + devicenodes.get(j).toString());
                             break;
                         case 3:
                             devicenodes.get(j).brightness = cmd.getInt("value");
@@ -546,10 +592,11 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
             if (UserUtils.isLogin(this)) {
                 JSONObject jb = new JSONObject();
                 jb.put("name", etName.getText().toString());
+                jb.put("remark", etDesc.getText().toString());
                 jb.put("icon", selectIcon);
                 jb.put("cmd", js.toString());
-                jb.put("remark", "from app");
                 jb.put("userId", UserUtils.getUserInfo(this).id);
+                jb.put("type", 2);
                 //提交请求
                 if (sceneResult == null)
                     HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ADD_SCENE + UserUtils.getAccessToken(this), jb.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
@@ -574,13 +621,23 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                     HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_EDIT_SCENE, sceneResult.id, UserUtils.getAccessToken(this)), jb.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
                         @Override
                         public void onHttpRequestSuccess(Object result) {
-                            ToastUtil.showToast(getApplicationContext(), R.string.edit_scene_success);
-                            finish();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.showToast(getApplicationContext(), R.string.edit_scene_success);
+                                    finish();
+                                }
+                            });
                         }
 
                         @Override
                         public void onHttpRequestFail(int code, String errMsg) {
-                            ToastUtil.showToast(getApplicationContext(), R.string.net_error);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.showToast(getApplicationContext(), R.string.net_error);
+                                }
+                            });
                         }
                     });
                 }
@@ -605,14 +662,35 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                 return ljb;
             } else {
                 if (device.devicetype > 1) {
+                    ljb.remove(0);
                     // 添加颜色设置
                     jb = new JSONObject();
                     jb.put("deviceId", device.coreid);
                     jb.put("cmd", 2);
                     jb.put("nd", device.nodeno);
+                    // 判断使用颜色还是色温
                     int[] color = device.color;
-                    int[] value = {0, 1, device.brightness, 0, color[0], color[1], color[1]};
-                    jb.put("ring", value);
+                    JSONArray j_array = new JSONArray();
+                    j_array.put(0);
+                    j_array.put(1);
+                    j_array.put(device.brightness);
+                    if (device.scenarioId == null || device.scenarioId.equals("")) {
+                        // 使用颜色
+                        j_array.put(0);
+                        j_array.put(0);
+                        j_array.put(color[0]);
+                        j_array.put(color[1]);
+                        j_array.put(color[2]);
+                    } else {
+                        // 对色温进行运算
+                        j_array.put(device.cct >> 8);
+                        j_array.put(device.cct & 0xff);
+                        j_array.put(0);
+                        j_array.put(0);
+                        j_array.put(0);
+                    }
+                    jb.putOpt("ring", j_array);
+                    ljb.add(jb.toString());
                     return ljb;
                 } else {
                     // 添加其他属性

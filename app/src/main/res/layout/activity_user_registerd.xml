@@ -67,7 +67,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/et_user_password"
             android:layout_marginTop="30dp"
-            android:background="@drawable/bt_bg"
+            android:background="@drawable/layout_button_radius"
+            android:padding="@dimen/margin_l_r"
             android:text="@string/regist"
             android:textColor="@color/white" />
 

@@ -23,6 +23,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.timqi.sectorprogressview.ColorfulRingProgressView;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
@@ -91,7 +92,9 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
         } else {
             BluetoothScan();
         }
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
+
 
 
     @Override
@@ -318,6 +321,7 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
             unBindReceiver();
         }
         myThread = false;
+        ImmersionBar.with(this).destroy();
     }
 
     private BroadcastReceiver mBluetoothReceiver = new BroadcastReceiver() {

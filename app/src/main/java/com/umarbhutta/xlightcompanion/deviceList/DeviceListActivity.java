@@ -3,7 +3,6 @@ package com.umarbhutta.xlightcompanion.deviceList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
@@ -19,7 +19,6 @@ import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.adapter.DeviceListAdapter;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
-import com.umarbhutta.xlightcompanion.help.DeviceInfo;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSettingMainDevice;
@@ -57,10 +56,6 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //重新跳转
-                Intent intent = new Intent(getApplicationContext(), SlidingMenuMainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
                 finish();
             }
         });
@@ -116,6 +111,8 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         if (null == GlanceMainFragment.deviceList || GlanceMainFragment.deviceList.size() <= 0) {
 //            ToastUtil.showToast(this, R.string.you_have_no_device_and_add);
         }
+
+        ImmersionBar.with(this).statusBarDarkFont(true).titleBar(R.id.ll_top_edit).init();
     }
 
     //设置主设备
@@ -251,5 +248,11 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         if (GlanceMainFragment.deviceList.get(position).isShare == 0)
             showDeleteSceneDialog(position);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 }

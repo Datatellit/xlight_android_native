@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.StringRes;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
@@ -113,6 +114,8 @@ public class ApiFactory {
     }
 
     private RestAdapter.Builder buildCommonRestAdapterBuilder(Gson gson, OkHttpClient client) {
+        Log.e("XLight", gson.toString());
+        Log.e("XLight",getApiUri().toString());
         return new RestAdapter.Builder()
                 .setClient(new OkClient(client))
                 .setConverter(new GsonConverter(gson))

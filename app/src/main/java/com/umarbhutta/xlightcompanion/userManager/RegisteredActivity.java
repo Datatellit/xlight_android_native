@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.App;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
@@ -49,6 +50,7 @@ public class RegisteredActivity extends BaseActivity implements View.OnClickList
         AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         initViews();
         getHelpUrl();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
 
     private void initViews() {
@@ -80,6 +82,12 @@ public class RegisteredActivity extends BaseActivity implements View.OnClickList
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 
     @Override

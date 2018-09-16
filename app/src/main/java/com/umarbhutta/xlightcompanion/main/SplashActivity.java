@@ -2,6 +2,7 @@ package com.umarbhutta.xlightcompanion.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -11,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.gyf.barlibrary.ImmersionBar;
+import com.skydoves.colorpickerpreference.ColorPickerView;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
@@ -29,16 +32,12 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion >= 20) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
-        }
-
+//        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         //功能归类分区方法，必须调用<<<<<<<<<<
         initView();
         initData();
         //功能归类分区方法，必须调用>>>>>>>>>>
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.color_wel_status).statusBarDarkFont(true).init();
     }
 
     //定义ViewPager对象
@@ -206,4 +205,10 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
         currentIndex = positon;
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
+    }
 }

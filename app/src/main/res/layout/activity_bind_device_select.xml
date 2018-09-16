@@ -65,7 +65,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="15dp"
-                android:background="@color/bar_color"
+                android:background="@color/colorPrimary"
                 android:enabled="true"
                 android:onClick="nextClick"
                 android:text="@string/add_device_bulb_ok"

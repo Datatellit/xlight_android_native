@@ -4,6 +4,7 @@ package io.particle.android.sdk.cloud;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
@@ -28,6 +29,7 @@ public class ParticleAccessToken {
 
 
     public static synchronized ParticleAccessToken fromNewSession(Responses.LogInResponse logInResponse) {
+        Log.e("XLight", logInResponse.toString());
         if (logInResponse == null
                 || !Py.truthy(logInResponse.accessToken)
                 || !"bearer".equalsIgnoreCase(logInResponse.tokenType)) {

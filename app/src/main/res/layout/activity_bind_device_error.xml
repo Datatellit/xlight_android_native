@@ -106,7 +106,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="30dp"
-                android:background="@color/bar_color"
+                android:background="@color/colorPrimary"
                 android:onClick="RetryClick"
                 android:text="@string/add_device_end_try"
                 android:textColor="@color/white"
@@ -123,7 +123,7 @@
                 android:background="@color/white"
                 android:onClick="GiveupClick"
                 android:text="@string/add_device_end_back"
-                android:textColor="@color/bar_color"
+                android:textColor="@color/color_menu_text"
                 tools:text="@string/add_device_end_back" />
         </LinearLayout>
     </ScrollView>

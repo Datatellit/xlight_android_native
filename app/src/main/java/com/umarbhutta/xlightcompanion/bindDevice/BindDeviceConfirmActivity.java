@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
@@ -64,6 +65,13 @@ public class BindDeviceConfirmActivity extends BaseActivity implements View.OnCl
             ((TextView) findViewById(R.id.txtDesc)).setVisibility(View.VISIBLE);
             ((RadioButton) findViewById(R.id.rbSure)).setText(R.string.add_device_one_sure_desc);
         }
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 
     @Override
@@ -75,7 +83,7 @@ public class BindDeviceConfirmActivity extends BaseActivity implements View.OnCl
         RadioButton rb = (RadioButton) v;
         if (rb.isChecked()) {
             findViewById(R.id.btnNext).setEnabled(true);
-            findViewById(R.id.btnNext).setBackgroundColor(getResources().getColor(R.color.bar_color));
+            findViewById(R.id.btnNext).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         } else {
             findViewById(R.id.btnNext).setEnabled(false);
             findViewById(R.id.btnNext).setBackgroundColor(getResources().getColor(R.color.pickerview_wheelview_textcolor_divider));

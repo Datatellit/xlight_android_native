@@ -1,7 +1,10 @@
 package com.umarbhutta.xlightcompanion.main;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,64 +13,115 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.gyf.barlibrary.BarHide;
+import com.gyf.barlibrary.ImmersionBar;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.seismic.ShakeDetector;
 import com.umarbhutta.xlightcompanion.App;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.BLE.BLEPairedDeviceList;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
-import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
+import com.umarbhutta.xlightcompanion.control.ControlRuleFragment;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
+import com.umarbhutta.xlightcompanion.help.HelpFragment;
+import com.umarbhutta.xlightcompanion.imgloader.ImageLoaderOptions;
+import com.umarbhutta.xlightcompanion.news.NewsMainFragment;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.LoginResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.ShakeInfo;
+import com.umarbhutta.xlightcompanion.report.ReportFragment;
+import com.umarbhutta.xlightcompanion.room.RoomMainFragment;
+import com.umarbhutta.xlightcompanion.rule.RuleMainFragment;
+import com.umarbhutta.xlightcompanion.scenario.ScenarioMainFragment;
+import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.settings.BaseFragmentActivity;
-import com.umarbhutta.xlightcompanion.settings.ShakeActivity;
+import com.umarbhutta.xlightcompanion.settings.SettingFragment;
+import com.umarbhutta.xlightcompanion.settings.UserMsgModifyActivity;
+import com.umarbhutta.xlightcompanion.share.ShareMainFragment;
+import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
+import com.umarbhutta.xlightcompanion.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.PushAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 /**
  * Created by Administrator
  */
 
-public class SlidingMenuMainActivity extends BaseFragmentActivity {
+public class SlidingMenuMainActivity extends BaseFragmentActivity implements View.OnClickListener {
     private Fragment mContent;
 
+    private SensorManager sensorManager;
+    private ShakeDetector sd;
+    private Vibrator vibrator;
     public static Map<String, xltDevice> xltDeviceMaps;
     public static xltDevice m_mainDevice;
     public static ShakeInfo mShakeInfo;
+    public static DrawerLayout drawerLayout;
+    public static RelativeLayout relativeLayoutMenu;
+    private CircleImageView userIcon;
+    private TextView tv_userName, textView, nav_exit;
+    private Button btnLogin;
+    private LinearLayout llLogin;
+    private long startTime = 0;
+    private long lastTime = 0;
+    private LinearLayout llPerName;
+    private ArrayList<TextView> lstTv;
+    private TextView itemGlance, itemControl, itemScenario, itemLogout, itemSettings, itemHelp, itemNews, itemRoom;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         // 设置主视图界面
         setContentView(R.layout.responsive_content_frame);
-        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion >= 20) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
-        }
+//        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
+//        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+//        if (currentapiVersion >= 20) {
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.bar_color));
+//        }
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        relativeLayoutMenu = (RelativeLayout) findViewById(R.id.ll_menu);
         initSlidingMenu(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
-
+        ImmersionBar.with(this).statusBarDarkFont(true).init();
         // Check Bluetooth
         BLEPairedDeviceList.init(this);
         if (!App.isRequestBlue && BLEPairedDeviceList.IsSupported() && !BLEPairedDeviceList.IsEnabled()) {
@@ -75,49 +129,70 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, BLEPairedDeviceList.REQUEST_ENABLE_BT);
         }
-
         xltDeviceMaps = new HashMap<String, xltDevice>();
-        // Initialize SmartDevice SDK
-//        m_mainDevice = new xltDevice();
-//        m_mainDevice.Init(this);
-
-        // 测试数据
-        // Setup Device/Node List
-//        for( int lv_idx = 0; lv_idx < 3; lv_idx++ ) {
-//            m_mainDevice.addNodeToDeviceList(deviceNodeIDs[lv_idx], xltDevice.DEFAULT_DEVICE_TYPE, deviceNames[lv_idx]);
-//        }
-//        m_mainDevice.setDeviceID(deviceNodeIDs[0]);
-//
-//        // Connect to Controller
-//        m_mainDevice.Connect(CloudAccount.DEVICE_ID);
-
         if (null == sensorManager) {
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            sd = new ShakeDetector(new ShakeDetector.Listener() {
+                @Override
+                public void hearShake() {
+                    Log.e("XLight", "Don't shake me, bro!");
+                    shakeAction();
+                }
+            });
+            sd.start(sensorManager);
         }
-
-
-        if (sensorManager != null) {// 注册监听器
-            sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-            // 第一个参数是Listener，第二个参数是所得传感器类型，第三个参数值获取传感器信息的频率
-        }
-
     }
 
-    private void initSlidingMenu(Bundle savedInstanceState) {
+    public void initSlidingMenu(Bundle savedInstanceState) {
         // check if the content frame contains the menu frame
-        if (findViewById(R.id.menu_frame) == null) {
-            setBehindContentView(R.layout.menu_frame);
-            getSlidingMenu().setSlidingEnabled(true);
-            getSlidingMenu()
-                    .setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        } else {
-            // add a dummy view
-            View v = new View(this);
-            setBehindContentView(v);
-            getSlidingMenu().setSlidingEnabled(false);
-            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-        }
+//        if (findViewById(R.id.menu_frame) == null) {
+//            setBehindContentView(R.layout.menu_frame);
+//            getSlidingMenu().setSlidingEnabled(true);
+//            getSlidingMenu()
+//                    .setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+//        } else {
+//            // add a dummy view
+//            View v = new View(this);
+//            setBehindContentView(v);
+//            getSlidingMenu().setSlidingEnabled(false);
+//            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+//        }
+        lstTv = new ArrayList<>();
+        llPerName = (LinearLayout) findViewById(R.id.llPerName);
+        tv_userName = (TextView) findViewById(R.id.tv_userName);
+        textView = (TextView) findViewById(R.id.textView);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        nav_exit = (TextView) findViewById(R.id.nav_exit);
+        userIcon = (CircleImageView) findViewById(R.id.userIcon);
+
+        itemGlance = (TextView) findViewById(R.id.nav_glance);
+        itemRoom = (TextView) findViewById(R.id.nav_room);
+        itemScenario = (TextView) findViewById(R.id.nav_scenario);
+        itemControl = (TextView) findViewById(R.id.nav_control);
+        itemSettings = (TextView) findViewById(R.id.nav_settings);
+        itemNews = (TextView) findViewById(R.id.nav_news);
+        itemHelp = (TextView) findViewById(R.id.nav_help);
+        llLogin = (LinearLayout) findViewById(R.id.ll_login);
+        itemGlance.setOnClickListener(this);
+        itemControl.setOnClickListener(this);
+        itemScenario.setOnClickListener(this);
+        itemNews.setOnClickListener(this);
+        itemSettings.setOnClickListener(this);
+        itemRoom.setOnClickListener(this);
+        itemHelp.setOnClickListener(this);
+        nav_exit.setOnClickListener(this);
+        userIcon.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
+
+        lstTv.add(itemGlance);
+        lstTv.add(itemControl);
+        lstTv.add(itemScenario);
+        lstTv.add(itemNews);
+        lstTv.add(itemSettings);
+        lstTv.add(itemRoom);
+        lstTv.add(itemHelp);
+
 
         // 设置主界面Fragment视图内容
         if (savedInstanceState != null)
@@ -129,30 +204,95 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, mContent).commit();
 
-        // set the Behind View Fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.menu_frame, new MainMenuFragment()).commit();
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                View content = drawerLayout.getChildAt(0);
+                View menu = drawerView;
+                float scale = 1 - slideOffset;//1~0
+                content.setTranslationX(menu.getMeasuredWidth() * (1 - scale));//0~width
+            }
 
-        // 设置滑动菜单的属性值
-        SlidingMenu sm = getSlidingMenu();
-        sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-        sm.setShadowWidthRes(R.dimen.shadow_width);
-        sm.setShadowDrawable(R.drawable.shadow);
-        sm.setBehindScrollScale(0.25f);
-        sm.setFadeDegree(0.25f);
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+        // 默认选中
+        noSelected(itemGlance);
+        // set the Behind View Fragment
+
+//        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.scene_name);
+//
+////create the drawer and remember the `Drawer` result object
+//        Drawer result = new DrawerBuilder()
+//                .withActivity(this)
+//                .addDrawerItems(
+//                        item1,
+//                        new DividerDrawerItem()
+//                )
+//                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+//                    @Override
+//                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//                        // do something with the clicked item :D
+//                        return true;
+//                    }
+//                }).withFullscreen(true)
+//                .buildView();
+
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.menu_frame, new MainMenuFragment()).commit();
+//
+//        SlidingMenu sm = getSlidingMenu();
+//        sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+//        sm.setShadowWidthRes(R.dimen.shadow_width);
+//        sm.setShadowDrawable(R.drawable.shadow);
+//        sm.setBehindScrollScale(0.25f);
+//        sm.setFadeDegree(0.25f);
+//        ImmersionBar.with(this).init();
     }
 
     public void switchContent(final Fragment fragment) {
+        Log.e("XLight", "switch content");
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (mContent.getClass() == fragment.getClass()) {
+            return;
+        }
+//        if (!fragment.isAdded()) {
+//            fragmentTransaction.add(R.id.content_frame, fragment);
+//        } else {
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+//        }
         mContent = fragment;
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment).commit();
-
+        fragmentTransaction.commit();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             public void run() {
-                getSlidingMenu().showContent();
+                // getSlidingMenu().showContent();
             }
         }, 50);
+    }
+
+    public void switchMessage() {
+        if (!UserUtils.isLogin(this)) {
+//                    showContentView();
+            onActivityPressed(LoginActivity.class);
+            return;
+        }
+        noSelected(itemNews);
+        Fragment fragment = new NewsMainFragment();//设置
+        Log.e("XLight", "click news");//消息
+        switchContent(fragment);
     }
 
     public void onActivityPressed(Class activity) {
@@ -186,12 +326,10 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {//点击的是返回键
-            showContent();
+            this.toggle(false);
         }
         return super.dispatchKeyEvent(event);
     }
-
-    private long startTime = 0;
 
     @Override
     public void onBackPressed() {
@@ -204,14 +342,130 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
         }
     }
 
-    private SensorManager sensorManager;
-    private Vibrator vibrator;
-    private static final int SENSOR_SHAKE = 10;
+    @Override
+    public void onClick(View v) {
+        Fragment fragment = null;
+        switch (v.getId()) {
+            case R.id.btn_login:
+//                showContentView();
+                onActivityPressed(LoginActivity.class);
+                break;
+            case R.id.userIcon:
+//                showContentView();
+                if (!UserUtils.isLogin(this)) {
+                    onActivityPressed(LoginActivity.class);
+                    return;
+                }
+                onActivityPressed(UserMsgModifyActivity.class);
+                break;
+            case R.id.nav_exit:
+                showLogoutDialog();
+                break;
+            case R.id.nav_glance:
+                noSelected(itemGlance);
+                fragment = new GlanceMainFragment();//首页
+                break;
+            case R.id.nav_control:
+                if (!UserUtils.isLogin(this)) {
+//                    showContentView();
+                    onActivityPressed(LoginActivity.class);
+                    return;
+                }
+                noSelected(itemControl);
+                fragment = new RuleMainFragment();//规则
+                break;
+            case R.id.nav_scenario:
+                if (!UserUtils.isLogin(this)) {
+//                    showContentView();
+                    onActivityPressed(LoginActivity.class);
+                    return;
+                }
+                noSelected(itemScenario);
+                fragment = new ScenarioMainFragment();//场景
+                break;
+            case R.id.nav_news:
+                if (!UserUtils.isLogin(this)) {
+//                    showContentView();
+                    onActivityPressed(LoginActivity.class);
+                    return;
+                }
+                noSelected(itemNews);
+                fragment = new NewsMainFragment();//设置
+                Log.e("XLight", "click news");//消息
+                break;
+            case R.id.nav_settings:
+                if (!UserUtils.isLogin(this)) {
+//                    showContentView();
+                    onActivityPressed(LoginActivity.class);
+                    return;
+                }
+                noSelected(itemSettings);
+                fragment = new SettingFragment();//设置
+                break;
+            case R.id.nav_help:
+                noSelected(itemHelp);
+                fragment = new HelpFragment();//帮助
+                break;
+            case R.id.nav_room:
+                if (!UserUtils.isLogin(this)) {
+//                    showContentView();
+                    onActivityPressed(LoginActivity.class);
+                    return;
+                }
+                noSelected(itemRoom);
+                fragment = new RoomMainFragment();//房間
+                Log.e("XLight", "click room");
+                break;
+        }
+        if (fragment != null) {
+            switchContent(fragment);
+        }
+    }
+
+    public void noSelected(TextView selected) {
+        for (TextView tv : lstTv) {
+            tv.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+        selected.setBackgroundColor(getResources().getColor(R.color.menu_selected));
+        toggle(false);
+    }
 
     public void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
         getShakeInfo();
+        if (UserUtils.isLogin(this)) {
+            LoginResult userInfo = UserUtils.getUserInfo(this);
+            llLogin.setVisibility(View.GONE);
+            llPerName.setVisibility(View.VISIBLE);
+            String nickName = UserUtils.getUserInfo(this).getNickname();
+            if (null == nickName) {
+                nickName = "";
+            }
+            tv_userName.setText("Welcome, " + nickName);
+            textView.setText(UserUtils.getUserInfo(this).getEmail());
+            ImageLoader.getInstance().displayImage(userInfo.getImage(), userIcon, ImageLoaderOptions.getImageLoaderOptions());
+        } else {
+            // ImageLoader.getInstance().displayImage("", userIcon, ImageLoaderOptions.getImageLoaderOptions());
+            llLogin.setVisibility(View.VISIBLE);
+            llPerName.setVisibility(View.GONE);
+        }
+    }
+
+    public static void toggle() {
+        if (!SlidingMenuMainActivity.drawerLayout.isDrawerOpen(SlidingMenuMainActivity.relativeLayoutMenu)) {
+            SlidingMenuMainActivity.drawerLayout.openDrawer(SlidingMenuMainActivity.relativeLayoutMenu);
+        } else {
+            SlidingMenuMainActivity.drawerLayout.closeDrawer(SlidingMenuMainActivity.relativeLayoutMenu);
+        }
+    }
+
+    public static void toggle(boolean show) {
+        if (!SlidingMenuMainActivity.drawerLayout.isDrawerOpen(SlidingMenuMainActivity.relativeLayoutMenu) && show == true) {
+            SlidingMenuMainActivity.drawerLayout.openDrawer(SlidingMenuMainActivity.relativeLayoutMenu);
+        } else {
+            SlidingMenuMainActivity.drawerLayout.closeDrawer(SlidingMenuMainActivity.relativeLayoutMenu);
+        }
     }
 
     public void onPause() {
@@ -223,73 +477,19 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         mShakeInfo = null;
-        if (sensorManager != null) {// 取消监听器
-            sensorManager.unregisterListener(sensorEventListener);
-        }
-//        SharedPreferencesUtils.putObject(this, SharedPreferencesUtils.KEY_DEVICE_LIST, null);
+        sd.stop();
+        ImmersionBar.with(this).destroy();
     }
-
-    /**
-     * * 重力感应监听
-     */
-    private SensorEventListener sensorEventListener = new SensorEventListener() {
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            // 传感器信息改变时执行该方法
-            float[] values = event.values;
-            float x = values[0]; // x轴方向的重力加速度，向右为正
-            float y = values[1]; // y轴方向的重力加速度，向前为正
-            float z = values[2]; // z轴方向的重力加速度，向上为正
-//            Log.i("xlight", "x轴方向的重力加速度" + x + "；y轴方向的重力加速度" + y + "；z轴方向的重力加速度" + z);
-            // 一般在这三个方向的重力加速度达到40就达到了摇晃手机的状态。
-            //Logger.i("shake", "x = " + Math.abs(x) + ",y = " + y + ",z = " + z);
-            int medumValue = 18;// 三星 i9250怎么晃都不会超过20，没办法，只设置19了
-            if (Math.abs(x) > medumValue || Math.abs(y) > medumValue || Math.abs(z) > medumValue) {
-
-                if (!UserUtils.isLogin(SlidingMenuMainActivity.this) || null == mShakeInfo) {
-                    return;
-                }
-
-                vibrator.vibrate(200);
-                Message msg = new Message();
-                msg.what = SENSOR_SHAKE;
-                handler.sendMessage(msg);
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    };
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case SENSOR_SHAKE:
-                    //ToastUtil.showToast(ShakeActivity.this, "检测到摇晃，执行操作！");
-                    shakeAction();
-                    break;
-            }
-        }
-
-    };
-
-    long lastTime = 0;
 
     /**
      * 触发摇一摇动作
      */
     private void shakeAction() {
-
-        if (System.currentTimeMillis() - lastTime < 1000) {
+        if (System.currentTimeMillis() - lastTime < 1500) {
             return;
         }
         lastTime = System.currentTimeMillis();
-
+        vibrator.vibrate(200);
         if (!UserUtils.isLogin(this)) {
             return;
         }
@@ -362,4 +562,61 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity {
         });
     }
 
+    private void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.set_logout));
+        builder.setPositiveButton(getString(R.string.queding), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!UserUtils.isLogin(getBaseContext())) {
+                    onActivityPressed(LoginActivity.class);
+                    return;
+                }
+                // 调用登出
+                logout();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+    }
+
+    /**
+     * 退出登录
+     */
+    private void logout() {
+        if (GlanceMainFragment.devicenodes != null || GlanceMainFragment.devicenodes.size() > 0) {
+            GlanceMainFragment.devicenodes.clear();
+        }
+        SlidingMenuMainActivity.mShakeInfo = null;
+        SharedPreferencesUtils.putObject(this, SharedPreferencesUtils.KEY_DEVICE_LIST, null);
+        UserUtils.saveUserInfo(this, null);
+        if (UserUtils.isExpires(this, SharedPreferencesUtils.KEY__ANONYMOUSINFO)) {
+            //开始匿名登录
+            AnonymousParams anonymousParams = UserUtils.getAnonymous(this);
+            Gson gson = new Gson();
+            String paramStr = gson.toJson(anonymousParams);
+            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ANONYMOUS_LOGIN, paramStr, AnonymousResult.class, new HttpUtils.OnHttpRequestCallBack() {
+                @Override
+                public void onHttpRequestSuccess(Object result) {
+                    //登录成功，设置到本次的UserUtils对象中
+                    AnonymousResult ar = (AnonymousResult) result;
+                    UserUtils.saveAnonymousInfo(getBaseContext(), ar);
+                }
+
+                @Override
+                public void onHttpRequestFail(int code, String errMsg) {
+
+                }
+            });
+        }
+        //登出后回到首页
+        Intent intent = new Intent(this, SlidingMenuMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }

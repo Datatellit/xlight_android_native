@@ -1,8 +1,6 @@
 package com.umarbhutta.xlightcompanion.control.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,15 +11,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.umarbhutta.xlightcompanion.R;
-import com.umarbhutta.xlightcompanion.SDK.xltDevice;
-import com.umarbhutta.xlightcompanion.main.EditDeviceActivity;
-import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
-import com.umarbhutta.xlightcompanion.settings.SettingListAdapter;
 
 import java.util.List;
 

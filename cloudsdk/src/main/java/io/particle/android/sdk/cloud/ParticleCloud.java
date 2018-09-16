@@ -149,7 +149,7 @@ public class ParticleCloud {
     @WorkerThread
     public void logIn(String user, String password) throws ParticleCloudException {
         try {
-            Responses.LogInResponse response = identityApi.logIn("password", user, password);
+            Responses.LogInResponse response = identityApi.logIn("particle-collider", "particle-collider", "password", user, password);
             onLogIn(response, user, password);
         } catch (RetrofitError error) {
             throw new ParticleCloudException(error);

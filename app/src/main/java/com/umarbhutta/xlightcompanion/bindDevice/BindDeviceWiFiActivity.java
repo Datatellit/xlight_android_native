@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
@@ -57,10 +58,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimerTask;
 
+import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.devicesetup.ApConnector;
 import io.particle.android.sdk.devicesetup.commands.CommandClient;
 import io.particle.android.sdk.devicesetup.commands.ConfigureApCommand;
@@ -221,7 +224,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
             Log.d("XLight", "open wifi");
             wifiAdmin.openWifi();
             Log.d("XLight", "start scan wifi");
-            //wifiAdmin.startScan(mReceiver);
+//            wifiAdmin.startScan(mReceiver);
             IntentFilter filter = new IntentFilter();
             filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
             filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -235,9 +238,12 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         } else {
             apConnector = new ApConnector(this);
             stopScanWifi = true;
+            getWifiList();
             initAPInfo();
         }
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
+
 
     final Handler timeoutHandler = new Handler() {          // handle
         public void handleMessage(Message msg) {
@@ -361,6 +367,8 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         } catch (Exception ex) {
             Log.e("XLight", ex.getMessage(), ex);
         }
+
+        ImmersionBar.with(this).destroy();
     }
 
     @Override
@@ -745,27 +753,31 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
      */
     private void getWifiList() {
         if (isWifiContect()) {
-            Log.d("XLight", "get scan wifi result");
+            Log.e("XLight", "get scan wifi result");
             //获取结果
             wifiScanList = wifiManager.getScanResults();
-            if (wifiScanList.size() > 0) {
-                list.clear();
-                wifiList24.clear();
-            }
+            LinkedHashMap<String, ScanResult> linkedMap = new LinkedHashMap<>(wifiScanList.size());
             //处理结果
             for (ScanResult scanResult : wifiScanList) {
                 try {
-                    // 把每个数据当作一对象添加到数组里
-                    //Log.d("XLight", "SSID:" + scanResult.SSID + ",frequency:" + scanResult.frequency);
                     // 去除5g和名称为空的SSID
                     if (scanResult.SSID.equals("") || (scanResult.frequency > 4900 && scanResult.frequency < 5900))
                         continue;
-                    wifiList24.add(scanResult);
-                    list.add(scanResult.SSID);
+                    if (linkedMap.containsKey(scanResult.SSID)) {
+                        if (scanResult.level > linkedMap.get(scanResult.SSID).level) {
+                            linkedMap.put(scanResult.SSID, scanResult);
+                        }
+                        continue;
+                    }
+                    linkedMap.put(scanResult.SSID, scanResult);
                 } catch (Exception ex) {
                     Log.e("XLight", ex.getMessage());
                 }
             }
+            list.clear();
+            list.addAll(linkedMap.keySet());
+            wifiList24.clear();
+            wifiList24.addAll(linkedMap.values());
             adapter.notifyDataSetChanged();
         }
     }
@@ -911,25 +923,28 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                 Log.d("XLight", "get scan wifi result");
                 //获取结果
                 wifiScanList = wifiAdmin.getWifiList();
-                Log.d("XLight", wifiAdmin.lookUpScan().toString());
-                if (wifiScanList.size() > 0) {
-                    list.clear();
-                    wifiList24.clear();
-                }
+                LinkedHashMap<String, ScanResult> linkedMap = new LinkedHashMap<>(wifiScanList.size());
                 //处理结果
                 for (ScanResult scanResult : wifiScanList) {
                     try {
-                        // 把每个数据当作一对象添加到数组里
-                        Log.d("XLight", "SSID:" + scanResult.SSID + ",frequency:" + scanResult.frequency);
                         // 去除5g和名称为空的SSID
                         if (scanResult.SSID.equals("") || (scanResult.frequency > 4900 && scanResult.frequency < 5900))
                             continue;
-                        wifiList24.add(scanResult);
-                        list.add(scanResult.SSID);
+                        if (linkedMap.containsKey(scanResult.SSID)) {
+                            if (scanResult.level > linkedMap.get(scanResult.SSID).level) {
+                                linkedMap.put(scanResult.SSID, scanResult);
+                            }
+                            continue;
+                        }
+                        linkedMap.put(scanResult.SSID, scanResult);
                     } catch (Exception ex) {
                         Log.e("XLight", ex.getMessage());
                     }
                 }
+                list.clear();
+                list.addAll(linkedMap.keySet());
+                wifiList24.clear();
+                wifiList24.addAll(linkedMap.values());
                 adapter.notifyDataSetChanged();
             }
         }

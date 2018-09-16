@@ -131,7 +131,9 @@ public class ApiDefs {
 
         @FormUrlEncoded
         @POST("/oauth/token")
-        Responses.LogInResponse logIn(@Field("grant_type") String grantType,
+        Responses.LogInResponse logIn(@Field("client_id") String clientId,
+                                      @Field("client_secret") String clientSecret,
+                                      @Field("grant_type") String grantType,
                                       @Field("username") String username,
                                       @Field("password") String password);
 

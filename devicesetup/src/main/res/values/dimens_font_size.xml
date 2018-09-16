@@ -7,6 +7,8 @@
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">22sp</dimen>
 
+    <dimen name="text_size_menu">15sp</dimen>
+
     <dimen name="material_text_size_display4">112sp</dimen>
     <dimen name="material_text_size_display3">56sp</dimen>
     <dimen name="material_text_size_display2">45sp</dimen>

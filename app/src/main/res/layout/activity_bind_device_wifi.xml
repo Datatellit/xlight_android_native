@@ -147,7 +147,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="25dp"
-                android:background="@color/bar_color"
+                android:background="@color/colorPrimary"
                 android:onClick="ConnectClick"
                 android:text="@string/add_device_wifi_btn"
                 android:textColor="@color/white"

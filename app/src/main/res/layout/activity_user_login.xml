@@ -79,7 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_forget_password"
             android:layout_marginTop="30dp"
-            android:background="@drawable/bt_bg"
+            android:padding="@dimen/margin_l_r"
+            android:background="@drawable/layout_button_radius"
             android:text="@string/login_text"
             android:textSize="@dimen/text_size"
             android:textColor="@color/white" />

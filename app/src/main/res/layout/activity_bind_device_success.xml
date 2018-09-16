@@ -98,7 +98,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="30dp"
-                android:background="@color/bar_color"
+                android:background="@color/colorPrimary"
                 android:onClick="nextClick"
                 android:text="@string/next"
                 android:textColor="@color/white"

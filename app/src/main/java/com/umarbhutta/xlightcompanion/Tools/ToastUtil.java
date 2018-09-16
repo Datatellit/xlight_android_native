@@ -11,7 +11,7 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import com.umarbhutta.xlightcompanion.R;
 
 public class ToastUtil {
-    private static Toast mToast = null;
+    private static IToast mToast = null;
     private static KProgressHUD kProgressHUD;
 
     public static void showToast(Context context, int Stringid) {
@@ -22,13 +22,14 @@ public class ToastUtil {
         if (TextUtils.isEmpty(string))
             return;
         try {
-            if (null == mToast) {
-                mToast = Toast.makeText(context, string, Toast.LENGTH_SHORT);
-            } else {
-                mToast.setText(string);
-            }
-            mToast.setGravity(Gravity.CENTER, 0, 0);
-            mToast.show();
+//            if (null == mToast) {
+//                mToast = ToastCompat.makeText(context, string, Toast.LENGTH_SHORT);
+//            } else {
+//                mToast.setText(string);
+//            }
+            ToastCompat.makeText(context, string, Toast.LENGTH_SHORT).setGravity(Gravity.CENTER, 0, 0).show();
+//            mToast.setGravity(Gravity.CENTER, 0, 0);
+//            mToast.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

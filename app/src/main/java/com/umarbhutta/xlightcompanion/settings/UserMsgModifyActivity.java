@@ -1,17 +1,23 @@
 package com.umarbhutta.xlightcompanion.settings;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flyco.roundview.RoundLinearLayout;
+import com.gyf.barlibrary.ImmersionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
@@ -60,6 +66,9 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
     private TextView user_name;
     private TextView sex;
     private CircleImageView user_icon;
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
+    private EditText editText;
     /**
      * 性别
      */
@@ -150,6 +159,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
 //        getSupportActionBar().hide();
         initViews();
         hasPermision = checkPublishPermission();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
 
 
@@ -201,6 +211,46 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
         sex = (TextView) findViewById(R.id.sex);
         user_icon = (CircleImageView) findViewById(R.id.user_icon);
         updateUserinfo();
+        initDialog();
+    }
+
+
+    private void initDialog() {
+        builder = new AlertDialog.Builder(this);
+        dialog = builder.create();
+        View view = View.inflate(this, R.layout.layout_edittext, null);
+        // dialog.setView(view);// 将自定义的布局文件设置给dialog
+        dialog.setView(view, 0, 0, 0, 0);// 设置边距为0,保证在2.x的版本上运行没问题
+        editText = (EditText) view.findViewById(R.id.etName);
+        ((TextView) view.findViewById(R.id.txtTitle)).setText(getString(R.string.modify_nick));
+        editText.setText(nick_name.getText().toString());
+        ((ImageView) view.findViewById(R.id.iv_close)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hintKeyBoard();
+                // 关闭
+                dialog.dismiss();
+            }
+        });
+        ((RoundLinearLayout) view.findViewById(R.id.rll_close)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 调用保存接口
+                hintKeyBoard();
+                modifyUserInfo(1, editText.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        dialog.setCanceledOnTouchOutside(false);
+    }
+
+    public void hintKeyBoard() {
+        editText.clearFocus();
+        //拿到InputMethodManager
+        InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //如果window上view获取焦点 && view不为空
+        //表示软键盘窗口总是隐藏，除非开始时以SHOW_FORCED显示。
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     private void updateUserinfo() {
@@ -236,10 +286,9 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.account_layout://账号
-//                showDialog(v);
                 break;
             case R.id.nick_name_layout://呢称
-                showDialog(v, nick_name.getText().toString());
+                dialog.show();
                 break;
             case R.id.avatar_layout:
                 showPictureSelector();
@@ -251,34 +300,6 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
     }
 
     public int type = 0;
-
-    private void showDialog(View view, String defaultStr) {
-
-        String title;
-        if (R.id.account_layout == view.getId()) {
-            title = getString(R.string.modify_account);
-            type = 0;
-        } else {
-            title = getString(R.string.modify_nick);
-            type = 1;
-        }
-
-        final EditText et = new EditText(this);
-        new DialogUtils().getEditTextDialog(this, title, defaultStr, new DialogUtils.OnClickOkBtnListener() {
-            @Override
-            public void onClickOk(String editTextStr) {
-                String input = editTextStr;
-
-                if (TextUtils.isEmpty(input)) {
-                    ToastUtil.showToast(UserMsgModifyActivity.this, getString(R.string.content_is_null));
-                    return;
-                }
-
-                modifyUserInfo(type, input);
-            }
-        });
-
-    }
 
     private int sexPosition;
 
@@ -377,9 +398,12 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
                 }
                 break;
         }
-
         UserUtils.saveUserInfo(this, mLoginResult);
-
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
+    }
 }

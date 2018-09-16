@@ -1,6 +1,7 @@
 package com.umarbhutta.xlightcompanion.okHttp.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,9 +24,10 @@ public class Devicenodes implements Serializable {
     //    public List<String> sensorsdata;
     public List<Devicerings> devicerings;
     public List<Ruleconditions> ruleconditions;
-    public int[] color;
+    public int[] color = new int[3];
     public int isShare = 0;
     public String coreid;
+    public int filter;
 
     /**
      * 是否为主设备，0否，1是
@@ -45,11 +47,13 @@ public class Devicenodes implements Serializable {
                 ", scenarioId='" + scenarioId + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
-                ", devicenodetype='" + devicenodetype + '\'' +
-                ", devicetype='" + devicetype + '\'' +
+                ", devicenodetype=" + devicenodetype +
+                ", devicetype=" + devicetype +
                 ", devicerings=" + devicerings +
                 ", ruleconditions=" + ruleconditions +
                 ", coreid='" + coreid + '\'' +
+                ", filter=" + filter +
+                ", color=" + Arrays.toString(color) +
                 '}';
     }
 }

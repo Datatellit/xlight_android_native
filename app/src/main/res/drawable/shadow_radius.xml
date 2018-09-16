@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <!-- bottom shadow -->
-    <item>
-        <shape android:shape="rectangle" >
-            <!-- from top to bottom -->
-            <gradient
-                android:angle="90"
-                android:centerColor="#bbbbbb"
-                android:endColor="#d5d5d5"
-                android:startColor="#a9a09d" />
-            <corners android:radius="8dp" />
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 灰色阴影 -->
+    <item
+        android:left="2dp"
+        android:top="4dp">
+        <shape>
+            <solid android:color="#14483B88" />
+            <corners android:radius="12dp" />
         </shape>
     </item>
-
-    <!-- content -->
-    <item android:bottom="2dp">
-        <shape android:shape="rectangle" >
-            <solid android:color="#fff" />
-            <corners android:radius="8dp" />
+    <!-- 白色前景 -->
+    <item
+        android:bottom="4dp"
+        android:right="2dp">
+        <shape>
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="12dp" />
         </shape>
     </item>
-
 </layer-list>

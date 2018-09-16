@@ -1,11 +1,7 @@
 <resources>
     <string name="app_name">XLight</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-    <string name="ssid">SSID</string>
     <!--login-->
     <string name="login_text_user">Enter Email</string>
     <string name="login_text_password">Enter Password</string>
@@ -14,8 +10,6 @@
     <string name="login_text">Log In</string>
     <string name="account_is_null">Account is empty</string>
     <string name="password_is_null">Password is empty</string>
-    <string name="confirm_pwd_is_null">Enter passwrord again</string>
-    <string name="twice_pwd_not_same">Entered password differ</string>
     <string name="login_success">Login Successfully</string>
     <string name="net_error">network incorrect，please check network</string>
     <string name="registe_success">Sign up Successfully</string>
@@ -27,10 +21,7 @@
     <string name="commit_img">Submitting...</string>
     <string name="login_first">Log in first, please</string>
     <string name="internal_storage">Internal Storage</string>
-    <string name="pic_upload_fail_try_again">Upload image failed, please try again</string>
     <string name="photo_set_fail">Setup failed, please try again!</string>
-
-    <string name="no_start_plan">Schedule unabled</string>
 
     <string name="pickerview_cancel">Cancel</string>
     <string name="pickerview_submit">Confirm</string>
@@ -39,20 +30,21 @@
     <string name="pickerview_day">Day</string>
     <string name="pickerview_hours">Hour</string>
     <string name="pickerview_minutes">Minute</string>
-    <string name="pickerview_seconds">Second</string>
     <string name="content_is_null">Content can not be empty</string>
     <string name="ok">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="has_no_permission">Permission denied</string>
     <string name="setting">Setting</string>
-    <string name="login_fail">Login failed</string>
-    <string name="register_fail">Sign up failed</string>
     <string name="unbind_sucess">Unbundling successfully</string>
     <string name="unbind_fail">Unbundling failed</string>
     <string name="scene_name">Scenario Name</string>
     <string name="color_temp">CCT</string>
     <string name="brightness">Brightness</string>
     <string name="color">Color</string>
+    <string name="filter">Filter</string>
+    <string name="filter_one">Breathe</string>
+    <string name="filter_two">Flashing</string>
+    <string name="filter_three">Colorful Breathe</string>
+    <string name="filter_four">Colorful Flashing</string>
     <string name="scene_wait_device">Long press to adjust the device</string>
     <string name="scene_wait_last_select">Please add at least one device</string>
     <string name="scene_custom">Customize scene</string>
@@ -67,9 +59,7 @@
     <string name="next">Next</string>
     <string name="loading">Loading...</string>
     <string name="commiting">Submitting...</string>
-    <string name="wait">Submitting...</string>
     <string name="lamp">Light</string>
-    <string name="link_wifi">Connect WiFi</string>
     <string name="add_device_bluetooth">Bluetooth</string>
     <string name="add_device_accesspoint">Access Point</string>
     <string name="confirm_status">Confirm Device State</string>
@@ -80,7 +70,6 @@
     <string name="add_device_one_desc">The on-board LED should be blinking blue.If not,hold the SETUP button for 3 seconds</string>
     <string name="add_device_one_sure_title">Controller is powered on</string>
     <string name="add_device_one_sure_desc">Controller is powered on and blue light has blinked</string>
-    <string name="add_device_two_time">Remaining time</string>
     <string name="add_device_end_title">No controller found</string>
     <string name="add_device_end_desc">Please try again and then reconnect</string>
     <string name="add_device_end_list1">1、Please turn on the phone Bluetooth</string>
@@ -122,9 +111,7 @@
     <string name="select_blub_type">Select Bulb Type</string>
     <string name="add_device_bulb_ok">OK</string>
     <string name="add_device_bulb_bind">the device belongs to someone else</string>
-    <string name="you_refuse_wifi_list">You have denied access to wifi list permissions</string>
     <string name="device_link_success">The device is bound successfully</string>
-    <string name="device_link_fail">Device connection failed</string>
     <string name="luanch_condition">Launch Conditions</string>
     <string name="timer">Timing</string>
     <string name="detection_to_the_active">Detected activity</string>
@@ -220,10 +207,6 @@
     <string name="delete_this_rule">Confirm to delete this rule?</string>
     <string name="select_main_device">Select main device</string>
     <string name="setting_success">Setting successfully</string>
-    <string name="setting_fail">Setting failed</string>
-    <string name="scan_device_add">Scan device to add</string>
-    <string name="scan_qr_add">Scan QR code to add</string>
-    <string name="input_order_add">Enter command to add</string>
     <string name="unbind_device_tap">Unbundling device prompt</string>
     <string name="sure_unbind_device">Confirm unbind this device?</string>
     <string name="edit_device">Control Device</string>
@@ -268,11 +251,9 @@
     <string name="bu_queding">Secrecy</string>
     <string name="modify_account">Modify Account</string>
     <string name="modify_nick">Modify Nickname</string>
-    <string name="account">Account</string>
     <string name="nick_name">Nickname</string>
     <string name="touxiang">Head portrait</string>
     <string name="sex">Gender</string>
-    <string name="birthday">Birthday</string>
     <string name="find_pwd">Forgot Password?</string>
     <string name="login">Log In</string>
     <string name="input_pwd">Enter password</string>
@@ -282,13 +263,11 @@
     <string name="wei_tianjia_tiaojian">No condition added</string>
     <string name="jiang_zhixing_jieguo">Will execute the result</string>
     <string name="wei_tianjia_jieguo">No results added</string>
-    <string name="name">Name</string>
     <string name="power">Power</string>
     <string name="lightness">Brightness</string>
     <string name="cold_color">Warm color</string>
     <string name="zidingyi">Custom</string>
     <string name="you_want_notify_content">Content you want to notify</string>
-    <string name="please_close_device">Please connect the router as close to the device as possible to ensure that the router signal covers the device</string>
     <string name="please_select_main_device">Please select the main device</string>
     <!--<string name="you_have_no_device">You have not added a device yet</string>-->
     <string name="you_have_no_device">No main device,please back to the home page,click the "+" to add device</string>
@@ -330,30 +309,22 @@
     <string name="this_month_has_save_money_more_two">Yuan this month.</string>
     <string name="my_device">My Devices</string>
     <string name="you_have_no_device_and_add">No device, click + to add device</string>
-    <string name="report">Report</string>
-    <string name="all_scene">All scenarios</string>
     <string name="no_add_scene">You have not added scenarios</string>
-    <string name="open_life">Open the wisdom of life</string>
-    <string name="scan_device_add_first">Scan device to add（Suitable for binding equipment for the first time）</string>
     <string name="excute_ad">Execution Action：</string>
     <string name="adt">Conditions：</string>
     <string name="select_pic">Select Image</string>
     <string name="camera">Camera</string>
     <string name="calary_select">Choose from Album</string>
-    <string name="back">Back</string>
     <string name="title">Title</string>
-    <string name="wifi_password">password</string>
 
     <string name="no_conditions">Please set the conditions</string>
     <string name="no_results">Please set the results</string>
-    <string name="lodding">Lodding</string>
     <string name="select_device">Please select device</string>
     <string name="no_device">No device</string>
     <string name="do_not_supoort_shake">This device does not support shake</string>
     <string name="config_success">Configuration is successful</string>
     <string name="config_fail">Configuration failed</string>
     <string name="title_setting">Setting</string>
-    <string name="please_input_wifi_pwd">Please input wifi password</string>
     <string name="no_ling_pai">The access token provided is invalid</string>
     <string name="ling_pai_guoqi">The access token provided has expired</string>
     <string name="param_not_legal">parameter is not legal</string>
@@ -378,4 +349,75 @@
     <string name="lamp_tool">Lamp</string>
     <string name="hint_find_pwd">Please enter the eamil address you signed up with to receive a verification code</string>
     <string name="again_exit">Press again to exit the program</string>
+
+    <string name="add_more">Add More</string>
+
+    <string name="DHTt">TEMP</string>
+    <string name="DHTh">HUM</string>
+    <string name="CO2">CO2</string>
+    <string name="PM25">PM2.5</string>
+    <string name="ALS">ALS</string>
+    <string name="CH2O">CH2O</string>
+    <string name="TVOC">TVOC</string>
+
+    <string name="room">Room</string>
+    <string name="message">Message</string>
+
+    <string name="default_room">Default Room</string>
+    <string name="add_room">No equipment, please click "+" to add equipment to your room</string>
+
+    <string name="add_device_scene">Edit Devices</string>
+
+    <string name="scene_desc">Scene Description</string>
+
+    <string name="txt_color">Colorful</string>
+    <string name="txt_cct">Color temperature</string>
+
+    <string name="txt_family">Family</string>
+
+    <string name="txt_myController">My Gateway</string>
+
+    <string name="txt_family_code">Family QRCode</string>
+    <string name="txt_family_code_hint1">For home sharing devices</string>
+    <string name="txt_family_code_hint2">Family member scan code login</string>
+    <string name="txt_family_code_hint3">Valid for 10 minutes</string>
+    <string name="txt_family_code_btn">Share QRCode</string>
+
+    <string name="txt_family_member">Family Member</string>
+    <string name="txt_family_member_hint1">Family Member(Total 1)</string>
+    <string name="txt_family_member_name">Marry</string>
+    <string name="txt_family_member_time">Scan QRCode Time:</string>
+    <string name="txt_family_member_btn">Remove member</string>
+
+    <string name="tab_1">Brightness</string>
+    <string name="tab_2">CCT</string>
+    <string name="tab_3">Colorful</string>
+    <string name="tab_4">Effects</string>
+    <string name="tab_5">Delay</string>
+    <string name="tab_6">Timing</string>
+
+    <string name="filter1">Breathe</string>
+    <string name="filter2">Flashing</string>
+    <string name="filter3">Change Breathing</string>
+    <string name="filter4">Change flicker</string>
+    <string name="filter5">Happy</string>
+    <string name="filter6">More</string>
+
+    <string name="timming">When do you want to turn on the lights?</string>
+
+    <string name="open">Open</string>
+
+    <string name="more_filter">More special effects, stay tuned...</string>
+
+    <string name="more_color">More Color</string>
+
+    <string name="device_name">Device Name</string>
+    <string name="device_move">Device Room</string>
+    <string name="device_remark">Manual</string>
+    <string name="device_remove">Device Remove</string>
+
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+
+    <string name="refresh">Refresh</string>
 </resources>

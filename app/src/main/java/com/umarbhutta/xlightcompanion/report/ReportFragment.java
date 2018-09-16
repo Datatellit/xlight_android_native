@@ -146,7 +146,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
 
         if (getActivity() instanceof SlidingMenuMainActivity) {
             SlidingMenuMainActivity ra = (SlidingMenuMainActivity) getActivity();
-            ra.toggle();
+//            ra.toggle();
         }
     }
 

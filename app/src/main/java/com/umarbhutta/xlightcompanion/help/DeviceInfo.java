@@ -33,7 +33,7 @@ public class DeviceInfo {
     获取网卡地址
      */
     public static String getWlanMAC(Context context) {
-        WifiManager wm =  (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         return wm.getConnectionInfo().getMacAddress();
     }
 
@@ -41,8 +41,12 @@ public class DeviceInfo {
     获取手机蓝牙地址
      */
     public static String getBluetoothMAC() {
-        BluetoothAdapter mBlueth = BluetoothAdapter.getDefaultAdapter();
-        return mBlueth.getAddress();
+        try {
+            BluetoothAdapter mBlueth = BluetoothAdapter.getDefaultAdapter();
+            return mBlueth.getAddress();
+        } catch (Exception e) {
+            return "00:00:00:00:00:00";
+        }
     }
 
     public static String getSign(Context context) {

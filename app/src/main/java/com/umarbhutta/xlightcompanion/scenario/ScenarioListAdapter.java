@@ -16,6 +16,8 @@ import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.UserScene;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -59,12 +61,13 @@ public class ScenarioListAdapter extends BaseAdapter {
             holder.ll_item = (LinearLayout) convertView.findViewById(R.id.ll_item);
 
             holder.sceneName = (TextView) convertView.findViewById(R.id.txtName);
-            holder.imgButton = (RelativeLayout) convertView.findViewById(R.id.imgButton);
+            holder.txtAdd = (TextView) convertView.findViewById(R.id.txtAdd);
+            holder.txtDesc = (TextView) convertView.findViewById(R.id.txtDesc);
             UserScene us = scene.userscenes.get(0);
             if (us.userId == 0) {
-                holder.imgButton.setVisibility(View.GONE);
+                holder.txtAdd.setVisibility(View.GONE);
             } else {
-                holder.imgButton.setVisibility(View.VISIBLE);
+                holder.txtAdd.setVisibility(View.VISIBLE);
             }
             convertView.setTag(holder);
         } else {
@@ -88,7 +91,7 @@ public class ScenarioListAdapter extends BaseAdapter {
                 return true;
             }
         });
-        holder.imgButton.setOnClickListener(new View.OnClickListener() {
+        holder.txtAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onFabPressed(v, scene);
@@ -96,6 +99,7 @@ public class ScenarioListAdapter extends BaseAdapter {
         });
         holder.sceneName.setText(scene.name);
         holder.sceneIcon.setImageResource(AddSceneActivity.getDrawResourceID(scene.icon, mContext));
+        holder.txtDesc.setText(scene.remark);
         return convertView;
     }
 
@@ -106,7 +110,9 @@ public class ScenarioListAdapter extends BaseAdapter {
 
         private LinearLayout ll_item;
 
-        private RelativeLayout imgButton;
+        private TextView txtDesc;
+
+        private TextView txtAdd;
 
     }
 

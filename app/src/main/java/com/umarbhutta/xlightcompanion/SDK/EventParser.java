@@ -126,21 +126,21 @@ public class EventParser {
                 m_parentDevice.m_Data.m_RoomBrightness = jObject.getInt("ALS");
                 bdlData.putInt("ALS", m_parentDevice.m_Data.m_RoomBrightness);
             }
-            if (jObject.has("MIC")) {
-                m_parentDevice.m_Data.m_Mic = jObject.getInt("MIC");
-                bdlData.putInt("MIC", m_parentDevice.m_Data.m_Mic);
+            if (jObject.has("PM10")) {
+                m_parentDevice.m_Data.m_Mic = jObject.getInt("PM10");
+                bdlData.putInt("PM10", m_parentDevice.m_Data.m_Mic);
             }
-            if (jObject.has("PIR")) {
-                m_parentDevice.m_Data.m_PIR = jObject.getInt("PIR");
-                bdlData.putInt("PIR", m_parentDevice.m_Data.m_PIR);
+            if (jObject.has("CH2O")) {
+                m_parentDevice.m_Data.m_PIR = jObject.getInt("CH2O");
+                bdlData.putInt("CH2O", m_parentDevice.m_Data.m_PIR);
             }
-            if (jObject.has("GAS")) {
-                m_parentDevice.m_Data.m_GAS = jObject.getInt("GAS");
-                bdlData.putInt("GAS", m_parentDevice.m_Data.m_GAS);
+            if (jObject.has("CO2")) {
+                m_parentDevice.m_Data.m_GAS = jObject.getInt("CO2");
+                bdlData.putInt("CO2", m_parentDevice.m_Data.m_GAS);
             }
-            if (jObject.has("SMK")) {
-                m_parentDevice.m_Data.m_Smoke = jObject.getInt("SMK");
-                bdlData.putInt("SMK", m_parentDevice.m_Data.m_Smoke);
+            if (jObject.has("TVOC")) {
+                m_parentDevice.m_Data.m_Smoke = jObject.getInt("TVOC");
+                bdlData.putInt("TVOC", m_parentDevice.m_Data.m_Smoke);
             }
             if (jObject.has("PM25")) {
                 m_parentDevice.m_Data.m_PM25 = jObject.getInt("PM25");

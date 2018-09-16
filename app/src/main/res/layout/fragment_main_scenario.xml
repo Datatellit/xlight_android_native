@@ -48,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="@string/scene_system"
+                    android:visibility="gone"
                     android:textSize="24sp" />
 
                 <com.umarbhutta.xlightcompanion.gridView.MyGridView
@@ -71,7 +72,6 @@
                 android:id="@+id/llCustom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:visibility="gone"
                 android:orientation="vertical">
 
@@ -80,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="@string/scene_custom"
+                    android:visibility="gone"
                     android:textSize="24sp" />
 
                 <com.umarbhutta.xlightcompanion.gridView.MyGridView
@@ -89,12 +90,12 @@
                     android:layout_marginTop="15dp"
                     android:gravity="center"
                     android:horizontalSpacing="15dp"
-                    android:numColumns="3"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
+                    android:numColumns="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
                     android:scrollbars="none"
                     android:stretchMode="columnWidth"
-                    android:verticalSpacing="5dp"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
+                    android:verticalSpacing="16dp"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

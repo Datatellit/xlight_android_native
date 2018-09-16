@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
@@ -70,13 +71,14 @@ public class AddControlRuleActivity extends BaseActivity {
         super.onDestroy();
         mNewRuleConditionInfoList.clear();
         mNewRuleResultInfoList.clear();
+        ImmersionBar.with(this).destroy();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_control_rule);
-        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
+//        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         rules = new Rules();
 
         Intent intent = getIntent();
@@ -87,10 +89,10 @@ public class AddControlRuleActivity extends BaseActivity {
                 dealEditInfo();
             }
         }
-
-
         initViews();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
+
 
     /**
      * 把现有的规则数据放到list中
@@ -115,7 +117,7 @@ public class AddControlRuleActivity extends BaseActivity {
 
 
                             NewRuleItemInfo mNewRuleItemInfo = new NewRuleItemInfo();
-                            mNewRuleItemInfo.setmSchedule(mSchedule,AddControlRuleActivity.this);
+                            mNewRuleItemInfo.setmSchedule(mSchedule, AddControlRuleActivity.this);
                             mNewRuleConditionInfoList.add(mNewRuleItemInfo);
                             break;
                         case 2:
@@ -276,19 +278,19 @@ public class AddControlRuleActivity extends BaseActivity {
         if (isEditPage) {//编辑规则
             RequestAddRules.getInstance().editRule(AddControlRuleActivity.this, rules, mRuleInfo.id,
                     new RequestAddRules.OnCreateRuleCallback() {
-                @Override
-                public void mOnCreateRuleCallbackFail(int code, String errMsg) {
-                    Logger.e(TAG, "errMsg=" + errMsg);
-                    ToastUtil.showToast(AddControlRuleActivity.this, "" + errMsg);
-                }
+                        @Override
+                        public void mOnCreateRuleCallbackFail(int code, String errMsg) {
+                            Logger.e(TAG, "errMsg=" + errMsg);
+                            ToastUtil.showToast(AddControlRuleActivity.this, "" + errMsg);
+                        }
 
-                @Override
-                public void mOnCreateRuleCallbackSuccess(CreateRuleResult mCreateRuleResult) {
+                        @Override
+                        public void mOnCreateRuleCallbackSuccess(CreateRuleResult mCreateRuleResult) {
 //                    Logger.e(TAG, "mCreateRuleResult=" + mCreateRuleResult.code);
-                    ToastUtil.showToast(AddControlRuleActivity.this, getString(R.string.rule_create_success));
-                    finish();
-                }
-            });
+                            ToastUtil.showToast(AddControlRuleActivity.this, getString(R.string.rule_create_success));
+                            finish();
+                        }
+                    });
 
         } else {//创建规则
             RequestAddRules.getInstance().createRule(AddControlRuleActivity.this, rules, new RequestAddRules.OnCreateRuleCallback() {

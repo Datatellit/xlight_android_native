@@ -221,10 +221,29 @@ public class Responses {
         @SerializedName("token_type")
         public final String tokenType;
 
-        public LogInResponse(long expiresInSeconds, String accessToken, String tokenType) {
+        @SerializedName("scope")
+        public final String scope;
+
+        @SerializedName("refresh_token")
+        public final String refreshToken;
+
+        public LogInResponse(long expiresInSeconds, String accessToken, String tokenType, String scope, String refreshToken) {
             this.expiresInSeconds = expiresInSeconds;
             this.accessToken = accessToken;
             this.tokenType = tokenType;
+            this.scope = scope;
+            this.refreshToken = refreshToken;
+        }
+
+        @Override
+        public String toString() {
+            return "LogInResponse{" +
+                    "expiresInSeconds=" + expiresInSeconds +
+                    ", accessToken=" + accessToken +
+                    ", tokenType=" + tokenType +
+                    ", scope=" + scope +
+                    ", refreshToken=" + refreshToken +
+                    '}';
         }
     }
 

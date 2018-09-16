@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
@@ -35,6 +36,7 @@ public class UserResProtocalActivity extends BaseActivity {
 //        getSupportActionBar().hide();
         url = getIntent().getStringExtra("url");
         initViews();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
 
     private WebView webView;
@@ -92,6 +94,12 @@ public class UserResProtocalActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 
     //改写物理按键——返回的逻辑

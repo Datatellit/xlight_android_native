@@ -39,39 +39,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="CustomCheckBox">
-        <item name="android:theme">@style/CheckBoxAppTheme</item>
-    </style>
-
-    <style name="CheckBoxAppTheme">
-        <item name="android:colorControlActivated">
-            @android:color/white
-        </item>
-        <item name="android:colorControlNormal">
-            @android:color/white
-        </item>
-        <item name="android:colorControlHighlight">
-            @android:color/white
-        </item>
-    </style>
-
-    <style name="select_bing_dialog">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:backgroundDimEnabled">true</item>
-    </style>
-
-    <style name="dialogstyle" parent="android:Animation">
-        <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
-        <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
-    </style>
     <!--switch按钮-->
-    <style name="MySwitchButton" parent="@android:style/Widget.CompoundButton">
-        <item name="android:button">@drawable/switch_selector</item>
-    </style>
     <!--设置界面item属性-->
     <style name="SettingsItem">
         <item name="android:layout_height">50dp</item>
@@ -86,7 +54,6 @@
     </style>
 
     <!--toolbar菜单按钮的颜色-->
-    <style name="ActionButton.Overflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow"></style>
 
     <style name="setting_item_left_texty_style">
         <item name="android:layout_width">wrap_content</item>
@@ -127,10 +94,6 @@
     </style>
 
     <!--全局页面item属性左边距-->
-    <style name="ItemStyle">
-        <item name="android:layout_marginLeft">@dimen/item_margin_left</item>
-        <item name="android:layout_marginRight">@dimen/item_margin_right</item>
-    </style>
     <!--全局页面line-->
     <style name="LineStyle">
         <item name="android:layout_width">match_parent</item>
@@ -141,10 +104,5 @@
     <style name="MEditText" parent="Theme.AppCompat.Light">
         <item name="colorControlNormal">@color/bar_color</item>
         <item name="colorControlActivated">@color/bar_color</item>
-    </style>
-    <style name="SpnStyle">
-        <item name="colorControlNormal">@color/black</item>
-        <item name="colorControlActivated">@color/black</item>
-        <item name="colorControlHighlight">@color/black</item>
     </style>
 </resources>

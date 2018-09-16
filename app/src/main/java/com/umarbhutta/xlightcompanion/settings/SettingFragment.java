@@ -1,7 +1,6 @@
 package com.umarbhutta.xlightcompanion.settings;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,21 +15,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.gyf.barlibrary.ImmersionBar;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umarbhutta.xlightcompanion.R;
-import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
-import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
+import com.umarbhutta.xlightcompanion.deviceList.DeviceListActivity;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
+import com.umarbhutta.xlightcompanion.imgloader.ImageLoaderOptions;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
-import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeleteRuleDevice;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.model.LoginResult;
+import com.umarbhutta.xlightcompanion.room.FamilyCodeActivity;
+import com.umarbhutta.xlightcompanion.room.FamilyMemberActivity;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
-import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
+import com.umarbhutta.xlightcompanion.views.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +47,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     SettingListAdapter settingListAdapter;
     ListView settingListView;
-
+    private CircleImageView userIcon;
+    private TextView tv_userName, textView;
     private ImageView iv_menu;
     private TextView textTitle;
     private Button btn_add;
+    private ImageView iv_code;
+
 
     @Nullable
     @Override
@@ -60,17 +65,26 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         textTitle.setText(getString(R.string.title_setting));
         btn_add = (Button) view.findViewById(R.id.btn_add);
         btn_add.setVisibility(View.INVISIBLE);
+        tv_userName = (TextView) view.findViewById(R.id.tv_userName);
+        textView = (TextView) view.findViewById(R.id.textView);
+        userIcon = (CircleImageView) view.findViewById(R.id.userIcon);
+        iv_code = (ImageView) view.findViewById(R.id.iv_code);
 
         settingListView = (ListView) view.findViewById(R.id.settingListView);
         settingListAdapter = new SettingListAdapter(getActivity(), settingStr);
         settingListView.setAdapter(settingListAdapter);
 
+        iv_code.setOnClickListener(this);
+
         settingStr.add(getString(R.string.persion_inco));
         settingStr.add(getString(R.string.modify_pwd));
+        settingStr.add(getString(R.string.txt_family));
+        settingStr.add(getString(R.string.txt_myController));
         settingStr.add(getString(R.string.shake));
 //        settingStr.add("用户邀请");
 //        settingStr.add("快速绑定");
         settingStr.add(getString(R.string.logout));
+
         settingListAdapter.notifyDataSetChanged();
         settingListAdapter.setmOnItemClickListener(new SettingListAdapter.OnItemClickListener() {
             @Override
@@ -92,7 +106,24 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                         }
                         onFabPressed(ModifyPasswordActivity.class);
                         break;
-                    case 2://摇一摇
+                    case 2://家庭成员
+                        if (!UserUtils.isLogin(getActivity())) {
+                            onFabPressed(LoginActivity.class);
+                            getActivity().finish();
+                            return;
+                        }
+                        // 家庭成员页面
+                        onFabPressed(FamilyMemberActivity.class);
+                        break;
+                    case 3://摇一摇
+                        if (!UserUtils.isLogin(getActivity())) {
+                            onFabPressed(LoginActivity.class);
+                            getActivity().finish();
+                            return;
+                        }
+                        onFabPressed(DeviceListActivity.class);
+                        break;
+                    case 4://摇一摇
                         if (!UserUtils.isLogin(getActivity())) {
                             onFabPressed(LoginActivity.class);
                             getActivity().finish();
@@ -106,13 +137,41 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 //                    case 4://快速绑定
 //                        onFabPressed(FastBindingActivity.class);
 //                        break;
-                    case 3://退出登录
+                    case 5://退出登录
                         showDeleteDialog();
                         break;
                 }
             }
         });
+        initUserInfo();
         return view;
+    }
+
+    public void initUserInfo() {
+        if (UserUtils.isLogin(getActivity())) {
+            LoginResult userInfo = UserUtils.getUserInfo(getActivity());
+            String nickName = UserUtils.getUserInfo(getActivity()).getNickname();
+            if (null == nickName) {
+                nickName = "";
+            }
+            tv_userName.setText("Welcome, " + nickName);
+            textView.setText(UserUtils.getUserInfo(getActivity()).getEmail());
+            ImageLoader.getInstance().displayImage(userInfo.getImage(), userIcon, ImageLoaderOptions.getImageLoaderOptions());
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (view != null) {
+            ImmersionBar.with(this).titleBar(R.id.ll_main_top).statusBarDarkFont(true).init();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initUserInfo();
     }
 
     private void onFabPressed(Class activity) {
@@ -161,6 +220,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_menu:
                 switchFragment();
+                break;
+            case R.id.iv_code:
+                // 跳转到别的页面
+                onFabPressed(FamilyCodeActivity.class);
                 break;
         }
     }

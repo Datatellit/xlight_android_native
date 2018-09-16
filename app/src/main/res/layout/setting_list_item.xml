@@ -3,8 +3,12 @@
     android:id="@+id/ll_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:orientation="horizontal">
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:paddingBottom="14px"
+    android:paddingLeft="@dimen/margin_l_r"
+    android:paddingRight="@dimen/margin_l_r"
+    android:paddingTop="14px">
 
     <TextView
         android:id="@+id/tv_setting_name"
@@ -14,14 +18,14 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center|left"
         android:text="@string/persion_center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textColor="@color/color_menu_text"
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginRight="20dp"
-        android:src="@drawable/icon_left_arrow" />
+        android:src="@drawable/next" />
 
 </LinearLayout>

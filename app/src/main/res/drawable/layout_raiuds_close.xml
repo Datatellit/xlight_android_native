@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <solid android:color="#BFBFBF" />
-
-    <stroke
-        android:width="0.5dp"
-        android:color="#BFBFBF" />
-
-    <!-- 这个可以不加，padding用不上
-    <padding
-        android:bottom="1dp"
-        android:left="0.5dp"
-        android:right="0.5dp"
-        android:top="0dp" /> -->
-    <!-- 圆角 -->
-    <corners
-        android:bottomLeftRadius="10dp"
-        android:bottomRightRadius="10dp"
-        android:topLeftRadius="10dp"
-        android:topRightRadius="10dp" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 灰色阴影 -->
+    <item
+        android:left="2dp"
+        android:top="4dp">
+        <shape>
+            <solid android:color="#14483B88" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <!-- 白色前景 -->
+    <item
+        android:bottom="4dp"
+        android:right="2dp">
+        <shape>
+            <solid android:color="#e8e8e8" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+</layer-list>

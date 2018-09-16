@@ -51,6 +51,25 @@
                     android:hint="@string/scene_name"
                     android:paddingLeft="10dp" />
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/sv_ll_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/layout_radius"
+                android:orientation="vertical"
+                android:padding="15dp">
+                <EditText
+                    android:id="@+id/etDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/scene_desc" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/txtSetting"

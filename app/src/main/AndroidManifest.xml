@@ -160,6 +160,9 @@
             android:name=".settings.ShakeActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".main.ControlDeviceActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".main.EditDeviceActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -216,6 +219,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".control.activity.result.AppNotifyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".room.FamilyMemberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".room.FamilyCodeActivity"
             android:screenOrientation="portrait" />
 
         <receiver

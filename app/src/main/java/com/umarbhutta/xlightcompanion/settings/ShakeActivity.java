@@ -1,27 +1,18 @@
 package com.umarbhutta.xlightcompanion.settings;
 
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
-import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
-import com.umarbhutta.xlightcompanion.Tools.StringUtil;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.control.activity.dialog.DialogRowNameActivity;
@@ -58,6 +49,7 @@ public class ShakeActivity extends BaseActivity {
         setContentView(R.layout.activity_shake);
         AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         initViews();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
 
     private void initViews() {
@@ -253,4 +245,9 @@ public class ShakeActivity extends BaseActivity {
         return null;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
+    }
 }

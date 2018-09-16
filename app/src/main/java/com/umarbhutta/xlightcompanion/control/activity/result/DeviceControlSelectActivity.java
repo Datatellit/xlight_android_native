@@ -24,7 +24,6 @@ import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.control.activity.AddControlRuleActivity;
 import com.umarbhutta.xlightcompanion.control.activity.dialog.DialogRowNameActivity;
-import com.umarbhutta.xlightcompanion.control.bean.ControlRuleDevice;
 import com.umarbhutta.xlightcompanion.control.bean.NewRuleItemInfo;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
 import com.umarbhutta.xlightcompanion.okHttp.model.Actioncmd;

@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
@@ -77,7 +78,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
         btn_add = (Button) view.findViewById(R.id.btn_add);
         btn_add.setVisibility(View.VISIBLE);
 //        btn_add.setBackground(getActivity().getDrawable(R.drawable.control_add));
-        btn_add.setBackgroundResource(R.drawable.control_add);
+//        btn_add.setBackgroundResource(R.drawable.control_add);
         btn_add.setOnClickListener(this);
 
         //setup recycler view
@@ -88,6 +89,15 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
         llCustom = (LinearLayout) view.findViewById(R.id.llCustom);
         llSystem = (LinearLayout) view.findViewById(R.id.llSystem);
         return view;
+    }
+
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (view != null) {
+            ImmersionBar.with(this).titleBar(R.id.ll_main_top).statusBarDarkFont(true).init();
+        }
     }
 
     @Override
@@ -267,40 +277,40 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
 
     public void resolveScene(final SceneResult scene) {
         try {
-            JSONArray ja = new JSONArray(scene.cmd);
-            Map<String, JSONArray> maps = new HashMap<>();
-            for (int i = 0; i < ja.length(); i++) {
-                JSONObject jb = ja.getJSONObject(i);
-                String deviceId = jb.getString("deviceId");
-                jb.remove("deviceId");
-                JSONArray child;
-                //开始进行命令合并
-                if (maps.containsKey(deviceId)) {
-                    //已经存在，进行命令合并
-                    child = (JSONArray) maps.get(deviceId);
-                } else {
-                    child = new JSONArray();
-                }
-                child.put(jb);
-                maps.put(deviceId, child);
-            }
-            //生成发送格式
-            ja = new JSONArray();
-            for (String key : maps.keySet()) {
-                JSONObject jb = new JSONObject();
-                JSONObject log = new JSONObject();
-                log.put("userId", UserUtils.getUserInfo(getContext()).id);
-                log.put("detail", "切换到" + scene.name + "场景");
-                log.put("logtype", 1);
-                log.put("logform", "APP");
-                jb.put("deviceid", key);
-                jb.put("args", ((JSONArray) maps.get(key)));
-                jb.put("logs", log);
-                ja.put(jb);
-            }
-            JSONObject jb = new JSONObject();
-            jb.put("data", ja);
-            HttpUtils.getInstance().postRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, UserUtils.getAccessToken(getContext())), jb.toString(), null, new HttpUtils.OnHttpRequestCallBack() {
+//            JSONArray ja = new JSONArray(scene.cmd);
+//            Map<String, JSONArray> maps = new HashMap<>();
+//            for (int i = 0; i < ja.length(); i++) {
+//                JSONObject jb = ja.getJSONObject(i);
+//                String deviceId = jb.getString("deviceId");
+//                jb.remove("deviceId");
+//                JSONArray child;
+//                //开始进行命令合并
+//                if (maps.containsKey(deviceId)) {
+//                    //已经存在，进行命令合并
+//                    child = (JSONArray) maps.get(deviceId);
+//                } else {
+//                    child = new JSONArray();
+//                }
+//                child.put(jb);
+//                maps.put(deviceId, child);
+//            }
+//            //生成发送格式
+//            ja = new JSONArray();
+//            for (String key : maps.keySet()) {
+//                JSONObject jb = new JSONObject();
+//                JSONObject log = new JSONObject();
+//                log.put("userId", UserUtils.getUserInfo(getContext()).id);
+//                log.put("detail", "切换到" + scene.name + "场景");
+//                log.put("logtype", 1);
+//                log.put("logform", "APP");
+//                jb.put("deviceid", key);
+//                jb.put("args", ((JSONArray) maps.get(key)));
+//                jb.put("logs", log);
+//                ja.put(jb);
+//            }
+//            JSONObject jb = new JSONObject();
+//            jb.put("data", ja);
+            HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, scene.id, UserUtils.getAccessToken(getContext())), "", null, new HttpUtils.OnHttpRequestCallBack() {
                 @Override
                 public void onHttpRequestSuccess(Object result) {
                     ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
@@ -352,4 +362,9 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
+    }
 }

@@ -11,6 +11,7 @@ public class WeatherDetails {
     private double mApparentTempF;
     private int mApparentTempC;
     private int mHumidity;
+    private String summary;
 
     public WeatherDetails() {
         super();
@@ -19,6 +20,7 @@ public class WeatherDetails {
     public String getLocation() {
         return mLocation;
     }
+
     public void setLocation(final String location) {
         mLocation = location;
     }
@@ -31,8 +33,7 @@ public class WeatherDetails {
         this.mIcon = mIcon;
     }
 
-    public int getTemp(final String unit)
-    {
+    public int getTemp(final String unit) {
         if (unit == "fahrenheit") {
             return (int) mTempF;
         } else {
@@ -43,19 +44,22 @@ public class WeatherDetails {
     public void setTemp(final double mTemp) {
         this.mTempF = mTemp;
 
-        mTempC = (int) ((mTempF - 32.0) * (5.0/9.0) + 0.5);
+        mTempC = (int) ((mTempF - 32.0) * (5.0 / 9.0) + 0.5);
     }
 
     public int getmHumidity() {
         return mHumidity;
     }
 
+    public String getSummary() {
+        return this.summary;
+    }
+
     public void setHumidity(final int humidity) {
         this.mHumidity = humidity;
     }
 
-    public int getApparentTemp(final String unit)
-    {
+    public int getApparentTemp(final String unit) {
         if (unit == "fahrenheit") {
             return (int) mApparentTempF;
         } else {
@@ -65,6 +69,10 @@ public class WeatherDetails {
 
     public void setApparentTemp(final double mTemp) {
         mApparentTempF = mTemp;
-        mApparentTempC = (int) ((mTempF - 32.0) * (5.0/9.0) + 0.5);
+        mApparentTempC = (int) ((mTempF - 32.0) * (5.0 / 9.0) + 0.5);
+    }
+
+    public void setSummary(final String summary) {
+        this.summary = summary;
     }
 }

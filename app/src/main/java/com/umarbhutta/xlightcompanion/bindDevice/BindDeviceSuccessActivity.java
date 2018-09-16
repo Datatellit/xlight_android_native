@@ -17,6 +17,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
@@ -59,6 +60,13 @@ public class BindDeviceSuccessActivity extends BaseActivity implements View.OnCl
         Log.d("XLight", "coreID:" + coreID);
         EditText et = (EditText) findViewById(R.id.etControllerName);
         et.setSelection(et.getText().length());
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
@@ -67,6 +69,7 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
                 view.loadUrl(url);
                 return true;
             }
+
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -86,7 +89,7 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
                 if (newProgress == 100) {
                     // 网页加载完成
 
-                }  else {
+                } else {
                     // 加载中
 
                 }
@@ -96,13 +99,23 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
         getHelpUrl();
         return view;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (view != null) {
+            ImmersionBar.with(this).titleBar(R.id.ll_main_top).statusBarDarkFont(true).init();
+        }
+    }
+
     private ProgressDialog mDialog;
+
     /**
      * 获取帮助的url
      */
     public void getHelpUrl() {
         mDialog = ProgressDialogUtils.showProgressDialog(getActivity(), getString(R.string.loading));
-        if(mDialog!=null){
+        if (mDialog != null) {
             mDialog.show();
         }
         HttpUtils.getInstance().getRequestInfo(NetConfig.URL_GET_HELP_URL, null, new HttpUtils.OnHttpRequestCallBack() {
@@ -116,14 +129,16 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
                     public void run() {
                         try {
                             JSONObject jsonObject = new JSONObject((String) result);
+                            Log.e("XLight", jsonObject.toString());
                             JSONObject dataObj = jsonObject.getJSONObject("data");
                             String helpUrl = dataObj.getString("url");
                             webView.loadUrl(helpUrl);
 //                            webView.loadUrl("http://www.baidu.com");
-                            if(mDialog!=null){
+                            if (mDialog != null) {
                                 mDialog.dismiss();
                             }
                         } catch (JSONException e) {
+                            mDialog.dismiss();
                             e.printStackTrace();
                         }
                     }
@@ -132,7 +147,12 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onHttpRequestFail(int code, String errMsg) {
-
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDialog.dismiss();
+                    }
+                });
             }
         });
     }
@@ -155,5 +175,11 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
             SlidingMenuMainActivity ra = (SlidingMenuMainActivity) getActivity();
             ra.toggle();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 }

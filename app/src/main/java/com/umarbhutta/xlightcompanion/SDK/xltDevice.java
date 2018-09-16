@@ -17,6 +17,8 @@ import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
 
 import java.util.ArrayList;
 
+import io.particle.android.sdk.cloud.ParticleDevice;
+
 import static com.umarbhutta.xlightcompanion.SDK.BLE.BLEPairedDeviceList.XLIGHT_BLE_NAME_PREFIX;
 
 /**
@@ -39,7 +41,6 @@ public class xltDevice {
     public static final int DEFAULT_DEVICE_ID = 1;
     public static final String DEFAULT_DEVICE_NAME = "";
     public static final String DEFAULT_DEVICE_BLENAME = XLIGHT_BLE_NAME_PREFIX + DEFAULT_DEVICE_NAME;
-
 
     // on/off values
     public static final int STATE_OFF = 0;
@@ -257,6 +258,8 @@ public class xltDevice {
 
     // Callback members
     public callbackConnect m_onConnected = null;
+
+    public static ParticleDevice mCurrentDevice;
 
     //-------------------------------------------------------------------------
     // Regular Interfaces
@@ -932,6 +935,10 @@ public class xltDevice {
 
     public boolean isCloudOK() {
         return (cldBridge.isConnected());
+    }
+
+    public ParticleDevice getCurDevice() {
+        return (cldBridge.currDevice);
     }
 
     public boolean isBLEOK() {

@@ -47,8 +47,10 @@ public class UserUtils {
         Date curTime = new Date();
         curTime.setTime(new Date().getTime() - 86400000);
         if (key == SharedPreferencesUtils.KEY__ANONYMOUSINFO) {
-            if (curTime.getTime() > ((AnonymousParams) result).expires.getTime()) {
+            if (((AnonymousParams) result).expires != null && curTime.getTime() > ((AnonymousParams) result).expires.getTime()) {
                 // 进行登录
+                return true;
+            } else {
                 return true;
             }
         } else {
@@ -103,7 +105,11 @@ public class UserUtils {
     public static AnonymousParams getAnonymous(Context context) {
         AnonymousParams anonymousParams = new AnonymousParams();
         anonymousParams.imei = DeviceInfo.getIMEI(context);
-        anonymousParams.bluetoothMac = DeviceInfo.getBluetoothMAC();
+        try {
+            anonymousParams.bluetoothMac = DeviceInfo.getBluetoothMAC();
+        } catch (Exception e) {
+            anonymousParams.bluetoothMac = "00:00:00:00:00:00";
+        }
         anonymousParams.hardwareInfo = DeviceInfo.getHardwareInfo();
         anonymousParams.systemInfo = DeviceInfo.getSystemInfo();
         anonymousParams.type = 1;

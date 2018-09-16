@@ -7,6 +7,7 @@ import android.os.Message;
 import android.view.Window;
 
 import com.google.gson.Gson;
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
@@ -25,9 +26,10 @@ public class WelcomActivity extends BaseActivity implements HttpUtils.OnHttpRequ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.activity_welcom);
-        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
+        ImmersionBar.with(this).statusBarDarkFont(true).init();
+//        AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         handler.sendEmptyMessageDelayed(100, 2000);
         if (UserUtils.isLogin(this)) {
             if (UserUtils.isExpires(this, SharedPreferencesUtils.KEY__USERINFO)) {
@@ -95,5 +97,11 @@ public class WelcomActivity extends BaseActivity implements HttpUtils.OnHttpRequ
     @Override
     public void onHttpRequestFail(int code, String errMsg) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 }

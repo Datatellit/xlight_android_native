@@ -10,6 +10,8 @@ import com.umarbhutta.xlightcompanion.okHttp.model.DeviceInfoResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.SensorsResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.Sensorsdata;
 
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,32 +39,37 @@ public class RequestSensorInfo implements HttpUtils.OnHttpRequestCallBack {
         this.mRequestSensorInfo = mRequestSensorInfo;
         String strDevices = "";
         for (int i = 0, j = devices.size(); i < j; i++) {
-            strDevices = strDevices + "deviceId[]=" + devices.get(i) + "&";
+            strDevices = strDevices + "coreid[]=" + devices.get(i) + "&";
         }
         if (strDevices.length() > 1) {
             strDevices = strDevices.substring(0, strDevices.length() - 1);
         }
 
         //if (UserUtils.isLogin(context)) {
-        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_GET_SENSOR + UserUtils.getAccessToken(context) + "&" + strDevices,
-                SensorsResult.class, this);
+        HttpUtils.getInstance().getRequestInfo(String.format(NetConfig.URL_GET_SENSOR, UserUtils.getAccessToken(context)) + "&" + strDevices,
+                null, this);
         //}
     }
 
     @Override
     public void onHttpRequestSuccess(Object result) {
-        SensorsResult info = (SensorsResult) result;
+        try {
+            JSONObject info = new JSONObject(result.toString());
 
-        if (info.code == 1) {
-            if (null != mRequestSensorInfo) {
-                mRequestSensorInfo.onRequestSensorInfoSuccess(info.data);
+            if (info.getInt("code") == 1) {
+                if (null != mRequestSensorInfo) {
+                    mRequestSensorInfo.onRequestSensorInfoSuccess(info.getJSONObject("data"));
+                }
+            } else {
+                if (null != mRequestSensorInfo) {
+                    mRequestSensorInfo.onRequestSensorInfoFail(info.getInt("code"), info.getString("msg"));
+                }
             }
-        } else {
+        } catch (Exception ex) {
             if (null != mRequestSensorInfo) {
-                mRequestSensorInfo.onRequestSensorInfoFail(info.code, info.msg);
+                mRequestSensorInfo.onRequestSensorInfoFail(0, ex.getMessage());
             }
         }
-
     }
 
     @Override
@@ -73,7 +80,7 @@ public class RequestSensorInfo implements HttpUtils.OnHttpRequestCallBack {
     }
 
     public interface OnRequestSensorInfoCallback {
-        void onRequestSensorInfoSuccess(List<Sensorsdata> mSensorsdata);
+        void onRequestSensorInfoSuccess(JSONObject mSensorsdata);
 
         void onRequestSensorInfoFail(int code, String errMsg);
     }

@@ -26,7 +26,8 @@
                 android:id="@+id/lightImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-10dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 android:src="@drawable/aquabg_noring" />
@@ -360,7 +361,6 @@
                     style="@style/LineStyle"
                     android:layout_below="@+id/colorTemperature" />
 
-
                 <LinearLayout
                     android:id="@+id/colorLL"
                     android:layout_width="match_parent"
@@ -422,6 +422,101 @@
                     </RelativeLayout>
 
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/line4"
+                    style="@style/LineStyle"
+                    android:layout_below="@+id/colorTemperature" />
+
+                <LinearLayout
+                    android:id="@+id/filterLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/line4"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="16dp">
+
+                    <TextView
+                        android:id="@+id/filterLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="left|start"
+                        android:text="@string/filter"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/textColorPrimary" />
+
+
+                    <RelativeLayout
+                        android:id="@+id/filterLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="20dp"
+                            android:scrollbars="none">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <Button
+                                    android:id="@+id/filter_one"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="35dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@color/bar_color"
+                                    android:onClick="onFilterClick"
+                                    android:text="@string/filter_one"
+                                    android:textColor="@color/white" />
+
+                                <Button
+                                    android:id="@+id/filter_two"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="35dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@color/bar_color"
+                                    android:onClick="onFilterClick"
+                                    android:text="@string/filter_two"
+                                    android:textColor="@color/white" />
+
+                                <Button
+                                    android:id="@+id/filter_three"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="35dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@color/bar_color"
+                                    android:onClick="onFilterClick"
+                                    android:text="@string/filter_three"
+                                    android:textColor="@color/white" />
+
+                                <Button
+                                    android:id="@+id/filter_four"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="35dp"
+                                    android:layout_weight="1"
+                                    android:background="@color/bar_color"
+                                    android:layout_marginRight="10dp"
+                                    android:textColor="@color/white"
+                                    android:onClick="onFilterClick"
+                                    android:text="@string/filter_four" />
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

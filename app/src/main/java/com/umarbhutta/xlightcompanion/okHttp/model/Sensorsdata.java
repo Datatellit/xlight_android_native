@@ -23,23 +23,23 @@ public class Sensorsdata implements Serializable {
     /**
      * 动作
      */
-    public int PIR;
+    public float TVOC;
     /**
      * 烟雾
      */
-    public int smk;
+    public int PM25;
     /**
      * 气体
      */
-    public int gas;
+    public float CH2O;
     /**
      * 噪音
      */
-    public int MIC;
+    public int CO2;
     /**
      * PM25
      */
-    public int PM25;
+    public int PM10;
 
     @Override
     public String toString() {
@@ -47,10 +47,10 @@ public class Sensorsdata implements Serializable {
                 "DHTt=" + DHTt +
                 ", DHTh=" + DHTh +
                 ", ALS=" + ALS +
-                ", PIR=" + PIR +
-                ", smk=" + smk +
-                ", gas=" + gas +
-                ", MIC=" + MIC +
+                ", PIR=" + CH2O +
+                ", smk=" + CO2 +
+                ", gas=" + PM10 +
+                ", MIC=" + TVOC +
                 ", PM25=" + PM25 +
                 '}';
     }

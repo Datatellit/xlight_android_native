@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_item"
+    android:layout_width="95dp"
+    android:layout_height="95dp"
+    android:background="@drawable/shadow_radius"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/imgLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+                android:src="@mipmap/d" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+                android:singleLine="true"
+                android:text="--"
+                android:textColor="#ff222222"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <com.flyco.roundview.RoundLinearLayout
+        android:id="@+id/ll_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="2dp"
+        android:gravity="left"
+        app:rv_backgroundColor="@color/color_light_close"
+        app:rv_cornerRadius_BL="12dp"
+        app:rv_cornerRadius_BR="12dp">
+
+        <TextView
+            android:id="@+id/txtSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/off"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/txtBrightness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="5dp"
+            android:text="0%"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:visibility="gone" />
+    </com.flyco.roundview.RoundLinearLayout>
+
+</LinearLayout>
