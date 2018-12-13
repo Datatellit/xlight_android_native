@@ -141,7 +141,7 @@
     <string name="xingqiri">Sunday</string>
     <string name="custom">Custom</string>
     <string name="device_connect_failed">Device [%s] connection failed</string>
-    <string name="device_disconnect">Device disconnected,Please try to pull the reconnect</string>
+    <string name="device_disconnect">Device disconnected,Please try click refresh</string>
     <string name="share">Share</string>
     <string name="share_title">Create Share</string>
     <string name="share_desc">Share your device to your friends and family</string>
@@ -389,8 +389,8 @@
     <string name="txt_family_member_time">Scan QRCode Time:</string>
     <string name="txt_family_member_btn">Remove member</string>
 
-    <string name="tab_1">Brightness</string>
-    <string name="tab_2">CCT</string>
+    <string name="tab_1">Lighting</string>
+    <string name="tab_2">Atmosphere</string>
     <string name="tab_3">Colorful</string>
     <string name="tab_4">Effects</string>
     <string name="tab_5">Delay</string>
@@ -402,6 +402,13 @@
     <string name="filter4">Change flicker</string>
     <string name="filter5">Happy</string>
     <string name="filter6">More</string>
+
+    <string name="color1">Pink</string>
+    <string name="color2">Purple</string>
+    <string name="color3">Sky Blue</string>
+    <string name="color4">Rose Red</string>
+    <string name="color5">Green</string>
+    <string name="color6">More</string>
 
     <string name="timming">When do you want to turn on the lights?</string>
 
@@ -420,4 +427,26 @@
     <string name="off">OFF</string>
 
     <string name="refresh">Refresh</string>
+
+    <string name="success">OK</string>
+
+    <string name="notfound_scenario">No scene information found</string>
+
+    <string name="great">Great</string>
+    <string name="good">Good</string>
+    <string name="bad">Bad</string>
+
+    <string name="cct_warm">Warm</string>
+    <string name="cct_coldwhite">Cold White</string>
+    <string name="cct_normal">Normal</string>
+    <string name="cct_soft">Soft</string>
+    <string name="cct_sun">Sunlight</string>
+
+    <string name="feature_wait">Please wait for the function is under development</string>
+
+    <string name="sleep_notify">The light will turn off after 15 minutes</string>
+
+    <string name="device_disconnected">Device [%s] offline</string>
+    <string name="device_online">Device [%s] online</string>
+    <string name="session_timeout">Session timeout</string>
 </resources>

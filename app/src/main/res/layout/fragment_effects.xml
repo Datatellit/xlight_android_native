@@ -38,8 +38,8 @@
 
             <com.umarbhutta.xlightcompanion.views.CircleImageView
                 android:id="@+id/iv_filter_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/tx_hx"
                 app:civ_border_color="#e5e5e5" />
 
@@ -64,8 +64,8 @@
 
             <com.umarbhutta.xlightcompanion.views.CircleImageView
                 android:id="@+id/iv_filter_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/tx_ss"
                 app:civ_border_color="#e5e5e5" />
 
@@ -88,8 +88,8 @@
 
             <com.umarbhutta.xlightcompanion.views.CircleImageView
                 android:id="@+id/iv_filter_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/tx_bhhx"
                 app:civ_border_color="#e5e5e5" />
 
@@ -124,8 +124,8 @@
 
             <com.umarbhutta.xlightcompanion.views.CircleImageView
                 android:id="@+id/iv_filter_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/tx_bhss"
                 app:civ_border_color="#e5e5e5" />
 
@@ -150,8 +150,8 @@
 
             <com.umarbhutta.xlightcompanion.views.CircleImageView
                 android:id="@+id/iv_filter_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/tx_xy"
                 app:civ_border_color="#e5e5e5" />
 
@@ -174,8 +174,8 @@
 
             <com.umarbhutta.xlightcompanion.views.CircleImageView
                 android:id="@+id/iv_filter_6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/ys_more"
                 app:civ_border_color="#e5e5e5" />
 

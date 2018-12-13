@@ -76,14 +76,22 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/txtCity"
+                        android:id="@+id/txtOutDHTt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_l_r"
                         android:text="---"
                         android:textColor="@color/white"
-                        android:textSize="32sp"
-                        android:textStyle="bold" />
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_toRightOf="@+id/txtOutDHTt"
+                        android:text="℃"
+                        android:textColor="#ffffffff"
+                        android:textSize="16sp" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -92,29 +100,45 @@
                     android:layout_weight="1"
                     android:gravity="right|center_vertical">
 
-                    <TextView
-                        android:id="@+id/txtWeather"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="6dp"
-                        android:text="--"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-
                     <ImageView
                         android:id="@+id/weatherIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/margin_l_r"
+                        android:layout_marginRight="6dp"
                         android:src="@mipmap/sunny_day" />
+
+                    <TextView
+                        android:id="@+id/txtWeather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_l_r"
+                        android:text="--"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:paddingLeft="@dimen/margin_l_r"
+                android:paddingRight="@dimen/margin_l_r">
+
+                <TextView
+                    android:id="@+id/txtCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-2dp"
+                    android:text="--"
+                    android:textColor="@color/white"
+                    android:textSize="21sp" />
             </LinearLayout>
             <!--Circle Round-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="138dp"
-                android:layout_marginBottom="42dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="37dp"
                 android:gravity="center">
 
                 <RelativeLayout
@@ -136,7 +160,7 @@
                         android:gravity="center_horizontal"
                         android:text="--"
                         android:textColor="#ffffffff"
-                        android:textSize="42sp" />
+                        android:textSize="50sp" />
 
                     <TextView
                         android:id="@+id/txtUnit"
@@ -144,7 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txtSensor"
                         android:layout_centerInParent="true"
-                        android:text="@string/DHTt"
+                        android:text="@string/great"
                         android:textColor="#ffffffff"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -213,7 +237,7 @@
                             android:id="@+id/imgALS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bgt__ld" />
+                            android:background="@drawable/bg_ld" />
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -257,7 +281,7 @@
                             android:id="@+id/imgDHTh"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bgt__sd" />
+                            android:background="@drawable/bg_sd" />
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -301,7 +325,7 @@
                             android:id="@+id/imgPM25"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bgt__wm" />
+                            android:background="@drawable/bg_wm" />
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -345,7 +369,7 @@
                             android:id="@+id/imgCO2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bgt__co2" />
+                            android:background="@drawable/bg_co2" />
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -389,7 +413,7 @@
                             android:id="@+id/imgCH2O"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bgt__jq" />
+                            android:background="@drawable/bg_jq" />
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -434,7 +458,7 @@
                             android:id="@+id/imgTVOC"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bgt_tovc" />
+                            android:background="@drawable/bg_tovc" />
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -539,33 +563,43 @@
             </RelativeLayout>
         </LinearLayout>
         <!--Light Grid-->
-        <HorizontalScrollView
+        <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="none">-->
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/default_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_marginLeft="@dimen/margin_l_r"
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:text="@string/you_have_no_device_and_add"
+                android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/default_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/margin_l_r"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/you_have_no_device_and_add"
-                    android:visibility="gone" />
-
-                <com.umarbhutta.xlightcompanion.gridView.MyGridView
-                    android:id="@+id/gvLight"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/margin_l_r"
-                    android:paddingRight="@dimen/margin_l_r"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
-            </LinearLayout>
-        </HorizontalScrollView>
+            <GridView
+                android:id="@+id/gvLight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnWidth="95dp"
+                android:fadeScrollbars="true"
+                android:gravity="center"
+                android:horizontalSpacing="10dp"
+                android:numColumns="auto_fit"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="0dp"
+                android:scrollbars="vertical"
+                android:stretchMode="spacingWidth"
+                android:verticalSpacing="10dp"></GridView>
+        </LinearLayout>
+        <!--</ScrollView>-->
     </LinearLayout>
 </ScrollView>

@@ -6,14 +6,14 @@
 
     <include layout="@layout/top_layout" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:layout_marginTop="20dp"
         android:id="@+id/rl_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:layout_alignParentStart="true">
+        android:paddingRight="30dp">
 
         <EditText
             android:id="@+id/et_user_account"
@@ -72,7 +72,7 @@
             android:text="@string/regist"
             android:textColor="@color/white" />
 
-    </RelativeLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

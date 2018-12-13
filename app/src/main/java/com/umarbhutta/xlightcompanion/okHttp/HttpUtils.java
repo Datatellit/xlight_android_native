@@ -233,4 +233,6 @@ public class HttpUtils extends BaseHttp {
         void onHttpRequestFail(int code, String errMsg);
     }
 
+
+
 }

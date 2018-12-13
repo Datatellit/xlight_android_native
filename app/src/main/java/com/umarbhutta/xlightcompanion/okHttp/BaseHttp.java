@@ -6,6 +6,7 @@ import android.util.Log;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,7 +42,11 @@ public abstract class BaseHttp {
      * @param url
      */
     protected void getData(String url) {
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(10, TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(10, TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(10, TimeUnit.SECONDS)//设置连接超时时间;
+                .build();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -70,7 +75,11 @@ public abstract class BaseHttp {
      * @param jsonParam
      */
     protected void postData(String url, String jsonParam) {
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(10, TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(10, TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(10, TimeUnit.SECONDS)//设置连接超时时间
+                .build();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
         if (TextUtils.isEmpty(jsonParam)) {

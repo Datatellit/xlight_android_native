@@ -22,10 +22,14 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
+import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
+import com.umarbhutta.xlightcompanion.adapter.ScenarioAdapter;
 import com.umarbhutta.xlightcompanion.control.bean.Brightness;
 import com.umarbhutta.xlightcompanion.event.ColorEvent;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
 import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
+import com.umarbhutta.xlightcompanion.okHttp.model.ScenariosResult;
+import com.umarbhutta.xlightcompanion.okHttp.requests.RequestScenarios;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/5.
@@ -53,13 +58,15 @@ public class ControlDeviceActivity extends BaseActivity {
     public static xltDevice mCurrentDevice;
     private Handler m_handlerControl;
     private String TAG = "XLight";
+    private List<ScenariosResult> mScenarioList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getScenarioList();
         setContentView(R.layout.activity_control);
         mTitles = new String[]{
-                getString(R.string.tab_1), getString(R.string.tab_2), getString(R.string.tab_3), getString(R.string.tab_4), getString(R.string.tab_5), getString(R.string.tab_6)
+                getString(R.string.tab_1), getString(R.string.tab_2), getString(R.string.tab_5), getString(R.string.tab_6)
         };
         devicenodes = (Devicenodes) getIntent().getSerializableExtra("info");
         mPositon = getIntent().getIntExtra("position", 0);
@@ -80,18 +87,19 @@ public class ControlDeviceActivity extends BaseActivity {
         int index = 0;
         for (String title : mTitles) {
             if (index == 0) {
-                mFragments.add(BrightnessFragment.getInstance());
+                mFragments.add(CCTFragment.getInstance(mScenarioList));
             } else if (index == 1) {
-                mFragments.add(CCTFragment.getInstance());
-            } else if (index == 2) {
                 mFragments.add(ColorFragment.getInstance());
-            } else if (index == 3) {
-                mFragments.add(EffectsFragment.getInstance());
-            } else if (index == 4) {
+            } else if (index == 2) {
                 mFragments.add(DelayFragment.getInstance());
-            } else if (index == 5) {
+            } else if (index == 3) {
                 mFragments.add(TimingFragment.getInstance());
             }
+//            else if (index == 4) {
+//                mFragments.add(DelayFragment.getInstance());
+//            } else if (index == 5) {
+//                mFragments.add(TimingFragment.getInstance());
+//            }
             index++;
         }
         ViewPager vp = (ViewPager) findViewById(R.id.vp);
@@ -102,6 +110,36 @@ public class ControlDeviceActivity extends BaseActivity {
         initViews();
         ImmersionBar.with(this).statusBarDarkFont(true).titleBar(R.id.ll_top_edit).init();
     }
+
+    public void getScenarioList() {
+        Log.e("CCTFragment", "Get ScenarioList");
+        RequestScenarios.getInstance().getScenarioInfo(this, new RequestScenarios.OnRequestScenarioInfoCallback() {
+            @Override
+            public void onRequestScenarioInfoSuccess(final List<ScenariosResult> mScenarioResult) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScenarioList = mScenarioResult;
+                        Log.e("CCTFragment", "Get ScenarioList:" + mScenarioList.size());
+                        CCTFragment cctFragment = (CCTFragment) mFragments.get(0);
+                        cctFragment.refreshScenario(mScenarioList);
+                    }
+                });
+            }
+
+            @Override
+            public void onRequestScenarioInfoFail(int code, String errMsg) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("CCTFragment", "Get ScenarioList Error");
+                        ToastUtil.showToast(getBaseContext(), R.string.net_error);
+                    }
+                });
+            }
+        });
+    }
+
 
     @Override
     public void onStart() {
@@ -125,6 +163,7 @@ public class ControlDeviceActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ImmersionBar.with(this).destroy();
+        mCurrentDevice.removeDeviceEventHandler(m_handlerControl);
     }
 
     public void initViews() {

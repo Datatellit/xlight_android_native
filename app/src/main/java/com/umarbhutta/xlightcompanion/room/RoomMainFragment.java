@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
+import com.umarbhutta.xlightcompanion.Tools.ToastCompat;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.glance.LightItemAdapter;
@@ -118,14 +119,10 @@ public class RoomMainFragment extends Fragment implements View.OnClickListener {
             }
         } else if (null != deviceList && deviceList.size() > 0) {
             devicenodes.clear();
-            Log.e("XLight", "device count:" + deviceList.size());
+//            Log.e("XLight", "device count:" + deviceList.size());
             SharedPreferencesUtils.putObject(getActivity(), SharedPreferencesUtils.KEY_DEVICE_LIST, deviceList);
             if (SlidingMenuMainActivity.xltDeviceMaps != null) {
                 SlidingMenuMainActivity.xltDeviceMaps.clear();
-            }
-            LoginResult lr = null;
-            if (UserUtils.isLogin(getContext())) {
-                lr = UserUtils.getUserInfo(getActivity());
             }
             for (int i = 0; i < deviceList.size(); i++) {
                 // Initialize SmartDevice SDK
@@ -170,6 +167,7 @@ public class RoomMainFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btn_add:
                 // 跳转到添加场景页面
+                ToastUtil.showToast(this.getContext(), getString(R.string.feature_wait));
                 break;
         }
     }

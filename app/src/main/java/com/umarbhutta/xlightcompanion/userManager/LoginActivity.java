@@ -145,8 +145,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (10086 == requestCode)
-            finish();
+//        if (10086 == requestCode)
+//            finish();
     }
 
     private void login() {

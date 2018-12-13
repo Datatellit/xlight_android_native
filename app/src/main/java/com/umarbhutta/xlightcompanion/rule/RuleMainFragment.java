@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
+import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.control.activity.AddControlRuleActivity;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.news.MessageListAdapter;
@@ -61,6 +63,13 @@ public class RuleMainFragment extends Fragment implements View.OnClickListener {
         ruleListAdapter = new RuleListAdapter(getContext(), lstRule);
         gvRule.setAdapter(ruleListAdapter);
         ruleListAdapter.notifyDataSetChanged();
+        ruleListAdapter.setOnClickCallBack(new RuleListAdapter.OnClickCallBack() {
+            @Override
+            public void onClickCallBack(int position) {
+                ToastUtil.showToast(getContext(), getString(R.string.feature_wait));
+            }
+        });
+
         return view;
     }
 

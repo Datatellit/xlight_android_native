@@ -31,18 +31,18 @@ public class EventParser {
         int nodeId = -1;
         try {
             JSONObject jObject = new JSONObject(dataPayload);
-            if (deviceId != null && !deviceId.equals(""))
-                bdlControl.putString("coreId", deviceId);
-            if (jObject.has("km")) {
-                bdlControl.putInt("km", jObject.getInt("km"));
-            }
-            if (jObject.has("on")) {
-                bdlControl.putInt("on", jObject.getInt("on"));
-            }
             if (jObject.has("nd")) {
                 nodeId = jObject.getInt("nd");
                 int ringId = xltDevice.RING_ID_ALL;
-                if (nodeId == m_parentDevice.getDeviceID() || m_parentDevice.findNodeFromDeviceList(nodeId) >= 0) {
+                if (m_parentDevice.findNodeFromDeviceList(nodeId) >= 0) {
+                    if (deviceId != null && !deviceId.equals(""))
+                        bdlControl.putString("coreId", deviceId);
+                    if (jObject.has("km")) {
+                        bdlControl.putInt("km", jObject.getInt("km"));
+                    }
+                    if (jObject.has("on")) {
+                        bdlControl.putInt("on", jObject.getInt("on"));
+                    }
                     bdlControl.putInt("nd", nodeId);
                     if (jObject.has("up")) {
                         m_parentDevice.setNodeAlive(nodeId, jObject.getInt("up") > 0);

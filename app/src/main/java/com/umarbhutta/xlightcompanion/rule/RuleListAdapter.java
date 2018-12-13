@@ -63,9 +63,11 @@ public class RuleListAdapter extends BaseAdapter {
         holder.chkState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mOnClickCallBack.onClickCallBack(position);
                 Log.e("XLight", "rule state change");
             }
         });
+
         return convertView;
     }
 

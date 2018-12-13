@@ -12,7 +12,6 @@ import com.umarbhutta.xlightcompanion.App;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
-import com.umarbhutta.xlightcompanion.control.adapter.ScenarioSelectListAdapter;
 import com.umarbhutta.xlightcompanion.okHttp.model.Actioncmd;
 import com.umarbhutta.xlightcompanion.okHttp.model.SceneListResult;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSceneListInfo;
@@ -41,7 +40,7 @@ public class SelectScenarioActivity extends BaseActivity {
     public static ArrayList<String> name = null;
     public static ArrayList<String> info = new ArrayList<>(Arrays.asList("A bright, party room preset", "A relaxed atmosphere with yellow tones", "Turn the chandelier rings off"));
 
-    ScenarioSelectListAdapter scenarioListAdapter;
+//    ScenarioSelectListAdapter scenarioListAdapter;
     ListView scenarioListView;
 
     public SceneListResult mDeviceInfoResult;
@@ -99,7 +98,7 @@ public class SelectScenarioActivity extends BaseActivity {
                 name.add(incomingName);
                 info.add(incomingInfo);
 
-                scenarioListAdapter.notifyDataSetChanged();
+//                scenarioListAdapter.notifyDataSetChanged();
 //                Toast.makeText(this, "The scenario has been successfully added", Toast.LENGTH_SHORT).show();
             } else if (resultCode == Activity.RESULT_CANCELED) {
 //                Toast.makeText(this, "No new scenarios were added to the list", Toast.LENGTH_SHORT).show();
@@ -139,7 +138,7 @@ public class SelectScenarioActivity extends BaseActivity {
     }
 
     private void initList() {
-        scenarioListAdapter = new ScenarioSelectListAdapter(SelectScenarioActivity.this, mDeviceInfoResult, mActioncmd);
-        scenarioListView.setAdapter(scenarioListAdapter);
+       // scenarioListAdapter = new ScenarioSelectListAdapter(SelectScenarioActivity.this, mDeviceInfoResult, mActioncmd);
+        //scenarioListView.setAdapter(scenarioListAdapter);
     }
 }

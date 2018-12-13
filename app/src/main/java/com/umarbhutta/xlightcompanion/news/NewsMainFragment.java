@@ -101,7 +101,7 @@ public class NewsMainFragment extends Fragment implements View.OnClickListener {
                 switchFragment();
                 break;
             case R.id.btn_more:
-                // 跳转到添加场景页面
+                ToastUtil.showToast(getContext(), getString(R.string.feature_wait));
                 break;
         }
     }

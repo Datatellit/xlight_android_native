@@ -85,7 +85,7 @@ public class ControlRuseltActivity extends BaseActivity {
 //                Toast.makeText(getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
                 switch (position) {
                     case 0://灯具控制
-                        onFabPressed(DeviceControlSelectActivity.class);
+                       // onFabPressed(DeviceControlSelectActivity.class);
                         break;
                     case 1://场景切换
                         onFabPressed(SelectScenarioActivity.class);

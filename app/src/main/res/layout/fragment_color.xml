@@ -11,185 +11,506 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:gravity="center">
-
-        <com.flyco.roundview.RoundLinearLayout
-            android:id="@+id/tv_selected"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:rv_backgroundColor="#ff6fc0"
-            app:rv_isRadiusHalfHeight="true"
-            app:rv_isWidthHeightEqual="true"
-            app:rv_strokeColor="#FFE5E5E5"
-            app:rv_strokeWidth="4dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:orientation="horizontal"
-        android:paddingLeft="45dp"
-        android:paddingRight="45dp"
-        android:weightSum="3">
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_pink"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:rv_backgroundColor="#ff6fc0"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
             android:gravity="center">
 
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_purple"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:rv_backgroundColor="#cd7eff"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true" />
+            <LinearLayout
+                android:id="@+id/ll_tab_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <ImageView
+                    android:id="@+id/iv_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/qf_ysk" />
+
+                <TextView
+                    android:id="@+id/txtColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/tab_3"
+                    android:textColor="#ff222222"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="right">
+            android:layout_width="95dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_blue"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:rv_backgroundColor="#7181ff"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true" />
+            <LinearLayout
+                android:id="@+id/ll_tab_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <ImageView
+                    android:id="@+id/iv_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/qf_tx" />
+
+                <TextView
+                    android:id="@+id/txtFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/tab_4"
+                    android:textColor="#ff808080"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="5dp"
+        android:background="#fff2f2f2"></LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_color"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:orientation="horizontal"
-        android:paddingLeft="45dp"
-        android:paddingRight="45dp"
-        android:weightSum="3">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:weightSum="3">
 
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_sky"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.flyco.roundview.RoundLinearLayout
+                    android:id="@+id/tv_pink"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:rv_backgroundColor="#ff6fc0"
+                    app:rv_isRadiusHalfHeight="true"
+                    app:rv_isWidthHeightEqual="true"
+                    app:rv_strokeColor="#ff6fc0"
+                    app:rv_strokeWidth="3dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/color1"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
-                app:rv_backgroundColor="#7bdbff"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true"></com.flyco.roundview.RoundLinearLayout>
+                android:orientation="vertical">
 
+                <com.flyco.roundview.RoundLinearLayout
+                    android:id="@+id/tv_purple"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:rv_backgroundColor="#cd7eff"
+                    app:rv_isRadiusHalfHeight="true"
+                    app:rv_isWidthHeightEqual="true"
+                    app:rv_strokeColor="#cd7eff"
+                    app:rv_strokeWidth="3dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/color2"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.flyco.roundview.RoundLinearLayout
+                    android:id="@+id/tv_blue"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:rv_backgroundColor="#7181ff"
+                    app:rv_isRadiusHalfHeight="true"
+                    app:rv_isWidthHeightEqual="true"
+                    app:rv_strokeColor="#7181ff"
+                    app:rv_strokeWidth="3dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/color3"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:weightSum="3">
 
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_green"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:rv_backgroundColor="#7affc4"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.flyco.roundview.RoundLinearLayout
+                    android:id="@+id/tv_red"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:gravity="center"
+                    app:rv_backgroundColor="#FF4343"
+                    app:rv_isRadiusHalfHeight="true"
+                    app:rv_isWidthHeightEqual="true"
+                    app:rv_strokeColor="#FF4343"
+                    app:rv_strokeWidth="3dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/color4"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.flyco.roundview.RoundLinearLayout
+                    android:id="@+id/tv_green"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:rv_backgroundColor="#7affc4"
+                    app:rv_isRadiusHalfHeight="true"
+                    app:rv_isWidthHeightEqual="true"
+                    app:rv_strokeColor="#7affc4"
+                    app:rv_strokeWidth="3dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/color5"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.umarbhutta.xlightcompanion.views.CircleImageView
+                    android:id="@+id/ys_more"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ys_more"
+                    app:civ_border_color="#e5e5e5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/color6"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="right">
-
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_orange"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:rv_backgroundColor="#ffc851"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true" />
-        </LinearLayout>
-
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.umarbhutta.xlightcompanion.views.CircleImageView
+                    android:id="@+id/iv_filter_1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/tx_hx"
+                    app:civ_border_color="#e5e5e5" />
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/filter1"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <com.umarbhutta.xlightcompanion.views.CircleImageView
+                    android:id="@+id/iv_filter_2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/tx_ss"
+                    app:civ_border_color="#e5e5e5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:singleLine="true"
+                    android:text="@string/filter2"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.umarbhutta.xlightcompanion.views.CircleImageView
+                    android:id="@+id/iv_filter_3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/tx_bhhx"
+                    app:civ_border_color="#e5e5e5" />
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/filter3"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.umarbhutta.xlightcompanion.views.CircleImageView
+                    android:id="@+id/iv_filter_4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/tx_bhss"
+                    app:civ_border_color="#e5e5e5" />
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/filter4"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <com.umarbhutta.xlightcompanion.views.CircleImageView
+                    android:id="@+id/iv_filter_5"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/tx_xy"
+                    app:civ_border_color="#e5e5e5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:singleLine="true"
+                    android:text="@string/filter5"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.umarbhutta.xlightcompanion.views.CircleImageView
+                    android:id="@+id/iv_filter_6"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ys_more"
+                    app:civ_border_color="#e5e5e5" />
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/filter6"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="45dp"
-        android:paddingRight="45dp"
-        android:weightSum="3">
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+        <ImageView
+            android:id="@+id/iv_less"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/zm_jian" />
 
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_red"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:rv_backgroundColor="#FC4343"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <com.xw.repo.BubbleSeekBar
+            android:id="@+id/brightnessSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:paddingTop="2dp"
+            app:bsb_hide_bubble="true"
+            app:bsb_max="100"
+            app:bsb_min="0"
+            app:bsb_progress="0"
+            app:bsb_second_track_color="#FF96E6A1"
+            app:bsb_second_track_size="12dp"
+            app:bsb_section_count="1"
+            app:bsb_show_progress_in_float="false"
+            app:bsb_show_section_mark="false"
+            app:bsb_show_section_text="false"
+            app:bsb_thumb_color="#FF96E6A1"
+            app:bsb_track_color="#f0f0f0"
+            app:bsb_track_size="10dp" />
 
-            <com.flyco.roundview.RoundLinearLayout
-                android:id="@+id/tv_yellow"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:rv_backgroundColor="#ECF83B"
-                app:rv_isRadiusHalfHeight="true"
-                app:rv_isWidthHeightEqual="true" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/zm_jia" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="right">
+        <TextView
+            android:id="@+id/txtBrightness"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/color_menu_text"
+            android:textSize="16sp" />
 
-            <com.umarbhutta.xlightcompanion.views.CircleImageView
-                android:id="@+id/tv_more"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ys_more" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textColor="@color/color_menu_text"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

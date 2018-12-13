@@ -65,14 +65,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:columnWidth="95dp"
+                        android:columnWidth="105dp"
                         android:gravity="center"
                         android:horizontalSpacing="30dp"
-                        android:numColumns="2"
+                        android:numColumns="auto_fit"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
-                        android:scrollbars="none"
-                        android:stretchMode="columnWidth"
+                        android:scrollbars="vertical"
+                        android:stretchMode="spacingWidth"
                         android:verticalSpacing="15dp"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
                 </RelativeLayout>
             </RelativeLayout>

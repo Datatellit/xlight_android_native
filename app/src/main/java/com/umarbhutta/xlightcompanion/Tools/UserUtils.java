@@ -5,12 +5,21 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.umarbhutta.xlightcompanion.help.DeviceInfo;
+import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.LoginResult;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by guangbinw on 2017/3/12.
@@ -59,7 +68,36 @@ public class UserUtils {
                 return true;
             }
         }
-        return false;
+        // 进行有效性的check，如果不通过，则返回true
+        if (checkTokenValid(((LoginResult) result).access_token)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean checkTokenValid(String token) {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(10, TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(10, TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(10, TimeUnit.SECONDS)//设置连接超时时间;
+                .build();
+        Request request = new Request.Builder()
+                .url(String.format(NetConfig.SERVER_ADDRESS_DOMAIN))
+                .build();
+        Call call = okHttpClient.newCall(request);
+        try {
+            Response response = call.execute();
+            Log.e("XLight", response.body().toString());
+            JSONObject jsonObject = new JSONObject(response.body().toString());
+            if (jsonObject.getInt("code") == 10000 || jsonObject.getInt("code") == 10002) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     /**

@@ -1,12 +1,20 @@
 package com.umarbhutta.xlightcompanion.okHttp.requests.imp;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.AddDeviceResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.CheckDeviceResult;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by guangbinw on 2017/3/14.
@@ -39,6 +47,29 @@ public class RequestCheckDevice implements HttpUtils.OnHttpRequestCallBack {
             e.printStackTrace();
         }
         // }
+    }
+
+    public boolean checkDeviceSync(String deviceId) {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(10, TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(10, TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(10, TimeUnit.SECONDS)//设置连接超时时间;
+                .build();
+        Request request = new Request.Builder()
+                .url(String.format(NetConfig.URL_CHECK_DEVICE, deviceId, UserUtils.getAccessToken(context)))
+                .build();
+        Call call = okHttpClient.newCall(request);
+        try {
+            Response response = call.execute();
+            Log.e("XLight", response.body().toString());
+            if (response.code() == 403) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     @Override

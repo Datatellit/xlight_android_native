@@ -143,7 +143,8 @@
     <string name="xingqiri">星期日</string>
     <string name="custom">自定义</string>
     <string name="device_connect_failed">设备 [%s] 连接失败</string>
-    <string name="device_disconnect">设备离线，请下拉重连</string>
+    <string name="device_disconnected">设备 [%s] 离线</string>
+    <string name="device_disconnect">设备离线，请点击刷新</string>
     <string name="share">分享</string>
     <string name="share_title">添加分享</string>
     <string name="share_desc">将设备分享给您的朋友或家人，共同使用</string>
@@ -386,8 +387,8 @@
     <string name="txt_family_member_time">扫码时间</string>
     <string name="txt_family_member_btn">移除成员</string>
 
-    <string name="tab_1">亮度</string>
-    <string name="tab_2">色温</string>
+    <string name="tab_1">照明</string>
+    <string name="tab_2">氛围</string>
     <string name="tab_3">颜色</string>
     <string name="tab_4">特效</string>
     <string name="tab_5">延时</string>
@@ -400,6 +401,15 @@
     <string name="filter4">变化闪烁</string>
     <string name="filter5">喜悦</string>
     <string name="filter6">更多</string>
+
+
+    <string name="color1">桃红</string>
+    <string name="color2">淡紫</string>
+    <string name="color3">天蓝</string>
+    <string name="color4">玫红</string>
+    <string name="color5">绿色</string>
+    <string name="color6">更多</string>
+
 
     <string name="open">打开</string>
 
@@ -418,4 +428,26 @@
     <string name="off">关</string>
 
     <string name="refresh">点击刷新</string>
+
+    <string name="success">成功</string>
+
+    <string name="notfound_scenario">未发现场景信息</string>
+
+    <string name="great">优</string>
+    <string name="good">良</string>
+    <string name="bad">差</string>
+
+    <string name="cct_warm">温暖</string>
+    <string name="cct_coldwhite">冷白</string>
+    <string name="cct_normal">适中</string>
+    <string name="cct_soft">柔和</string>
+    <string name="cct_sun">日光</string>
+
+    <string name="feature_wait">功能正在开发中，敬请期待</string>
+
+    <string name="sleep_notify">灯光将在15分钟后关闭</string>
+
+    <string name="device_online">设备 [%s] 上线</string>
+
+    <string name="session_timeout">会话超时</string>
 </resources>

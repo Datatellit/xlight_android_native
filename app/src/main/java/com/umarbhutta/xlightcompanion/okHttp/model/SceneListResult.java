@@ -8,16 +8,14 @@ import java.util.List;
  * 场景列表信息
  */
 
-public class SceneListResult implements Serializable{
+public class SceneListResult implements Serializable {
 
     public int code;
     public String msg;
-
     public SceneListResult data;
 
     public int count;
-
-    public List<Rows> rows;
+    public List<ScenariosResult> rows;
 
     @Override
     public String toString() {
@@ -25,8 +23,6 @@ public class SceneListResult implements Serializable{
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +
-                ", count=" + count +
-                ", rows=" + rows +
                 '}';
     }
 }

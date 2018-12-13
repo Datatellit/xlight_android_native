@@ -3,6 +3,7 @@ package com.umarbhutta.xlightcompanion.glance;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,6 +39,7 @@ import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
+import com.umarbhutta.xlightcompanion.Tools.SensorTool;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
@@ -65,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import io.particle.android.sdk.cloud.ParticleDevice;
 
@@ -81,6 +84,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     private ProgressDialog progressDialog;
     private Handler m_handlerGlance;
     private Handler m_deviceHandler;
+    private Handler m_sparkHandler;
     public static List<Rows> deviceList = new ArrayList<Rows>();
     public static List<Devicenodes> devicenodes = new ArrayList<Devicenodes>();
     public boolean codeChange = false;
@@ -100,6 +104,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     TextView txtCity;
     TextView txtWeather;
     TextView txtRefresh;
+    TextView txtOutDHTt;
     ImageView imgDHTt;
     ImageView imgDHTh;
     ImageView imgALS;
@@ -111,6 +116,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     ImageView imgMessage;
     ImageView weatherIcon;
     RelativeLayout rlAdd;
+    Sensorsdata sd;
 
     /**
      * 位置信息
@@ -133,7 +139,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 if (netMobile == 0) {
                     // 无网络
                     txtRefresh.setVisibility(View.VISIBLE);
-                    ToastUtil.showToast(getContext(), R.string.net_error);
+                    try {
+                        ToastUtil.showToast(getContext(), getString(R.string.net_error));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 } else {
                     // 连接上网络
 //                    txtRefresh.setVisibility(View.GONE);
@@ -192,51 +202,51 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 switchFragment();
                 break;
             case R.id.imgALS:
-                txtUnit.setText(R.string.ALS);
-                resetBg();
-                imgALS.setImageDrawable(getResources().getDrawable(R.drawable.bg_ld));
-                txtSensor.setText(ALS.getText());
+                // txtUnit.setText(R.string.ALS);
+                //resetBg();
+                //imgALS.setImageDrawable(getResources().getDrawable(R.drawable.bg_ld));
+                // txtSensor.setText(ALS.getText());
                 break;
             case R.id.imgDHTt:
-                txtUnit.setText(R.string.DHTt);
-                resetBg();
-                imgDHTt.setImageDrawable(getResources().getDrawable(R.drawable.bg_wd));
-                txtSensor.setText(DHTt.getText());
+                // txtUnit.setText(R.string.DHTt);
+                //resetBg();
+                // imgDHTt.setImageDrawable(getResources().getDrawable(R.drawable.bg_wd));
+                // txtSensor.setText(DHTt.getText());
                 break;
             case R.id.imgDHTh:
-                txtUnit.setText(R.string.DHTh);
-                resetBg();
-                imgDHTh.setImageDrawable(getResources().getDrawable(R.drawable.bg_sd));
-                txtSensor.setText(DHTh.getText());
+                // txtUnit.setText(R.string.DHTh);
+                //resetBg();
+                // imgDHTh.setImageDrawable(getResources().getDrawable(R.drawable.bg_sd));
+                // txtSensor.setText(DHTh.getText());
                 break;
             case R.id.imgPM25:
-                txtUnit.setText(R.string.PM25);
-                resetBg();
-                imgPM25.setImageDrawable(getResources().getDrawable(R.drawable.bg_wm));
-                txtSensor.setText(PM25.getText());
+                // txtUnit.setText(R.string.PM25);
+                //resetBg();
+                // imgPM25.setImageDrawable(getResources().getDrawable(R.drawable.bg_wm));
+                // txtSensor.setText(PM25.getText());
                 break;
             case R.id.imgCH2O:
-                txtUnit.setText(R.string.CH2O);
-                resetBg();
-                imgCH2O.setImageDrawable(getResources().getDrawable(R.drawable.bg_jq));
-                txtSensor.setText(CH2O.getText());
+                // txtUnit.setText(R.string.CH2O);
+                // resetBg();
+                // imgCH2O.setImageDrawable(getResources().getDrawable(R.drawable.bg_jq));
+                // txtSensor.setText(CH2O.getText());
                 break;
             case R.id.imgCO2:
-                txtUnit.setText(R.string.CO2);
-                resetBg();
-                imgCO2.setImageDrawable(getResources().getDrawable(R.drawable.bg_co2));
-                txtSensor.setText(CO2.getText());
+                // txtUnit.setText(R.string.CO2);
+                // resetBg();
+                // imgCO2.setImageDrawable(getResources().getDrawable(R.drawable.bg_co2));
+                // txtSensor.setText(CO2.getText());
                 break;
             case R.id.imgTVOC:
-                txtUnit.setText(R.string.TVOC);
-                resetBg();
-                imgTVOC.setImageDrawable(getResources().getDrawable(R.drawable.bg_tovc));
-                txtSensor.setText(TVOC.getText());
+                // txtUnit.setText(R.string.TVOC);
+                // resetBg();
+                // imgTVOC.setImageDrawable(getResources().getDrawable(R.drawable.bg_tovc));
+                // txtSensor.setText(TVOC.getText());
                 break;
             case R.id.rl_add:
                 ActionSheet.createBuilder(getContext(), getFragmentManager())
                         .setCancelButtonTitle(getString(R.string.cancel))
-                        .setOtherButtonTitles(getString(R.string.add_device_bluetooth), getString(R.string.add_device_accesspoint))
+                        .setOtherButtonTitles(getString(R.string.add_device_accesspoint))
                         .setCancelableOnTouchOutside(true)
                         .setListener(new ActionSheet.ActionSheetListener() {
                             @Override
@@ -247,7 +257,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                             @Override
                             public void onOtherButtonClick(ActionSheet actionSheet, int index) {
                                 Intent intent = new Intent(getContext(), BindDeviceConfirmActivity.class);
-                                intent.putExtra("type", index);
+                                intent.putExtra("type", 1);
                                 startActivityForResult(intent, 1);
                                 actionSheet.dismiss();
                             }
@@ -320,56 +330,78 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             xltDevice.setEnableEventSendMessage(true);
         //先清除
         xltDevice.clearDeviceEventHandlerList();
+        xltDevice.clearSparkEventHandlerList();
         Log.e(TAG, "listen device status for =>" + xltDevice.getControllerID());
         xltDevice.addDeviceEventHandler(m_deviceHandler);
+        xltDevice.addSparkEventHandler(m_sparkHandler);
     }
 
     private void updateUIHandler() {
         m_handlerGlance = new Handler(this.getContext().getMainLooper()) {
             public void handleMessage(Message msg) {
-                Log.e("XLight", "GlanceMainFragment_msg=" + msg.getData().toString());
+//                Log.e("XLight", "GlanceMainFragment_msg=" + msg.getData().toString());
                 if (deviceList != null && deviceList.size() > 0 && msg.getData().getInt("nd", -1) == 130) {
                     int intValue = msg.getData().getInt("DHTt", -255);
                     if (intValue != -255) {
+                        sd.DHTt = intValue;
                         DHTt.setText("" + intValue);
                     }
                     intValue = msg.getData().getInt("DHTh", -255);
                     if (intValue != -255) {
+                        sd.DHTh = intValue;
                         DHTh.setText("" + intValue);
                     }
                     intValue = msg.getData().getInt("PM25", -255);
                     if (intValue != -255) {
+                        sd.PM25 = intValue;
                         PM25.setText("" + intValue);
                     }
                     intValue = msg.getData().getInt("CH2O", -255);
                     if (intValue != -255) {
+                        sd.CH2O = intValue;
                         CH2O.setText("" + intValue);
                     }
                     intValue = msg.getData().getInt("TVOC", -255);
                     if (intValue != -255) {
+                        sd.TVOC = intValue;
                         TVOC.setText("" + intValue);
                     }
                     intValue = msg.getData().getInt("CO2", -255);
                     if (intValue != -255) {
+                        sd.CO2 = intValue;
                         CO2.setText("" + intValue);
                     }
                     intValue = msg.getData().getInt("ALS", -255);
                     if (intValue != -255) {
+                        sd.ALS = intValue;
                         ALS.setText("" + intValue);
                     }
+                    intValue = SensorTool.getKPI(sd);
+                    txtSensor.setText("" + intValue);
+                    txtUnit.setText(getUnit(intValue));
                 }
             }
         };
-        Log.e(TAG, "listen sensor status for =>" + SlidingMenuMainActivity.m_mainDevice.getControllerID());
+//        Log.e(TAG, "listen sensor status for =>" + SlidingMenuMainActivity.m_mainDevice.getControllerID());
         //先清除
         SlidingMenuMainActivity.m_mainDevice.clearDataEventHandlerList();
         SlidingMenuMainActivity.m_mainDevice.addDataEventHandler(m_handlerGlance);
     }
 
+    public String getUnit(int value) {
+        if (value > 80) {
+            return getResources().getString(R.string.great);
+        } else if (value > 60) {
+            return getResources().getString(R.string.good);
+        } else {
+            return getResources().getString(R.string.bad);
+        }
+    }
+
     public void initHandler() {
         m_deviceHandler = new Handler(this.getContext().getMainLooper()) {
             public void handleMessage(Message msg) {
-                Log.e(TAG, "GlanceMainFragment_msg=" + msg.getData().toString());
+//                Log.e(TAG, "GlanceMainFragment_msg=" + msg.getData().toString());
                 if (deviceList != null && deviceList.size() > 0) {
                     // 寻找设备
                     for (Devicenodes d : devicenodes) {
@@ -407,14 +439,40 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                             if (R != -255 && G != -255 && B != -255) {
                                 int[] tmpColor = {R, G, B};
                                 d.color = tmpColor;
-                                Log.e(TAG, "i change color:" + Arrays.toString(tmpColor));
+//                                Log.e(TAG, "i change color:" + Arrays.toString(tmpColor));
                             }
-                            Log.d("XLight", "device event change");
+//                            Log.d("XLight", "device event change");
                             codeChange = false;
                             if (adapterLight != null) {
                                 adapterLight.notifyDataSetChanged();
                             }
                             break;
+                        }
+                    }
+                }
+            }
+        };
+        m_sparkHandler = new Handler(this.getContext().getMainLooper()) {
+            public void handleMessage(Message msg) {
+                for (final Rows r : deviceList) {
+                    if (msg.getData().getString("coreId").equals(r.coreid)) {
+                        if (msg.getData().getString("data").equals("online")) {
+                            addDeviceMapsSDK();
+                            // 上线了，重新建立连接
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.showToast(getContext(), String.format(getString(R.string.device_online), r.devicename));
+                                }
+                            });
+                        } else {
+                            // 离线了，需要将控制权移除，并提示
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.showToast(getContext(), String.format(getString(R.string.device_disconnected), r.devicename));
+                                }
+                            });
                         }
                     }
                 }
@@ -447,6 +505,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                         if (null != devices && devices.size() > 0) {
                             if (null != mDeviceInfoResult && null != mDeviceInfoResult.Energysaving) {
                                 save_money.setText(getString(R.string.this_month_has_save_money_more) + "12 " + getString(R.string.this_month_has_save_money_more_two));
+                            } else {
+                                save_money.setText(getString(R.string.this_month_has_save_money_more) + "12 " + getString(R.string.this_month_has_save_money_more_two));
                             }
                         }
                         deviceList.clear();
@@ -457,7 +517,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                             adapterLight.notifyDataSetChanged();
                             codeChange = false;
                         }
-                        addDeviceMapsSDK(deviceList);
+                        addDeviceMapsSDK();
                     }
                 });
             }
@@ -482,7 +542,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
 
     private int initDeviceCount = 0;
 
-    public void addDeviceMapsSDK(final List<Rows> deviceList) {
+    public void addDeviceMapsSDK() {
         if (deviceList != null && deviceList.size() == 0) {
             devicenodes.clear();
             default_text.setVisibility(View.VISIBLE);
@@ -491,7 +551,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             }
         } else if (null != deviceList && deviceList.size() > 0) {
             devicenodes.clear();
-            Log.e("XLight", "device count:" + deviceList.size());
+            initDeviceCount = 0;
+//            Log.e("XLight", "device count:" + deviceList.size());
             default_text.setVisibility(View.GONE);
             SharedPreferencesUtils.putObject(getActivity(), SharedPreferencesUtils.KEY_DEVICE_LIST, deviceList);
 //            if (SlidingMenuMainActivity.xltDeviceMaps != null) {
@@ -505,17 +566,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 // Initialize SmartDevice SDK
                 final Rows device = deviceList.get(i);
                 final xltDevice m_XltDevice = SlidingMenuMainActivity.xltDeviceMaps.get(device.coreid) != null ? SlidingMenuMainActivity.xltDeviceMaps.get(device.coreid) : new xltDevice();
-                m_XltDevice.clearDeviceList();
-                if (device.devicenodes != null) {
-                    for (int lv_idx = 0; lv_idx < device.devicenodes.size(); lv_idx++) {
-                        m_XltDevice.addNodeToDeviceList(device.devicenodes.get(lv_idx).nodeno, xltDevice.DEFAULT_DEVICE_TYPE, device.devicenodes.get(lv_idx).devicenodename);
-                        device.devicenodes.get(lv_idx).coreid = deviceList.get(i).coreid;
-                        if (deviceList.get(i).sharedevice != null) {
-                            device.devicenodes.get(lv_idx).isShare = 1;
-                        }
-                    }
-                    devicenodes.addAll(device.devicenodes);
-                }
                 if (m_XltDevice != null && m_XltDevice.isCloudOK() && m_XltDevice.getCurDevice().isConnected()) {
                     //直接进行监听
                     if (device.maindevice == 1 && device.isShare == 0) {//主设备 TODO TODO  设置监听 广播回调
@@ -527,6 +577,17 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     }
                     // 设置所有控制器的设备状态监听
                     setDeviceHandlerMessage(m_XltDevice);
+                    if (device.devicenodes != null) {
+                        for (int lv_idx = 0; lv_idx < device.devicenodes.size(); lv_idx++) {
+                            m_XltDevice.addNodeToDeviceList(device.devicenodes.get(lv_idx).nodeno, xltDevice.DEFAULT_DEVICE_TYPE, device.devicenodes.get(lv_idx).devicenodename);
+                            device.devicenodes.get(lv_idx).coreid = deviceList.get(i).coreid;
+                            if (deviceList.get(i).sharedevice != null) {
+                                device.devicenodes.get(lv_idx).isShare = 1;
+                            }
+                        }
+                        devicenodes.addAll(device.devicenodes);
+                    }
+                    initDeviceCount++;
                     continue;
                 } else {
                     if (lr != null)
@@ -536,20 +597,31 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                         AnonymousParams ap = UserUtils.getAnonymousInfo(getContext());
                         m_XltDevice.Init(getActivity(), ap.uniqueId, ap.uniqueId);
                     }
+                    if (device.devicenodes != null) {
+                        for (int lv_idx = 0; lv_idx < device.devicenodes.size(); lv_idx++) {
+                            m_XltDevice.addNodeToDeviceList(device.devicenodes.get(lv_idx).nodeno, xltDevice.DEFAULT_DEVICE_TYPE, device.devicenodes.get(lv_idx).devicenodename);
+                            device.devicenodes.get(lv_idx).coreid = deviceList.get(i).coreid;
+                            if (deviceList.get(i).sharedevice != null) {
+                                device.devicenodes.get(lv_idx).isShare = 1;
+                            }
+                        }
+                        devicenodes.addAll(device.devicenodes);
+                    }
 //                if (deviceList.get(i).sharedevice != null) {
 //                    deviceList.get(i).isShare = 1;
 //                }
                     if (!progressDialog.isShowing() && SlidingMenuMainActivity.xltDeviceMaps.size() == 0) {
                         progressDialog.show();
                     }
-                    initDeviceCount = 0;
                     if (device.coreid != null) {
+                        Log.e("XLight", "reconnect:" + device.coreid);
                         // Connect to Controller
                         m_XltDevice.Connect(device.coreid, new xltDevice.callbackConnect() {
                             @Override
                             public void onConnected(xltDevice.BridgeType bridge, boolean connected) {
                                 Logger.e(TAG, String.format("coreID:%s,Bridge:%s,isControlConnect=%s", device.coreid, bridge, connected));
                                 initDeviceCount++;
+                                Log.e("XLight", "deviceSize:" + deviceList.size() + ",currentSize:" + initDeviceCount);
                                 if (deviceList.size() == initDeviceCount && progressDialog.isShowing()) {
                                     progressDialog.dismiss();
                                 }
@@ -570,9 +642,21 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                                     }
                                     // 设置所有控制器的设备状态监听
                                     setDeviceHandlerMessage(m_XltDevice);
+                                    // 连接成功，直接查询下面所有子节点的状态
+                                    for (Devicenodes node : devicenodes) {
+                                        if (node.coreid.equals(device.coreid)) {
+                                            m_XltDevice.QueryStatus(node.nodeno);
+                                        }
+                                    }
                                 } else {
                                     // 提示连接失败信息
-                                    ToastUtil.showToast(getContext(), String.format(getString(R.string.device_connect_failed), device.devicename));
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ToastUtil.showToast(getContext(), String.format(getString(R.string.device_connect_failed), device.devicename));
+                                            txtRefresh.setVisibility(View.VISIBLE);
+                                        }
+                                    });
                                 }
                             }
                         });
@@ -583,7 +667,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             for (Rows r : deviceList) {
                 lstDevice.add(r.coreid);
             }
-            getSensorAndStateInfo(lstDevice);
             if (adapterLight == null) {
                 changeGridView();
                 adapterLight = new LightItemAdapter(getContext(), devicenodes, true);
@@ -613,8 +696,9 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     public void onClickListener(LightItemAdapter.CLICK_TYPE type, int position) {
                         Devicenodes dn = devicenodes.get(position);
                         SlidingMenuMainActivity.m_mainDevice = SlidingMenuMainActivity.xltDeviceMaps.get(dn.coreid);
-                        if (SlidingMenuMainActivity.m_mainDevice == null || !SlidingMenuMainActivity.m_mainDevice.isCloudOK() || !SlidingMenuMainActivity.m_mainDevice.getCurDevice().isConnected()) {
+                        if (SlidingMenuMainActivity.m_mainDevice == null || !SlidingMenuMainActivity.m_mainDevice.getCurDevice().isConnected() || !SlidingMenuMainActivity.m_mainDevice.isCloudOK()) {
                             ToastUtil.showToast(getContext(), R.string.device_disconnect);
+                            txtRefresh.setVisibility(View.VISIBLE);
                             return;
                         }
                         if (type == LightItemAdapter.CLICK_TYPE.BOTTOM) {
@@ -641,6 +725,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     default_text.setVisibility(View.VISIBLE);
                 }
             }
+            getSensorAndStateInfo(lstDevice);
         }
     }
 
@@ -681,16 +766,18 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                                                     node.filter = l.filter;
                                                     if (node.devicetype > 1) {
                                                         node.color = new int[]{l.R, l.G, l.B};
-                                                        Log.e(TAG, "R:" + l.R + "G" + l.G + "B" + l.B + "=>" + Arrays.toString(node.color));
+//                                                        Log.e(TAG, "R:" + l.R + "G" + l.G + "B" + l.B + "=>" + Arrays.toString(node.color));
                                                     }
-                                                    Log.e(TAG, node.coreid + "==" + ds.coreid + "，" + node.nodeno + "==" + l.nd + "，type=" + node.devicetype + "=>" + node.toString());
+//                                                    Log.e(TAG, node.coreid + "==" + ds.coreid + "，" + node.nodeno + "==" + l.nd + "，type=" + node.devicetype + "=>" + node.toString());
                                                     break;
                                                 }
                                             }
                                         }
                                     }
+//                                    ToastUtil.showToast(getContext(), "初始化状态完成" + devicenodes.get(0).ison);
                                     if (ds != null && ds.sensor != null && ds.sensor.size() > 0) {
                                         for (Sensorsdata s : ds.sensor) {
+                                            sd = s;
                                             DHTh.setText("" + (int) s.DHTh);
                                             DHTt.setText("" + (int) s.DHTt);
                                             ALS.setText("" + s.ALS);
@@ -698,7 +785,9 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                                             CO2.setText("" + s.CO2);
                                             CH2O.setText("" + (int) s.CH2O);
                                             TVOC.setText("" + (int) s.TVOC);
-                                            txtSensor.setText("" + (int) s.DHTt);
+                                            int value = SensorTool.getKPI(s);
+                                            txtSensor.setText("" + value);
+                                            txtUnit.setText(getUnit(value));
                                         }
                                     }
                                 }
@@ -725,19 +814,19 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
      */
     public void changeGridView() {
         // item宽度
-        int itemWidth = dip2px(95);
-        // item之间的间隔
-        int itemPaddingH = dip2px(15);
-        int size = devicenodes.size();
-        // 计算GridView宽度
-        int gvWidth = size * (itemWidth + itemPaddingH) + 80;
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-        gvLight.setLayoutParams(params);
-        gvLight.setColumnWidth(itemWidth);
-        gvLight.setHorizontalSpacing(itemPaddingH);
-        gvLight.setStretchMode(GridView.NO_STRETCH);
-        gvLight.setNumColumns(size);
+//        int itemWidth = dip2px(95);
+//        // item之间的间隔
+//        int itemPaddingH = dip2px(15);
+//        int size = devicenodes.size();
+//        // 计算GridView宽度
+//        int gvWidth = size * (itemWidth + itemPaddingH) + 80;
+//
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+//        gvLight.setLayoutParams(params);
+//        gvLight.setColumnWidth(itemWidth);
+//        gvLight.setHorizontalSpacing(itemPaddingH);
+//        gvLight.setStretchMode(GridView.NO_STRETCH);
+//        gvLight.setNumColumns(size);
     }
 
     /**
@@ -767,6 +856,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         txtCity = (TextView) view.findViewById(R.id.txtCity);
         txtWeather = (TextView) view.findViewById(R.id.txtWeather);
         txtRefresh = (TextView) view.findViewById(R.id.txtRefresh);
+        txtOutDHTt = (TextView) view.findViewById(R.id.txtOutDHTt);
 
         imgMenu = (ImageView) view.findViewById(R.id.home_menu);
         weatherIcon = (ImageView) view.findViewById(R.id.weatherIcon);
@@ -889,6 +979,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         Request request = new Request.Builder()
                 .url(forecastUrl)
                 .build();
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
         //put request in call object to use for returning data
         Call call = client.newCall(request);
         Log.i("XLight", String.format("request weahter info->%s,%s", mLatitude, mLongitude));
@@ -896,6 +987,12 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
+                try {
+                    // 重新获取
+                    getWeather();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
 
             @Override
@@ -952,12 +1049,14 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         JSONObject currently = forecast.getJSONObject("currently");
         weatherDetails.setIcon(currently.getString("icon"));
         weatherDetails.setSummary(currently.getString("summary"));
+        weatherDetails.setTemp(currently.getDouble("apparentTemperature"));
         return weatherDetails;
     }
 
     private void updateDisplay() {
         weatherIcon.setImageDrawable(getWeatherIcon(mWeatherDetails.getIcon()));
         txtWeather.setText(mWeatherDetails.getSummary());
+        txtOutDHTt.setText("" + mWeatherDetails.getTemp(""));
     }
 
 
@@ -972,7 +1071,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         mOption.setMockEnable(true);
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
         mOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
-        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setHttpTimeOut(10000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
         mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
         mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
         mOption.setOnceLocation(true);//可选，设置是否单次定位。默认是false
@@ -1026,6 +1125,13 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         super.onDestroy();
         if (mImmersionBar != null)
             mImmersionBar.destroy();
+        for (xltDevice _xltDevice : SlidingMenuMainActivity.xltDeviceMaps.values()) {
+            _xltDevice.clearDataEventHandlerList();
+            _xltDevice.clearDeviceEventHandlerList();
+            _xltDevice.clearSparkEventHandlerList();
+            _xltDevice.Disconnect();
+            _xltDevice = null;
+        }
     }
 
     @Override

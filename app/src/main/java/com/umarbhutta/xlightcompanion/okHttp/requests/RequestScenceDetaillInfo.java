@@ -26,7 +26,7 @@ public class RequestScenceDetaillInfo implements HttpUtils.OnHttpRequestCallBack
      */
     public void getSceneInfo(Context context, int deviceId, OnRequestFirstPageInfoCallback mOnRequestFirstPageInfoCallback) {
         this.mOnRequestFirstPageInfoCallback = mOnRequestFirstPageInfoCallback;
-        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_SCENE_DETAIL + deviceId + "?access_token=" + UserUtils.getAccessToken(context), DeviceInfoResult.class, this);
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_SCENARIOS + deviceId + "?access_token=" + UserUtils.getAccessToken(context), DeviceInfoResult.class, this);
     }
 
     @Override

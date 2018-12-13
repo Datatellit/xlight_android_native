@@ -11,6 +11,7 @@ import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
@@ -28,7 +29,7 @@ public class CloudBridge extends BaseBridge {
 
     public ParticleDevice currDevice;
     private static int resultCode;
-    private static long subscriptionId = 0;
+    private long subscriptionId = 0;
 
     public CloudBridge() {
         super();
@@ -40,11 +41,13 @@ public class CloudBridge extends BaseBridge {
             @Override
             public void run() {
                 try {
+                    Log.e("XLight", "start connect to :" + devID);
                     currDevice = ParticleCloudSDK.getCloud().getDevice(devID);
                     SubscribeDeviceEvents();
                     setConnect(true);
                     m_parentDevice.onBridgeStatusChanged(xltDevice.BridgeType.Cloud, xltDevice.BCS_CONNECTED);
                     if (m_parentDevice.m_onConnected != null) {
+                        Log.e("XLight", "device connected:" + currDevice.getID());
                         m_parentDevice.m_onConnected.onConnected(xltDevice.BridgeType.Cloud, true);
                     }
                     // Delay 2 seconds, then Query Main Device
@@ -58,7 +61,9 @@ public class CloudBridge extends BaseBridge {
 
                 } catch (ParticleCloudException e) {
                     e.printStackTrace();
+                    Log.e("XLight", e.getBestMessage());
                     m_parentDevice.onBridgeStatusChanged(xltDevice.BridgeType.Cloud, xltDevice.BCS_CONNECTION_FAILED);
+                    m_parentDevice.m_onConnected.onConnected(xltDevice.BridgeType.Cloud, false);
                 }
             }
         }).start();
@@ -202,11 +207,20 @@ public class CloudBridge extends BaseBridge {
     }
 
     public int JSONCommandSpecialEffect(final int nodeID, final int filter) {
+        return JSONCommandSpecialEffect(nodeID, filter, null);
+    }
+
+    public int JSONCommandSpecialEffect(final int nodeID, final int filter, final int[] dt) {
         new Thread() {
             @Override
             public void run() {
                 // Make the Particle call here
-                String json = "{\"cmd\":" + xltDevice.CMD_EFFECT + ",\"nd\":" + nodeID + ",\"filter\":" + filter + "}";
+                String json = "";
+                if (dt == null) {
+                    json = "{\"cmd\":" + xltDevice.CMD_EFFECT + ",\"nd\":" + nodeID + ",\"filter\":" + filter + "}";
+                } else {
+                    json = "{\"cmd\":" + xltDevice.CMD_EFFECT + ",\"nd\":" + nodeID + ",\"filter\":" + filter + ",\"dt\":" + Arrays.toString(dt) + "}";
+                }
                 ArrayList<String> message = new ArrayList<>();
                 message.add(json);
                 try {
@@ -477,14 +491,26 @@ public class CloudBridge extends BaseBridge {
                                     if (m_parentDevice.getEnableEventBroadcast()) {
                                         m_parentContext.sendBroadcast(new Intent(xltDevice.bciDeviceConfig));
                                     }
+                                } else if (eventName.equalsIgnoreCase(xltDevice.eventSparkStatus)) {
+                                    bdlEventData.putString("coreId", event.deviceId);
+                                    bdlEventData.putString("data", event.dataPayload);
+                                    if (event.dataPayload.equals("online")) {
+                                        setConnect(true);
+                                    } else {
+                                        setConnect(false);
+                                    }
+                                    m_parentDevice.sendSparkStatusMessage(bdlEventData);
                                 }
                             }
                         }
 
                         public void onEventError(Exception e) {
-                            Log.e(TAG, "Event error: Event Disconnect");
+                            Log.e(TAG, "Event error: Event Disconnect > " + subscriptionId);
                             // 如果监听事件出现问题，那么应该按照每5秒重试一次的方式进行重新连接
                             try {
+                                if (subscriptionId == 0) {
+                                    return;
+                                }
                                 setConnect(false);
                                 Thread.sleep(5000);
                                 SubscribeDeviceEvents();
@@ -508,7 +534,9 @@ public class CloudBridge extends BaseBridge {
             public void run() {
                 if (subscriptionId > 0) {
                     try {
+                        Log.e(TAG, "UnsubscribeDeviceEvents:" + subscriptionId);
                         currDevice.unsubscribeFromEvents(subscriptionId);
+                        subscriptionId = 0;
                     } catch (ParticleCloudException e) {
                         e.printStackTrace();
                     }

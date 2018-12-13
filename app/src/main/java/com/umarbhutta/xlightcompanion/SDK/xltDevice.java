@@ -56,6 +56,7 @@ public class xltDevice {
     public static final String eventDeviceConfig = "xlc-config-device";
     public static final String eventDeviceStatus = "xlc-status-device";
     public static final String eventSensorData = "xlc-data-sensor";
+    public static final String eventSparkStatus = "spark/status";
 
     // Broadcast Intent
     public static final String bciAlarm = "io.xlight.SDK." + eventAlarm;
@@ -255,6 +256,7 @@ public class xltDevice {
     private Handler m_bcsHandler = null;
     private ArrayList<Handler> m_lstEH_DevST = new ArrayList<>();
     private ArrayList<Handler> m_lstEH_SenDT = new ArrayList<>();
+    private ArrayList<Handler> m_lstEH_SparkDT = new ArrayList<>();
 
     // Callback members
     public callbackConnect m_onConnected = null;
@@ -278,28 +280,35 @@ public class xltDevice {
         this.Init(context, CloudAccount.EMAIL, CloudAccount.PASSWORD);
     }
 
+    private static String lastUser = "";
+
     // Initialize objects
     public void Init(Context context, String username, String password) {
         // Clear event handler lists
         clearDeviceEventHandlerList();
         clearDataEventHandlerList();
         clearDeviceList();
-
         // Ensure we do it only once
-        if (!m_bInitialized) {
+//        Log.e("xltDevice", "m_bInitialized:" + m_bInitialized + ",lastUser:" + lastUser + ",username:" + username);
+        // 修改此处的逻辑，如果不是相同用户，需要重新初始
+        if (!m_bInitialized || !lastUser.equals(username)) {
             // Init BLE Adapter
-            if (!BLEPairedDeviceList.initialized()) {
+            if (!BLEPairedDeviceList.initialized() || !lastUser.equals(username)) {
                 BLEPairedDeviceList.init(context);
             }
 
             // Init Particle Adapter
-            if (!ParticleAdapter.initialized()) {
+//            Log.e("xltDevice", "ParticleAdapter initialized:" + ParticleAdapter.initialized() + ",lastUser:" + lastUser + ",username:" + username);
+            if (!ParticleAdapter.initialized() || !lastUser.equals(username)) {
+                if (!lastUser.equals("") && !lastUser.equals(username)) { // 切换用户的话需要先登出，在用新的用户登录
+                    ParticleAdapter.logout();
+                }
                 ParticleAdapter.init(context);
                 // ToDo: get login credential or access token from DMI
                 // make sure we logged onto IoT cloud
                 ParticleAdapter.authenticate(username, password);
             }
-
+            lastUser = username;
             m_bInitialized = true;
         }
 
@@ -395,12 +404,21 @@ public class xltDevice {
                     SystemClock.sleep(1500);
                 }
                 if (ParticleAdapter.isAuthenticated()) {
-                    if (ParticleAdapter.checkDeviceID(m_ControllerID)) {
-                        // Connect Cloud Instance
-                        cldBridge.connectCloud(m_ControllerID);
+                    try {
+                        if (ParticleAdapter.checkDeviceID(m_ControllerID)) {
+                            // Connect Cloud Instance
+                            cldBridge.connectCloud(m_ControllerID);
+                        } else {
+                            m_onConnected.onConnected(xltDevice.BridgeType.Cloud, false);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        m_onConnected.onConnected(xltDevice.BridgeType.Cloud, false);
                     }
                 } else {
+                    Log.e("XLight", "ParticleAdapter isAuthenticated failed");
                     onBridgeStatusChanged(BridgeType.Cloud, BCS_CONNECTION_FAILED);
+                    m_onConnected.onConnected(xltDevice.BridgeType.Cloud, false);
                 }
             }
         }).start();
@@ -937,6 +955,7 @@ public class xltDevice {
         return (cldBridge.isConnected());
     }
 
+
     public ParticleDevice getCurDevice() {
         return (cldBridge.currDevice);
     }
@@ -1189,10 +1208,14 @@ public class xltDevice {
 
     // Set Special Effect
     public int SetSpecialEffect(final int filter) {
-        return SetSpecialEffect(m_DevID, filter);
+        return SetSpecialEffect(m_DevID, filter, null);
     }
 
-    public int SetSpecialEffect(final int nodeID, final int filter) {
+    public int SetSpecialEffect(final int filter, final int[] dt) {
+        return SetSpecialEffect(m_DevID, filter, dt);
+    }
+
+    public int SetSpecialEffect(final int nodeID, final int filter, final int[] dt) {
         int rc = -1;
 
         // Select Bridge
@@ -1200,7 +1223,7 @@ public class xltDevice {
         if (isBridgeOK(m_currentBridge)) {
             switch (m_currentBridge) {
                 case Cloud:
-                    rc = cldBridge.JSONCommandSpecialEffect(nodeID, filter);
+                    rc = cldBridge.JSONCommandSpecialEffect(nodeID, filter, dt);
                     break;
                 case BLE:
                     rc = bleBridge.SetSpecialEffect(nodeID, filter);
@@ -1311,6 +1334,11 @@ public class xltDevice {
         return m_lstEH_SenDT.size();
     }
 
+    public int addSparkEventHandler(final Handler handler) {
+        m_lstEH_SparkDT.add(handler);
+        return m_lstEH_SparkDT.size();
+    }
+
     public boolean removeDeviceEventHandler(final Handler handler) {
         return m_lstEH_DevST.remove(handler);
     }
@@ -1319,12 +1347,20 @@ public class xltDevice {
         return m_lstEH_SenDT.remove(handler);
     }
 
+    public boolean removeSparkEventHandler(final Handler handler) {
+        return m_lstEH_DevST.remove(handler);
+    }
+
     public void clearDeviceEventHandlerList() {
         m_lstEH_DevST.clear();
     }
 
     public void clearDataEventHandlerList() {
         m_lstEH_SenDT.clear();
+    }
+
+    public void clearSparkEventHandlerList() {
+        m_lstEH_SparkDT.clear();
     }
 
     // Send device status message to each handler
@@ -1349,6 +1385,21 @@ public class xltDevice {
         Message msg;
         for (int i = 0; i < m_lstEH_SenDT.size(); i++) {
             handler = m_lstEH_SenDT.get(i);
+            if (handler != null) {
+                msg = handler.obtainMessage();
+                if (msg != null) {
+                    msg.setData(data);
+                    handler.sendMessage(msg);
+                }
+            }
+        }
+    }
+
+    public void sendSparkStatusMessage(final Bundle data) {
+        Handler handler;
+        Message msg;
+        for (int i = 0; i < m_lstEH_SparkDT.size(); i++) {
+            handler = m_lstEH_SparkDT.get(i);
             if (handler != null) {
                 msg = handler.obtainMessage();
                 if (msg != null) {

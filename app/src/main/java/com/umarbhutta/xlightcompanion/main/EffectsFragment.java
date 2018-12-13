@@ -13,6 +13,7 @@ import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
+import com.umarbhutta.xlightcompanion.settings.utils.DisplayUtils;
 import com.umarbhutta.xlightcompanion.views.CircleImageView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -139,16 +140,16 @@ public class EffectsFragment extends Fragment implements View.OnClickListener {
                 // 设置选中的
                 switch (ControlDeviceActivity.devicenodes.filter) {
                     case 1:
-                        lstFilter.get(0).setBorderWidth(8);
+                        lstFilter.get(0).setBorderWidth(DisplayUtils.dip2px(getContext(), 3));
                         break;
                     case 2:
-                        lstFilter.get(1).setBorderWidth(8);
+                        lstFilter.get(1).setBorderWidth(DisplayUtils.dip2px(getContext(), 3));
                         break;
                     case 3:
-                        lstFilter.get(2).setBorderWidth(8);
+                        lstFilter.get(2).setBorderWidth(DisplayUtils.dip2px(getContext(), 3));
                         break;
                     case 4:
-                        lstFilter.get(3).setBorderWidth(8);
+                        lstFilter.get(3).setBorderWidth(DisplayUtils.dip2px(getContext(), 3));
                         break;
                 }
             }

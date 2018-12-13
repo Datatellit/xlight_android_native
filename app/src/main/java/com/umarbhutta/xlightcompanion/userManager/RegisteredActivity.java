@@ -3,6 +3,7 @@ package com.umarbhutta.xlightcompanion.userManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -139,6 +140,16 @@ public class RegisteredActivity extends BaseActivity implements View.OnClickList
         HttpUtils.getInstance().postRequestInfo(NetConfig.URL_REGISTER, paramStr, RegisteResult.class, this);
     }
 
+    private void onFabPressed(Class activity) {
+        if (this.getBaseContext() == null)
+            return;
+
+        if (this.getBaseContext() instanceof SlidingMenuMainActivity) {
+            SlidingMenuMainActivity ra = (SlidingMenuMainActivity) this.getBaseContext();
+            ra.onActivityPressed(activity);
+        }
+    }
+
     @Override
     public void onHttpRequestSuccess(final Object result) {
         runOnUiThread(new Runnable() {
@@ -149,9 +160,9 @@ public class RegisteredActivity extends BaseActivity implements View.OnClickList
                     RegisteredActivity.this.cancelProgressDialog();
                     ToastUtil.showToast(RegisteredActivity.this, info.msg);
                 } else if (1 == info.code) {
-//                    ToastUtil.showToast(RegisteredActivity.this, getString(R.string.registe_success));
-                    setResult(10086);
-                    login();
+                    ToastUtil.showToast(RegisteredActivity.this, getString(R.string.registe_success));
+                    RegisteredActivity.this.cancelProgressDialog();
+                    finish();
                 } else {
                     RegisteredActivity.this.cancelProgressDialog();
                     ToastUtil.showToast(RegisteredActivity.this, getString(R.string.net_error));

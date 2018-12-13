@@ -302,7 +302,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         @Override
         public void run() {
             try {
-                Thread.sleep(32000);
+                Thread.sleep(10000);
                 new Thread(new CheckStateThread()).start();
             } catch (Exception e) {
 
@@ -438,6 +438,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                     Log.d("XLight", config.toString());
                     //连接失败
                     Log.e("XLight", "controller socket connect failed");
+                    ToastUtil.dismissLoading();
                 }
             });
         } catch (Exception e) {
@@ -560,7 +561,22 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                                                 ToastUtil.showLoading(BindDeviceWiFiActivity.this, null, getString(R.string.add_device_wifi_step6));
                                             }
                                         });
-                                        StartCheckDevice();
+                                        if (isBind()) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    ToastUtil.dismissLoading();
+                                                    ToastUtil.showToast(getBaseContext(), R.string.add_device_bulb_bind);
+                                                }
+                                            });
+                                            Intent intent = new Intent(getApplicationContext(), BindDeviceErrorActivity.class);
+                                            intent.putExtra("type", type);
+                                            startActivity(intent);
+                                            finish();
+                                            return;
+                                        } else {
+                                            StartCheckDevice();
+                                        }
                                     }
                                 }
                             };
@@ -572,6 +588,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                 };
                 new Thread(settingRunnable).start();
             } else {
+                ToastUtil.dismissLoading();
                 ToastUtil.showToast(this, R.string.add_device_wifi_disconnect);
             }
         } catch (Exception e) {
@@ -613,6 +630,10 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                 }
             }, bluetoothXlight);
         }
+    }
+
+    public boolean isBind() {
+        return RequestCheckDevice.getInstance().checkDeviceSync(coreID);
     }
 
     public void TestWiFi() {
@@ -752,8 +773,12 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
      * wifi列表
      */
     private void getWifiList() {
-        if (isWifiContect()) {
-            Log.e("XLight", "get scan wifi result");
+        if (!isWifiContect()) {
+            wifiManager.setWifiEnabled(true);
+        }
+        Log.e("XLight", "start scan wifi");
+        ToastUtil.showLoading(this, getString(R.string.add_device_wifi_scan));
+        if (type == 0) {
             //获取结果
             wifiScanList = wifiManager.getScanResults();
             LinkedHashMap<String, ScanResult> linkedMap = new LinkedHashMap<>(wifiScanList.size());
@@ -853,6 +878,12 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                     for (ScanApCommand.Scan ap : aps)
                         list.add(ap.ssid);
                     adapter.notifyDataSetChanged();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.dismissLoading();
+                        }
+                    });
                 }
                 break;
                 case 2: {
@@ -860,15 +891,16 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                         Log.d("XLight", "retry connect apconnect");
                         new Thread(runnableInit).start();
                     } else {
+                        ToastUtil.dismissLoading();
                         ToastUtil.showToast(getApplicationContext(), R.string.add_device_wifi_disconnect);
                     }
                 }
                 break;
             }
-            if (!stopScanWifi) {
-                updateWifiHandler.postDelayed(runnable, 100);
-                updateWifiHandler.sendEmptyMessageDelayed(1, 5000);
-            }
+//            if (!stopScanWifi) {
+//                updateWifiHandler.postDelayed(runnable, 100);
+//                updateWifiHandler.sendEmptyMessageDelayed(1, 5000);
+//            }
         }
     };
 

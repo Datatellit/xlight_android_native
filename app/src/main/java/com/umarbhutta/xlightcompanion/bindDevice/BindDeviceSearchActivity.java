@@ -86,6 +86,9 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
         if (type == 1) {
             ((TextView) findViewById(R.id.txtTitle)).setText(R.string.add_device_two_title2);
             mWifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if (!mWifiManager.isWifiEnabled()) {
+                mWifiManager.setWifiEnabled(true);
+            }
             mWifiManager.startScan();
             //搜索网络并加入
             WlanScan();
@@ -94,7 +97,6 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
         }
         ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
-
 
 
     @Override
@@ -209,16 +211,17 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
      */
     private void getWifiList() {
         if (isWifiContect() && !stopScanWifi) {
-            if (mWifiManager.getConnectionInfo().getSSID().contains("Photon-") && mWifiManager.getConnectionInfo().getSSID().length() == 11) {
+            if (mWifiManager.getConnectionInfo().getSSID().contains("Photon-")) {
                 connectWifi(mWifiManager.getConnectionInfo().getSSID());
                 return;
             }
             Log.d("XLight", "get scan wifi result");
             //获取结果
+            mWifiManager.startScan();
             List<ScanResult> wifiScanList = mWifiManager.getScanResults();
             //查看是否存在Photon-xxxx
             for (ScanResult sr : wifiScanList) {
-                if (sr.SSID.contains("Photon-") && sr.SSID.length() == 11) {
+                if (sr.SSID.contains("Photon-")) {
                     connectWifi(sr.SSID);
                 }
             }
@@ -279,7 +282,7 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
                     String ssid = wifiInfo.getSSID();
                     //获取当前wifi名称
                     Log.d("XLight", "连接到网络 " + ssid + ssid.contains("Photon-") + ssid.length());
-                    if (ssid.contains("Photon-") && ssid.length() >= 11) {
+                    if (ssid.contains("Photon-")) {
                         //连接成功，跳到下一个页面
                         Intent intent1 = new Intent(getApplicationContext(), BindDeviceWiFiActivity.class);
                         intent1.putExtra("type", type);
@@ -308,6 +311,7 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            Log.e("XLight", "retry scan wifi");
             getWifiList();
         }
     };

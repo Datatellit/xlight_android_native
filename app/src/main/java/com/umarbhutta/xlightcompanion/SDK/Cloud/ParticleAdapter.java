@@ -61,6 +61,13 @@ public class ParticleAdapter {
         }).start();
     }
 
+    public static void logout() {
+        if (m_bLoggedIn) {
+            ParticleCloudSDK.getCloud().logOut();
+            m_bLoggedIn = false;
+        }
+    }
+
     // Synchronous query
     private static int queryDevices() {
         // Make the Particle call here
@@ -102,6 +109,9 @@ public class ParticleAdapter {
 
     public static boolean checkDeviceID(final String devID) {
         if (isAuthenticated()) {
+            if (m_devices == null) {
+                queryDevices();
+            }
             for (ParticleDevice device : m_devices) {
                 if (devID.equalsIgnoreCase(device.getID())) {
                     return true;

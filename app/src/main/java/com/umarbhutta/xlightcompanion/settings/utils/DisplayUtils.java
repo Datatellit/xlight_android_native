@@ -61,8 +61,12 @@ public class DisplayUtils {
      * @return
      */
     public static int px2sp(Context context, float pxValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (pxValue / fontScale + 0.5f);
+        try {
+            final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+            return (int) (pxValue / fontScale + 0.5f);
+        } catch (Exception e) {
+            return (int) (pxValue / 1 + 0.5f);
+        }
     }
 
     /**
@@ -128,7 +132,7 @@ public class DisplayUtils {
         if (-1 != nineHeight2) {
             return nineHeight2;
         }
-        int screenWidth = getScreenWidth(context)/2;
+        int screenWidth = getScreenWidth(context) / 2;
         nineHeight2 = screenWidth * 9 / 16;
         return nineHeight2;
     }

@@ -313,9 +313,9 @@ public class GlanceMainFragment_bak extends Fragment implements View.OnClickList
                             if (R != -255 && G != -255 && B != -255) {
                                 int[] tmpColor = {R, G, B};
                                 d.color = tmpColor;
-                                Log.e(TAG, "i change color:" + Arrays.toString(tmpColor));
+//                                Log.e(TAG, "i change color:" + Arrays.toString(tmpColor));
                             }
-                            Log.d("XLight", "device event change");
+//                            Log.d("XLight", "device event change");
                             codeChange = false;
                             if (devicesListAdapter != null) {
                                 devicesListAdapter.notifyDataSetChanged();
@@ -686,7 +686,7 @@ public class GlanceMainFragment_bak extends Fragment implements View.OnClickList
 
         } else if (null != deviceList && deviceList.size() > 0) {
             devicenodes.clear();
-            Log.d("XLight", "device count:" + deviceList.size());
+//            Log.d("XLight", "device count:" + deviceList.size());
             default_text.setVisibility(View.GONE);
             SharedPreferencesUtils.putObject(getActivity(), SharedPreferencesUtils.KEY_DEVICE_LIST, deviceList);
             if (SlidingMenuMainActivity.xltDeviceMaps != null) {

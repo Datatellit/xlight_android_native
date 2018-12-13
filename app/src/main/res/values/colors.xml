@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <array name="arc_colors_default">
+        <item>#FFFF9E5D</item>
+        <item>#FFFFFFFF</item>
+        <item>#FF4A9BFF</item>
+    </array>
     <!--<color name="colorPrimary">#2196F3</color>-->
     <!--<color name="colorPrimaryDark">#1976D2</color>-->
     <!--<color name="colorPrimaryLight">#BBDEFB</color>-->
@@ -57,5 +62,7 @@
 
     <color name="color_light_close">#d2d2d2</color>
     <color name="color_light_open">#6cd285</color>
+
+    <color name="no_select">#FF808080</color>
 
 </resources><!--3999ca-->
