@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.gyf.barlibrary.ImmersionBar;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;

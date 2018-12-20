@@ -23,7 +23,7 @@ import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSettingMainDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestUnBindDevice;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.share.ShareDeviceActivity;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
@@ -131,9 +131,9 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         showProgressDialog(getString(R.string.setting));
 
         int deviceId = GlanceMainFragment.deviceList.get(position).id;
-        RequestSettingMainDevice.getInstance().settingDevice(this, 1, deviceId, new CommentRequstCallback() {
+        RequestSettingMainDevice.getInstance().settingDevice(this, 1, deviceId, new CommentRequestCallback() {
             @Override
-            public void onCommentRequstCallbackSuccess() {
+            public void onCommentRequestCallbackSuccess() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -145,7 +145,7 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
             }
 
             @Override
-            public void onCommentRequstCallbackFail(int code, final String errMsg) {
+            public void onCommentRequestCallbackFail(int code, final String errMsg) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -206,9 +206,9 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         showProgressDialog(getString(R.string.setting));
 
         RequestUnBindDevice.getInstance().unBindController(this, "" + GlanceMainFragment.deviceList.get(position).id,
-                new CommentRequstCallback() {
+                new CommentRequestCallback() {
                     @Override
-                    public void onCommentRequstCallbackSuccess() {
+                    public void onCommentRequestCallbackSuccess() {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -230,12 +230,12 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
                     }
 
                     @Override
-                    public void onCommentRequstCallbackFail(int code, final String errMsg) {
+                    public void onCommentRequestCallbackFail(int code, final String errMsg) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 cancelProgressDialog();
-                                ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_fail) + errMsg);
+                                ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_fail));
                             }
                         });
                     }

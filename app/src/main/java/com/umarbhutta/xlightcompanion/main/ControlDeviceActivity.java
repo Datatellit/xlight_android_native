@@ -23,19 +23,12 @@ import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
-import com.umarbhutta.xlightcompanion.adapter.ScenarioAdapter;
-import com.umarbhutta.xlightcompanion.control.bean.Brightness;
-import com.umarbhutta.xlightcompanion.event.ColorEvent;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
 import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
 import com.umarbhutta.xlightcompanion.okHttp.model.ScenariosResult;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestScenarios;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
-
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +59,7 @@ public class ControlDeviceActivity extends BaseActivity {
         getScenarioList();
         setContentView(R.layout.activity_control);
         mTitles = new String[]{
-                getString(R.string.tab_1), getString(R.string.tab_2), getString(R.string.tab_5), getString(R.string.tab_6)
+                getString(R.string.tab_1), getString(R.string.tab_2), getString(R.string.tab_5)
         };
         devicenodes = (Devicenodes) getIntent().getSerializableExtra("info");
         mPositon = getIntent().getIntExtra("position", 0);

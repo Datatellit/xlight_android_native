@@ -70,7 +70,6 @@ public class App extends Application {
             public void dealWithCustomAction(Context context, UMessage msg) {
                 if (msg.custom.equals("xxx") && mOnChangeViewCallback != null) {
                     Log.d("XLight", "open share page");
-                    mOnChangeViewCallback.onChangeViewListener(R.id.nav_share);
                 }
             }
         };

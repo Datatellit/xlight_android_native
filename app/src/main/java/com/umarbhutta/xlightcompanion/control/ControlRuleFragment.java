@@ -3,14 +3,12 @@ package com.umarbhutta.xlightcompanion.control;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +19,6 @@ import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
-import com.umarbhutta.xlightcompanion.control.activity.AddControlRuleActivity;
 import com.umarbhutta.xlightcompanion.control.adapter.DeviceRulesListAdapter;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.model.DeviceGetRules;
@@ -29,7 +26,7 @@ import com.umarbhutta.xlightcompanion.okHttp.model.RuleInfo;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeleteRuleDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeviceRulesInfo;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestRuleSwitchDevice;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
 import java.util.ArrayList;
@@ -170,10 +167,6 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
             case R.id.iv_menu:
                 switchFragment();
                 break;
-            case R.id.btn_add:
-                // 跳转到添加规则页面
-                onFabPressed(AddControlRuleActivity.class);
-                break;
         }
     }
 
@@ -213,9 +206,9 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
         } else {
             isCheckedInt = 0;
         }
-        RequestRuleSwitchDevice.getInstance().switchRule(getActivity(), mRuleInfoList.get(position).id, isCheckedInt, new CommentRequstCallback() {
+        RequestRuleSwitchDevice.getInstance().switchRule(getActivity(), mRuleInfoList.get(position).id, isCheckedInt,  new CommentRequestCallback() {
             @Override
-            public void onCommentRequstCallbackSuccess() {
+            public void onCommentRequestCallbackSuccess() {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -230,7 +223,7 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
             }
 
             @Override
-            public void onCommentRequstCallbackFail(int code, String errMsg) {
+            public void onCommentRequestCallbackFail(int code, String errMsg) {
                 ToastUtil.showToast(getActivity(), "errMsg=" + errMsg);
             }
         });
@@ -243,10 +236,6 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void OnItemClick(int position) {
-        RuleInfo mRuleInfo = mRuleInfoList.get(position);
-        Intent intent = new Intent(ControlRuleFragment.this.getActivity(), AddControlRuleActivity.class);
-        intent.putExtra("RuleInfo", mRuleInfo);
-        startActivity(intent);
     }
 
 
@@ -265,9 +254,9 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
 
                 mDialog.show();
 
-                RequestDeleteRuleDevice.getInstance().deleteRule(getActivity(), mRuleInfoList.get(position).id + "", new CommentRequstCallback() {
+                RequestDeleteRuleDevice.getInstance().deleteRule(getActivity(), mRuleInfoList.get(position).id + "", new CommentRequestCallback() {
                     @Override
-                    public void onCommentRequstCallbackSuccess() {
+                    public void onCommentRequestCallbackSuccess() {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -277,12 +266,9 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
                                 ToastUtil.showToast(getActivity(), getString(R.string.delete_success));
                             }
                         });
-
-
                     }
-
                     @Override
-                    public void onCommentRequstCallbackFail(int code, final String errMsg) {
+                    public void onCommentRequestCallbackFail(int code, final String errMsg) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

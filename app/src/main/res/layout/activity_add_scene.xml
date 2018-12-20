@@ -11,7 +11,6 @@
     <include layout="@layout/top_layout" />
 
     <ScrollView
-        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -22,7 +21,6 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/sv_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
@@ -52,7 +50,6 @@
                     android:paddingLeft="10dp" />
             </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/sv_ll_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"

@@ -18,7 +18,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/sv_ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -38,7 +37,6 @@
                 tools:text="@string/add_device_wifi_title" />
 
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
@@ -50,7 +48,6 @@
                 tools:text="@string/add_device_wifi_desc" />
 
             <ImageView
-                android:id="@+id/imageView3"
                 android:layout_width="270dp"
                 android:layout_height="270dp"
                 android:src="@drawable/group" />
@@ -62,7 +59,6 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/textView9"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginLeft="20dp"
@@ -101,7 +97,6 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/textView10"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginLeft="20dp"
@@ -140,7 +135,6 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/txtConnect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"

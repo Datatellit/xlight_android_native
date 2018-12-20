@@ -14,9 +14,9 @@ android {
     defaultConfig {
         applicationId "com.umarbhutta.xlightcompanion"
         minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 3
-        versionName "1.4"
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true
     }
     useLibrary 'org.apache.http.legacy'
@@ -60,7 +60,6 @@ android {
 dependencies {
 //    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':devicesetup')
-    compile project(':slidingmenu_library')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
@@ -74,7 +73,6 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.android.support.constraint:constraint-layout:+'
     testCompile 'junit:junit:4.12'
-    compile project(':slidingmenu_library')
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     // BY DEFAULT, BUILD APP AGAINST THE LOCAL SDK SOURCE
     // (i.e.: make modifications to the SDK source in the local repo show up in this app
@@ -96,7 +94,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
-    compile project(':RangeSeekBar')
     compile files('libs/umeng-common-1.4.0.jar')
     compile files('libs/umerror_android_1.0.0.jar')
     compile files('libs/immersionbar-2.3.1.jar')

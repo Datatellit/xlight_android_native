@@ -61,7 +61,7 @@ public class RequestCheckDevice implements HttpUtils.OnHttpRequestCallBack {
         Call call = okHttpClient.newCall(request);
         try {
             Response response = call.execute();
-            Log.e("XLight", response.body().toString());
+            Log.e("XLight", response.body().string());
             if (response.code() == 403) {
                 return true;
             } else {

@@ -276,14 +276,14 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
                 if (info.getState().equals(NetworkInfo.State.DISCONNECTED)) {
                     Log.d("XLight", "wifi网络连接断开");
                 } else if (info.getState().equals(NetworkInfo.State.CONNECTED)) {
-
                     WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
                     android.net.wifi.WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                     String ssid = wifiInfo.getSSID();
                     //获取当前wifi名称
                     Log.d("XLight", "连接到网络 " + ssid + ssid.contains("Photon-") + ssid.length());
-                    if (ssid.contains("Photon-")) {
+                    if (ssid.contains("Photon-") && !redirect) {
                         //连接成功，跳到下一个页面
+                        redirect = true;
                         Intent intent1 = new Intent(getApplicationContext(), BindDeviceWiFiActivity.class);
                         intent1.putExtra("type", type);
                         startActivity(intent1);
@@ -293,6 +293,8 @@ public class BindDeviceSearchActivity extends BaseActivity implements View.OnCli
             }
         }
     }
+
+    boolean redirect = false;
 
     Handler updateWifiHandler = new Handler() {
         @Override

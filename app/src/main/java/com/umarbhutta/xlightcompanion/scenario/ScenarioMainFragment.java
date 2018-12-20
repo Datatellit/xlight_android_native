@@ -33,7 +33,7 @@ import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.UserScene;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeleteScene;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSceneListInfo;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
 import org.json.JSONArray;
@@ -134,9 +134,9 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
 
     private void deleteScene(final int position) {
         SceneResult mSceneInfo = mCusSceneList.get(position);
-        RequestDeleteScene.getInstance().deleteScene(getActivity(), mSceneInfo.id, new CommentRequstCallback() {
+        RequestDeleteScene.getInstance().deleteScene(getActivity(), mSceneInfo.id, new CommentRequestCallback() {
             @Override
-            public void onCommentRequstCallbackSuccess() {
+            public void onCommentRequestCallbackSuccess() {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -148,7 +148,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
             }
 
             @Override
-            public void onCommentRequstCallbackFail(int code, final String errMsg) {
+            public void onCommentRequestCallbackFail(int code, final String errMsg) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

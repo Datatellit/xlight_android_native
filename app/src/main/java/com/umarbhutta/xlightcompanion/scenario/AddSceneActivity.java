@@ -534,8 +534,9 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                             JSONArray ring = cmd.getJSONArray("ring");
                             devicenodes.get(j).ison = ring.getInt(1);
                             devicenodes.get(j).brightness = ring.getInt(2);
-                            devicenodes.get(j).color = new int[]{ring.getInt(4), ring.getInt(5), ring.getInt(6)};
-                            devicenodes.get(j).cct = 3500;
+                            devicenodes.get(j).color = new int[]{ring.getInt(5), ring.getInt(6), ring.getInt(7)};
+                            devicenodes.get(j).cct = (ring.getInt(3) << 8) + ring.getInt(4);
+                            Log.e("XLight", "edit scene->" + ring.getInt(3) + "，" + ring.getInt(4));
                             Log.e("XLight", "edit scene->" + devicenodes.get(j).toString());
                             break;
                         case 3:

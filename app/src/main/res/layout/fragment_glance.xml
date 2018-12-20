@@ -2,7 +2,6 @@
 
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -16,7 +15,7 @@
         <LinearLayout
             android:id="@+id/ll_title"
             android:layout_width="match_parent"
-            android:layout_height="390dp"
+            android:layout_height="240dp"
             android:background="@drawable/home_bg"
             android:orientation="vertical">
             <!--Header Menu-->
@@ -44,6 +43,14 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/txtCity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
                         android:id="@+id/txtRefresh"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -56,470 +63,206 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/home_message"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/message" />
-                </LinearLayout>
-            </LinearLayout>
-            <!--Location and Weather-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/txtOutDHTt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_l_r"
-                        android:text="---"
-                        android:textColor="@color/white"
-                        android:textSize="32sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:layout_toRightOf="@+id/txtOutDHTt"
-                        android:text="℃"
-                        android:textColor="#ffffffff"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical">
-
-                    <ImageView
-                        android:id="@+id/weatherIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="6dp"
-                        android:src="@mipmap/sunny_day" />
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/txtWeather"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/margin_l_r"
+                        android:layout_marginRight="5dp"
                         android:text="--"
                         android:textColor="@color/white"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/weatherIcon"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@mipmap/sunny_day" />
 
                 </LinearLayout>
             </LinearLayout>
-
+            <!--Location and Weather-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:paddingLeft="@dimen/margin_l_r"
-                android:paddingRight="@dimen/margin_l_r">
-
-                <TextView
-                    android:id="@+id/txtCity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-2dp"
-                    android:text="--"
-                    android:textColor="@color/white"
-                    android:textSize="21sp" />
-            </LinearLayout>
-            <!--Circle Round-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="138dp"
-                android:layout_marginBottom="37dp"
-                android:gravity="center">
-
-                <RelativeLayout
-                    android:layout_width="138dp"
-                    android:layout_height="138dp"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="138dp"
-                        android:layout_height="138dp"
-                        android:background="@drawable/round" />
-
-                    <TextView
-                        android:id="@+id/txtSensor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="28dp"
-                        android:gravity="center_horizontal"
-                        android:text="--"
-                        android:textColor="#ffffffff"
-                        android:textSize="50sp" />
-
-                    <TextView
-                        android:id="@+id/txtUnit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/txtSensor"
-                        android:layout_centerInParent="true"
-                        android:text="@string/great"
-                        android:textColor="#ffffffff"
-                        android:textSize="18sp" />
-                </RelativeLayout>
-            </LinearLayout>
-            <!--Sensor-->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <!--DHTt-->
-                    <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/txtOutDHTt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_l_r"
-                        android:gravity="left|center_vertical">
+                        android:text="---"
+                        android:textColor="@color/white"
+                        android:textSize="60sp" />
 
-                        <ImageView
-                            android:id="@+id/imgDHTt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_wd" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/imgDHTt"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/txtDHTt"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="℃"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-                    <!--ALS-->
-                    <RelativeLayout
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_item"
-                        android:gravity="left|center_vertical">
-
-                        <ImageView
-                            android:id="@+id/imgALS"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_ld" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/imgALS"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/txtALS"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="%"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-                    <!--DHTh-->
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_item"
-                        android:gravity="left|center_vertical">
-
-                        <ImageView
-                            android:id="@+id/imgDHTh"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_sd" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/imgDHTh"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/txtDHTh"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="%"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-                    <!--PM25-->
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_item"
-                        android:gravity="left|center_vertical">
-
-                        <ImageView
-                            android:id="@+id/imgPM25"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_wm" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/imgPM25"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/txtPM25"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="μg/m³"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-                    <!--CO2-->
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_item"
-                        android:gravity="left|center_vertical">
-
-                        <ImageView
-                            android:id="@+id/imgCO2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_co2" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/imgCO2"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/txtCO2"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="ppm"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-                    <!--CH2O-->
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_item"
-                        android:gravity="left|center_vertical">
-
-                        <ImageView
-                            android:id="@+id/imgCH2O"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_jq" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/imgCH2O"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/txtCH2O"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="μg/m³"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-                    <!--TVOC-->
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_item"
-                        android:layout_marginRight="@dimen/margin_l_r"
-                        android:gravity="left|center_vertical">
-
-                        <ImageView
-                            android:id="@+id/imgTVOC"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_tovc" />
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/imgTVOC"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="8dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/txtTVOC"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="--"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="μg/m³"
-                                    android:textColor="#ffffffff"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                    </RelativeLayout>
+                        android:text="°"
+                        android:textColor="#ffffffff"
+                        android:textSize="60sp" />
                 </LinearLayout>
-            </HorizontalScrollView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/txtMin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:text="~"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtMax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="℃"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="--"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hum"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="--"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="%"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/green_radius"
+                        android:paddingBottom="6dp"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:paddingTop="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/aqi"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="@string/great"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
-        <!--money-->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="@dimen/margin_l_r"
-            android:layout_marginRight="@dimen/margin_l_r"
-            android:layout_marginTop="@dimen/margin_l_r"
-            android:background="@drawable/ffed_radius"
-            android:gravity="center_vertical"
-            android:padding="9dp">
+            android:padding="@dimen/margin_l_r"
+            android:paddingBottom="0dp">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="9dp"
-                android:src="@mipmap/prompt" />
+                android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/save_money"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scene_ctrl"
+                    android:textColor="#ff222222"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_scene_add"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/this_month_has_save_money"
-                android:textColor="#ff808080"
-                android:textSize="11sp" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtAddScene"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_scene"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/txtAddScene"
+                    android:src="@mipmap/add" />
+            </RelativeLayout>
         </LinearLayout>
+
         <!--Title-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -551,13 +294,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_more"
-                    android:textColor="#ff808080"
-                    android:textSize="12sp" />
+                    android:textColor="#ff555555"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@id/txtAdd"
                     android:src="@mipmap/add" />
             </RelativeLayout>
@@ -577,10 +320,10 @@
                 android:id="@+id/default_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="@dimen/margin_l_r"
                 android:layout_marginTop="12dp"
                 android:gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
                 android:text="@string/you_have_no_device_and_add"
                 android:visibility="gone" />
 
@@ -593,9 +336,9 @@
                 android:gravity="center"
                 android:horizontalSpacing="10dp"
                 android:numColumns="auto_fit"
+                android:paddingBottom="0dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingBottom="0dp"
                 android:scrollbars="vertical"
                 android:stretchMode="spacingWidth"
                 android:verticalSpacing="10dp"></GridView>

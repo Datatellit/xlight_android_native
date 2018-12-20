@@ -4,7 +4,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -14,12 +13,10 @@
     <include layout="@layout/top_layout" />
 
     <ScrollView
-        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/sv_ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -39,7 +36,6 @@
                 tools:text="@string/add_device_two_title" />
 
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"

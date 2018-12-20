@@ -19,7 +19,6 @@
     <string name="two_pwd_not_same">Entered passwords differ</string>
     <string name="modify_pwd_success">Password reset complete</string>
     <string name="commit_img">Submitting...</string>
-    <string name="login_first">Log in first, please</string>
     <string name="internal_storage">Internal Storage</string>
     <string name="photo_set_fail">Setup failed, please try again!</string>
 
@@ -30,7 +29,6 @@
     <string name="pickerview_day">Day</string>
     <string name="pickerview_hours">Hour</string>
     <string name="pickerview_minutes">Minute</string>
-    <string name="content_is_null">Content can not be empty</string>
     <string name="ok">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="setting">Setting</string>
@@ -40,11 +38,6 @@
     <string name="color_temp">CCT</string>
     <string name="brightness">Brightness</string>
     <string name="color">Color</string>
-    <string name="filter">Filter</string>
-    <string name="filter_one">Breathe</string>
-    <string name="filter_two">Flashing</string>
-    <string name="filter_three">Colorful Breathe</string>
-    <string name="filter_four">Colorful Flashing</string>
     <string name="scene_wait_device">Long press to adjust the device</string>
     <string name="scene_wait_last_select">Please add at least one device</string>
     <string name="scene_custom">Customize scene</string>
@@ -53,14 +46,11 @@
     <string name="scene_change_failed">execute %s scene failed</string>
     <string name="scene_close">Close</string>
     <string name="scene">Scenario</string>
-    <string name="select">Select</string>
     <string name="email_error">E-mail format is incorrect</string>
     <string name="input_email">Please enter your email address</string>
     <string name="next">Next</string>
     <string name="loading">Loading...</string>
-    <string name="commiting">Submitting...</string>
     <string name="lamp">Light</string>
-    <string name="add_device_bluetooth">Bluetooth</string>
     <string name="add_device_accesspoint">Access Point</string>
     <string name="confirm_status">Confirm Device State</string>
     <string name="add_device_one_title">Make sure controller is powered on</string>
@@ -112,34 +102,7 @@
     <string name="add_device_bulb_ok">OK</string>
     <string name="add_device_bulb_bind">the device belongs to someone else</string>
     <string name="device_link_success">The device is bound successfully</string>
-    <string name="luanch_condition">Launch Conditions</string>
-    <string name="timer">Timing</string>
-    <string name="detection_to_the_active">Detected activity</string>
-    <string name="detection_to_the_voice">Detected voice</string>
-    <string name="temperature">Temperature</string>
-    <string name="leave_home">Leave Home</string>
-    <string name="go_home">Be Home</string>
-    <string name="gas">Gas</string>
-    <string name="load_base_info_fail">Failed to load basic information...</string>
-    <string name="temp_setting">Temperature Setting</string>
-    <string name="briress_setting">Brightness Setting</string>
-    <string name="please_select_status">Please select the status</string>
-    <string name="please_select_temp">Please select the temperature</string>
-    <string name="higer">Above</string>
-    <string name="equal">Equal</string>
-    <string name="lower">Under</string>
-    <string name="timer_setting">Timing Setting</string>
-    <string name="select_repeate_time">Please select repeat cycle</string>
-    <string name="please_select_time">Please select the time</string>
     <string name="please_select">Please select</string>
-    <string name="xingqiyi">Monday</string>
-    <string name="xingqier">Tuesday</string>
-    <string name="xingqisan">Wednesday</string>
-    <string name="xingqisi">Thursday</string>
-    <string name="xingqiwu">Friday</string>
-    <string name="xingqiliu">Saturday</string>
-    <string name="xingqiri">Sunday</string>
-    <string name="custom">Custom</string>
     <string name="device_connect_failed">Device [%s] connection failed</string>
     <string name="device_disconnect">Device disconnected,Please try click refresh</string>
     <string name="share">Share</string>
@@ -173,27 +136,11 @@
     <string name="zhouwu">Friday</string>
     <string name="zhouilu">Saturday</string>
     <string name="zhouri">Sunday</string>
-    <string name="execute_once">Execute Once</string>
-    <string name="everyday">Everyday</string>
-    <string name="zhouyi_zhouwu">Workday</string>
-    <string name="app_notify">APP notification</string>
     <string name="complete">Complete</string>
-    <string name="please_input_notify_content">Please enter the content of the notification</string>
-    <string name="execute_result">Executive Outcomes</string>
-    <string name="lamp_control">Light Control</string>
     <string name="email_notify">E-mail notification</string>
-    <string name="scene_switch">Scenario switching (switching master Scenario)</string>
     <string name="scene_switch_no">Scenario switching</string>
     <string name="living_room_lamp">Light in the living room</string>
-    <string name="please_input_email">Enter Email</string>
-    <string name="please_input_right_email">please enter your vaild email</string>
-    <string name="please_input_notify_email_theme">Please enter the subject of the notification email</string>
-    <string name="select_scene">Select the scenario</string>
-    <string name="beforehand">Default</string>
     <string name="close">Close</string>
-    <string name="create_rule">New Rule</string>
-    <string name="eidt_rule">Edit Rule</string>
-    <string name="rule_create_success">Rule created successfully</string>
     <string name="main_device">Main Device</string>
     <string name="main_device_share">Shared devices can not be set as master</string>
     <string name="rule">Rule</string>
@@ -209,27 +156,17 @@
     <string name="setting_success">Setting successfully</string>
     <string name="unbind_device_tap">Unbundling device prompt</string>
     <string name="sure_unbind_device">Confirm unbind this device?</string>
-    <string name="edit_device">Control Device</string>
-    <string name="nuan_bai">Warm White</string>
-    <string name="zhengbai">Pure White</string>
-    <string name="lengbai">Cold White</string>
     <string name="edit_device_name">Edit Device Name</string>
     <string name="please_set_lamp_name">Pleas set the name of the light</string>
     <string name="modify_fail">Edit failed</string>
     <string name="first_page">Home</string>
-    <string name="baobiao">Report</string>
     <string name="help">Help</string>
     <string name="add_scene">Add Scenario</string>
-    <string name="input_scene_name">Enter the name of scenario</string>
-    <string name="edit_scene">Edit scenario</string>
     <string name="please_input_scene_name">Enter the name of scenario</string>
     <string name="edit_scene_success">Edit scenario successfully</string>
     <string name="add_scene_success">add scenario successfully</string>
     <string name="delete_scene_tap">Delete scenario tips</string>
     <string name="sure_delete_this_scene">Confirm to delete the scenario</string>
-    <string name="scan_qr">Scan QR code</string>
-    <string name="input_order">Enter the password code</string>
-    <string name="bind_quick">Fast bind</string>
     <string name="modify_pwd">Change Password</string>
     <string name="reset_pwd">Reset Password</string>
     <string name="please_input_verifycode">Please enter verification code</string>
@@ -241,7 +178,6 @@
     <string name="device_select_device">Device（Select Shake default device）</string>
     <string name="pic_select_fail">Image selection failed</string>
     <string name="your_sdcard_error">Your memory card has a problem, temporarily cannot modify the head</string>
-    <string name="invite_bind">Invite binding</string>
     <string name="file_has_no">File does not Exist</string>
     <string name="avar_set_fail">Head set failed, please try again later</string>
     <string name="avar_setting_fail">Head set failed, please try again later</string>
@@ -249,7 +185,6 @@
     <string name="women">Woman</string>
     <string name="man">Man</string>
     <string name="bu_queding">Secrecy</string>
-    <string name="modify_account">Modify Account</string>
     <string name="modify_nick">Modify Nickname</string>
     <string name="nick_name">Nickname</string>
     <string name="touxiang">Head portrait</string>
@@ -259,51 +194,20 @@
     <string name="input_pwd">Enter password</string>
     <string name="regist">Sign up</string>
     <string name="regist_protocal">Agreement</string>
-    <string name="manzu_tiaojian">When the conditions are met</string>
-    <string name="wei_tianjia_tiaojian">No condition added</string>
-    <string name="jiang_zhixing_jieguo">Will execute the result</string>
-    <string name="wei_tianjia_jieguo">No results added</string>
-    <string name="power">Power</string>
-    <string name="lightness">Brightness</string>
-    <string name="cold_color">Warm color</string>
-    <string name="zidingyi">Custom</string>
-    <string name="you_want_notify_content">Content you want to notify</string>
     <string name="please_select_main_device">Please select the main device</string>
     <!--<string name="you_have_no_device">You have not added a device yet</string>-->
     <string name="you_have_no_device">No main device,please back to the home page,click the "+" to add device</string>
-    <string name="email">The mailbox you want to notify</string>
-    <string name="email_title">Email Subject</string>
-    <string name="email_content">Email Content</string>
     <string name="please_input_pwd_again">Enter password again</string>
     <string name="verifycode">Verification code</string>
-    <string name="mingcheng">Name</string>
-    <string name="touch_temp">Trigger Temperature</string>
-    <string name="touch_bress">Trigger Brightness</string>
-    <string name="__status">State</string>
-    <string name="over_zero">above freezing</string>
-    <string name="below_zero">below zero</string>
-    <string name="start_time">Start Time</string>
-    <string name="__repeat">repeat</string>
     <string name="please_input_your_email">Enter Email</string>
     <string name="register_protocal">Agreement</string>
     <string name="has_agree">By signing up account,you agree to the aggreement</string>
-    <string name="quick_bind">Fast binding allows family members to quickly bind devices, using the following three ways:</string>
-    <string name="one_input_family_email">1,Enter the e-mail address of the family member directly</string>
-    <string name="__complete">Complete</string>
-    <string name="one_scan_code">2,Family members can bind devices by scanning the following QR code</string>
-    <string name="three_bind_order">3,Family members can bind devices by entering the following associated password</string>
-    <string name="link_order">Associated password：</string>
     <string name="zhanghao">Account</string>
     <string name="input_verifycode">Please enter verification code</string>
-    <string name="sleep">Sleep</string>
     <string name="persion_center">Personal Center</string>
-    <string name="has_start_plan">Schedule enabled</string>
-    <string name="dingshi">Timing</string>
     <string name="all_rules">All Rules</string>
     <string name="no_add_rules">You have not added rules</string>
     <!--<string name="ti_gan_temp">Somatosensory temperature</string>-->
-    <string name="ti_gan_temp">Feels like</string>
-    <string name="shidu">Humidity</string>
     <string name="this_month_has_save_money">Save electricity fee ￥-- this month.</string>
     <string name="this_month_has_save_money_more">Save electricity fee ￥</string>
     <string name="this_month_has_save_money_more_two">Yuan this month.</string>
@@ -316,9 +220,8 @@
     <string name="camera">Camera</string>
     <string name="calary_select">Choose from Album</string>
     <string name="title">Title</string>
-
-    <string name="no_conditions">Please set the conditions</string>
-    <string name="no_results">Please set the results</string>
+    <string name="failed">Failed</string>
+    <string name="executing">Executing...</string>
     <string name="select_device">Please select device</string>
     <string name="no_device">No device</string>
     <string name="do_not_supoort_shake">This device does not support shake</string>
@@ -351,14 +254,6 @@
     <string name="again_exit">Press again to exit the program</string>
 
     <string name="add_more">Add More</string>
-
-    <string name="DHTt">TEMP</string>
-    <string name="DHTh">HUM</string>
-    <string name="CO2">CO2</string>
-    <string name="PM25">PM2.5</string>
-    <string name="ALS">ALS</string>
-    <string name="CH2O">CH2O</string>
-    <string name="TVOC">TVOC</string>
 
     <string name="room">Room</string>
     <string name="message">Message</string>
@@ -412,8 +307,6 @@
 
     <string name="timming">When do you want to turn on the lights?</string>
 
-    <string name="open">Open</string>
-
     <string name="more_filter">More special effects, stay tuned...</string>
 
     <string name="more_color">More Color</string>
@@ -427,8 +320,6 @@
     <string name="off">OFF</string>
 
     <string name="refresh">Refresh</string>
-
-    <string name="success">OK</string>
 
     <string name="notfound_scenario">No scene information found</string>
 
@@ -444,9 +335,18 @@
 
     <string name="feature_wait">Please wait for the function is under development</string>
 
-    <string name="sleep_notify">The light will turn off after 15 minutes</string>
+    <string name="sleep_notify">The light will turn off after %s minutes</string>
 
     <string name="device_disconnected">Device [%s] offline</string>
     <string name="device_online">Device [%s] online</string>
     <string name="session_timeout">Session timeout</string>
+
+    <string name="delay">Delay times(minute)</string>
+    <string name="delay_on">Enable Delay</string>
+    <string name="enabled">Enabled</string>
+    <string name="delay_0">Delay time must be greater than 0</string>
+
+    <string name="hum">Humidity:</string>
+    <string name="aqi">Air quality:</string>
+    <string name="scene_ctrl">Scene control</string>
 </resources>

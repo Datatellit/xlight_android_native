@@ -6,12 +6,10 @@ package com.umarbhutta.xlightcompanion.okHttp;
 
 public class NetConfig {
 
-    //        public static final String SERVER_ADDRESS_DOMAIN = "https://iot.xlight.io";
-//    public static final String SERVER_IP = "211.159.174.249";
-//    public static final String SERVER_ADDRESS_DOMAIN = "http://211.159.174.249:8082";
-//    public static final String DCI_ADDRESS_DOMAIN = "http://211.159.174.249:8081";
-//
-//    public static final String SERVER_ADDRESS_DS = "http://211.159.174.249:8063";
+    public static final String SERVER_IP = "www.baidu.com";
+    public static final String SERVER_ADDRESS_DOMAIN = "http://211.159.174.249:8082";
+    public static final String DCI_ADDRESS_DOMAIN = "http://211.159.174.249:8081";
+
 
 //    public static final String SERVER_IP = "192.168.1.138";
 //    public static final String SERVER_ADDRESS_DOMAIN = "http://192.168.1.138:8082";
@@ -19,11 +17,9 @@ public class NetConfig {
 //
 //    public static final String SERVER_ADDRESS_DS = "http://192.168.1.138:8063";
 
-    public static final String SERVER_IP = "58.87.101.35";
-    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.datatellit.com";
-    public static final String DCI_ADDRESS_DOMAIN = "http://iot.datatellit.com";
-
-    public static final String SERVER_ADDRESS_DS = "http://dataservice.datatellit.com";
+//    public static final String SERVER_IP = "www.baidu.com";
+//    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.datatellit.com";
+//    public static final String DCI_ADDRESS_DOMAIN = "http://iot.datatellit.com";
 
     /**
      * 正式版开关

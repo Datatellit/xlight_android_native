@@ -66,7 +66,6 @@
                 android:id="@+id/brightnessSeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:bsb_bubble_color="@color/colorSeekBarDefault"
                 app:bsb_bubble_text_color="@color/white"
                 app:bsb_max="100"
                 app:bsb_min="0"
@@ -77,7 +76,9 @@
                 app:bsb_show_progress_in_float="false"
                 app:bsb_show_section_mark="false"
                 app:bsb_show_section_text="true"
-                app:bsb_track_color="@color/colorSeekBarDefault" />
+                />
+            <!--app:bsb_track_color="@color/colorSeekBarDefault"-->
+            <!--app:bsb_bubble_color="@color/colorSeekBarDefault"-->
         </LinearLayout>
     </LinearLayout>
 

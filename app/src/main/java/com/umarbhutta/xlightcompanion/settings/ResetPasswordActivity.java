@@ -1,6 +1,5 @@
 package com.umarbhutta.xlightcompanion.settings;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -11,13 +10,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.CommentResult;
-import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,9 +34,8 @@ public class ResetPasswordActivity extends BaseActivity implements HttpUtils.OnH
     private EditText et_old_passwordTv;
     private EditText et_new_passwordTv;
     private EditText et_new_password_againTv;
-    private ProgressDialog dialog;
     private String email;
-    private ImageButton ib_clear1,ib_clear2;
+    private ImageButton ib_clear1, ib_clear2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +44,7 @@ public class ResetPasswordActivity extends BaseActivity implements HttpUtils.OnH
         AndroidBug54971Workaround.assistActivity(findViewById(android.R.id.content));
         email = getIntent().getStringExtra("email");
         initViews();
+        ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
 
     private void initViews() {
@@ -130,28 +129,21 @@ public class ResetPasswordActivity extends BaseActivity implements HttpUtils.OnH
                 }
             }
         });
-
         findViewById(R.id.first_layout).setVisibility(View.GONE);
-
     }
 
     private void commit() {
         String et_new_passwordTvStr = et_new_passwordTv.getText().toString();
         String et_new_password_againTvStr = et_new_password_againTv.getText().toString();
-
         if (TextUtils.isEmpty(et_new_passwordTvStr)) {
             ToastUtil.showToast(this, R.string.input_new_pwd);
             return;
         }
-
         if (TextUtils.isEmpty(et_new_password_againTvStr)) {
             ToastUtil.showToast(this, getString(R.string.please_input_verifycode));
             return;
         }
-
-
-        dialog = ProgressDialogUtils.showProgressDialog(this, getString(R.string.commit_img));
-
+        showProgressDialog(getString(R.string.loading));
         JSONObject object = new JSONObject();
         try {
             object.put("email", email);
@@ -162,8 +154,6 @@ public class ResetPasswordActivity extends BaseActivity implements HttpUtils.OnH
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -171,12 +161,11 @@ public class ResetPasswordActivity extends BaseActivity implements HttpUtils.OnH
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dialog.cancel();
+                cancelProgressDialog();
                 ToastUtil.showToast(ResetPasswordActivity.this, getString(R.string.pwd_reset_success));
                 ResetPasswordActivity.this.finish();
             }
         });
-
     }
 
     @Override
@@ -184,10 +173,15 @@ public class ResetPasswordActivity extends BaseActivity implements HttpUtils.OnH
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dialog.cancel();
+                cancelProgressDialog();
                 ToastUtil.showToast(ResetPasswordActivity.this, "" + errMsg);
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();
     }
 }

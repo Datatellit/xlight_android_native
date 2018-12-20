@@ -3,22 +3,17 @@ package com.umarbhutta.xlightcompanion.glance;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -53,6 +48,7 @@ import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
 import com.umarbhutta.xlightcompanion.okHttp.model.Light;
 import com.umarbhutta.xlightcompanion.okHttp.model.LoginResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
+import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.Sensorsdata;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestFirstPageInfo;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSensorInfo;
@@ -64,12 +60,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import io.particle.android.sdk.cloud.ParticleDevice;
 
 /**
  */
@@ -81,8 +74,10 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
      */
     private LightItemAdapter adapterLight;
     private GridView gvLight;
+    private GridView gvScene;
+
+    public List<SceneResult> mSceneList = new ArrayList<SceneResult>();
     private ProgressDialog progressDialog;
-    private Handler m_handlerGlance;
     private Handler m_deviceHandler;
     private Handler m_sparkHandler;
     public static List<Rows> deviceList = new ArrayList<Rows>();
@@ -90,28 +85,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     public boolean codeChange = false;
     WeatherDetails mWeatherDetails;
 
-    TextView save_money;
     TextView default_text;
-    TextView DHTt;
-    TextView DHTh;
-    TextView ALS;
-    TextView PM25;
-    TextView CO2;
-    TextView CH2O;
-    TextView TVOC;
-    TextView txtSensor;
-    TextView txtUnit;
     TextView txtCity;
     TextView txtWeather;
     TextView txtRefresh;
     TextView txtOutDHTt;
-    ImageView imgDHTt;
-    ImageView imgDHTh;
-    ImageView imgALS;
-    ImageView imgPM25;
-    ImageView imgCH2O;
-    ImageView imgCO2;
-    ImageView imgTVOC;
     ImageView imgMenu;
     ImageView imgMessage;
     ImageView weatherIcon;
@@ -159,7 +137,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         initLocation();
         getBaseInfo();
         initHandler();
-
         return view;
     }
 
@@ -200,48 +177,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 break;
             case R.id.home_menu:
                 switchFragment();
-                break;
-            case R.id.imgALS:
-                // txtUnit.setText(R.string.ALS);
-                //resetBg();
-                //imgALS.setImageDrawable(getResources().getDrawable(R.drawable.bg_ld));
-                // txtSensor.setText(ALS.getText());
-                break;
-            case R.id.imgDHTt:
-                // txtUnit.setText(R.string.DHTt);
-                //resetBg();
-                // imgDHTt.setImageDrawable(getResources().getDrawable(R.drawable.bg_wd));
-                // txtSensor.setText(DHTt.getText());
-                break;
-            case R.id.imgDHTh:
-                // txtUnit.setText(R.string.DHTh);
-                //resetBg();
-                // imgDHTh.setImageDrawable(getResources().getDrawable(R.drawable.bg_sd));
-                // txtSensor.setText(DHTh.getText());
-                break;
-            case R.id.imgPM25:
-                // txtUnit.setText(R.string.PM25);
-                //resetBg();
-                // imgPM25.setImageDrawable(getResources().getDrawable(R.drawable.bg_wm));
-                // txtSensor.setText(PM25.getText());
-                break;
-            case R.id.imgCH2O:
-                // txtUnit.setText(R.string.CH2O);
-                // resetBg();
-                // imgCH2O.setImageDrawable(getResources().getDrawable(R.drawable.bg_jq));
-                // txtSensor.setText(CH2O.getText());
-                break;
-            case R.id.imgCO2:
-                // txtUnit.setText(R.string.CO2);
-                // resetBg();
-                // imgCO2.setImageDrawable(getResources().getDrawable(R.drawable.bg_co2));
-                // txtSensor.setText(CO2.getText());
-                break;
-            case R.id.imgTVOC:
-                // txtUnit.setText(R.string.TVOC);
-                // resetBg();
-                // imgTVOC.setImageDrawable(getResources().getDrawable(R.drawable.bg_tovc));
-                // txtSensor.setText(TVOC.getText());
                 break;
             case R.id.rl_add:
                 ActionSheet.createBuilder(getContext(), getFragmentManager())
@@ -315,16 +250,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         }
     }
 
-    //设置接收消息的监听
-    private void setHandlerMessage() {
-        if (SlidingMenuMainActivity.m_mainDevice.getEnableEventSendMessage()) {
-            updateUIHandler();
-        } else {
-            SlidingMenuMainActivity.m_mainDevice.setEnableEventSendMessage(true);
-            updateUIHandler();
-        }
-    }
-
     private void setDeviceHandlerMessage(xltDevice xltDevice) {
         if (!xltDevice.getEnableEventSendMessage())
             xltDevice.setEnableEventSendMessage(true);
@@ -336,57 +261,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         xltDevice.addSparkEventHandler(m_sparkHandler);
     }
 
-    private void updateUIHandler() {
-        m_handlerGlance = new Handler(this.getContext().getMainLooper()) {
-            public void handleMessage(Message msg) {
-//                Log.e("XLight", "GlanceMainFragment_msg=" + msg.getData().toString());
-                if (deviceList != null && deviceList.size() > 0 && msg.getData().getInt("nd", -1) == 130) {
-                    int intValue = msg.getData().getInt("DHTt", -255);
-                    if (intValue != -255) {
-                        sd.DHTt = intValue;
-                        DHTt.setText("" + intValue);
-                    }
-                    intValue = msg.getData().getInt("DHTh", -255);
-                    if (intValue != -255) {
-                        sd.DHTh = intValue;
-                        DHTh.setText("" + intValue);
-                    }
-                    intValue = msg.getData().getInt("PM25", -255);
-                    if (intValue != -255) {
-                        sd.PM25 = intValue;
-                        PM25.setText("" + intValue);
-                    }
-                    intValue = msg.getData().getInt("CH2O", -255);
-                    if (intValue != -255) {
-                        sd.CH2O = intValue;
-                        CH2O.setText("" + intValue);
-                    }
-                    intValue = msg.getData().getInt("TVOC", -255);
-                    if (intValue != -255) {
-                        sd.TVOC = intValue;
-                        TVOC.setText("" + intValue);
-                    }
-                    intValue = msg.getData().getInt("CO2", -255);
-                    if (intValue != -255) {
-                        sd.CO2 = intValue;
-                        CO2.setText("" + intValue);
-                    }
-                    intValue = msg.getData().getInt("ALS", -255);
-                    if (intValue != -255) {
-                        sd.ALS = intValue;
-                        ALS.setText("" + intValue);
-                    }
-                    intValue = SensorTool.getKPI(sd);
-                    txtSensor.setText("" + intValue);
-                    txtUnit.setText(getUnit(intValue));
-                }
-            }
-        };
-//        Log.e(TAG, "listen sensor status for =>" + SlidingMenuMainActivity.m_mainDevice.getControllerID());
-        //先清除
-        SlidingMenuMainActivity.m_mainDevice.clearDataEventHandlerList();
-        SlidingMenuMainActivity.m_mainDevice.addDataEventHandler(m_handlerGlance);
-    }
 
     public String getUnit(int value) {
         if (value > 80) {
@@ -502,13 +376,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                             progressDialog.dismiss();
                         }
                         List<Rows> devices = mDeviceInfoResult.rows;
-                        if (null != devices && devices.size() > 0) {
-                            if (null != mDeviceInfoResult && null != mDeviceInfoResult.Energysaving) {
-                                save_money.setText(getString(R.string.this_month_has_save_money_more) + "12 " + getString(R.string.this_month_has_save_money_more_two));
-                            } else {
-                                save_money.setText(getString(R.string.this_month_has_save_money_more) + "12 " + getString(R.string.this_month_has_save_money_more_two));
-                            }
-                        }
                         deviceList.clear();
                         deviceList.addAll(devices);
                         if (adapterLight != null) {
@@ -570,10 +437,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     //直接进行监听
                     if (device.maindevice == 1 && device.isShare == 0) {//主设备 TODO TODO  设置监听 广播回调
                         SlidingMenuMainActivity.m_mainDevice = m_XltDevice;
-                        if (SlidingMenuMainActivity.m_mainDevice != null && getActivity() != null) {
-                            //设置handler监听，获取数据室内温湿度
-                            setHandlerMessage();
-                        }
                     }
                     // 设置所有控制器的设备状态监听
                     setDeviceHandlerMessage(m_XltDevice);
@@ -635,10 +498,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                                             SlidingMenuMainActivity.m_mainDevice = null;
                                         }
                                         SlidingMenuMainActivity.m_mainDevice = m_XltDevice;
-                                        if (SlidingMenuMainActivity.m_mainDevice != null && getActivity() != null) {
-                                            //设置handler监听，获取数据室内温湿度
-                                            setHandlerMessage();
-                                        }
                                     }
                                     // 设置所有控制器的设备状态监听
                                     setDeviceHandlerMessage(m_XltDevice);
@@ -668,28 +527,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 lstDevice.add(r.coreid);
             }
             if (adapterLight == null) {
-                changeGridView();
                 adapterLight = new LightItemAdapter(getContext(), devicenodes, true);
                 gvLight.setAdapter(adapterLight);
-//                gvLight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        // 将此对象放到上面去
-//                        Log.e("XLight", String.format("click %s -> id %s ", position, id));
-//                        Devicenodes dn = devicenodes.get(position);
-//                        SlidingMenuMainActivity.m_mainDevice = SlidingMenuMainActivity.xltDeviceMaps.get(dn.coreid);
-//                        if (SlidingMenuMainActivity.m_mainDevice == null || !SlidingMenuMainActivity.m_mainDevice.isCloudOK() || !SlidingMenuMainActivity.m_mainDevice.getCurDevice().isConnected()) {
-//                            ToastUtil.showToast(getContext(), R.string.device_disconnect);
-//                            return;
-//                        }
-//                        // 点击事件 跳转到编辑设备页面
-//                        Intent intent = new Intent(getActivity(), ControlDeviceActivity.class);
-//                        intent.putExtra("info", dn);
-//                        intent.putExtra("position", position);
-//                        startActivityForResult(intent, 1);
-//                        Log.e(TAG, position + "=>" + dn.toString());
-//                    }
-//                });
                 // 直接控制事件
                 adapterLight.setOnClickListener(new LightItemAdapter.OnClickListener() {
                     @Override
@@ -725,171 +564,25 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     default_text.setVisibility(View.VISIBLE);
                 }
             }
-            getSensorAndStateInfo(lstDevice);
+            // getSensorAndStateInfo(lstDevice);
         }
-    }
-
-
-    public void getSensorAndStateInfo(final List<String> devices) {
-        RequestSensorInfo.getInstance(getActivity()).getBaseInfo(devices, new RequestSensorInfo.OnRequestSensorInfoCallback() {
-            @Override
-            public void onRequestSensorInfoSuccess(final JSONObject mSensorsdata) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        Log.e("XLight", mSensorsdata.toString());
-                        final Gson gson = new Gson();
-                        try {
-                            // 获取各个设备的最新状态及传感器信息
-                            for (String coreId : devices) {
-                                if (!mSensorsdata.isNull(coreId)) {
-                                    // 获取所有灯具的节点
-                                    JSONObject device = mSensorsdata.getJSONObject(coreId);
-                                    DeviceState ds = null;
-                                    try {
-                                        ds = gson.fromJson(device.toString(), DeviceState.class);
-                                    } catch (Exception ex) {
-                                        Log.e("XLight", device.toString());
-                                        Log.e(TAG, ex.getMessage(), ex);
-                                    }
-
-                                    if (ds != null && ds.light != null && ds.light.size() > 0) {
-                                        // List
-                                        for (Light l : ds.light) {
-                                            // 进行状态更新
-                                            for (Devicenodes node : devicenodes) {
-                                                if (node.coreid.equals(ds.coreid) && node.nodeno == l.nd) {
-                                                    // 同一个灯，进行相应的状态赋值
-                                                    node.ison = l.State;
-                                                    node.brightness = l.BR;
-                                                    node.cct = l.CCT;
-                                                    node.filter = l.filter;
-                                                    if (node.devicetype > 1) {
-                                                        node.color = new int[]{l.R, l.G, l.B};
-//                                                        Log.e(TAG, "R:" + l.R + "G" + l.G + "B" + l.B + "=>" + Arrays.toString(node.color));
-                                                    }
-//                                                    Log.e(TAG, node.coreid + "==" + ds.coreid + "，" + node.nodeno + "==" + l.nd + "，type=" + node.devicetype + "=>" + node.toString());
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-//                                    ToastUtil.showToast(getContext(), "初始化状态完成" + devicenodes.get(0).ison);
-                                    if (ds != null && ds.sensor != null && ds.sensor.size() > 0) {
-                                        for (Sensorsdata s : ds.sensor) {
-                                            sd = s;
-                                            DHTh.setText("" + (int) s.DHTh);
-                                            DHTt.setText("" + (int) s.DHTt);
-                                            ALS.setText("" + s.ALS);
-                                            PM25.setText("" + s.PM25);
-                                            CO2.setText("" + s.CO2);
-                                            CH2O.setText("" + (int) s.CH2O);
-                                            TVOC.setText("" + (int) s.TVOC);
-                                            int value = SensorTool.getKPI(s);
-                                            txtSensor.setText("" + value);
-                                            txtUnit.setText(getUnit(value));
-                                        }
-                                    }
-                                }
-                            }
-                            if (adapterLight != null) {
-                                adapterLight.notifyDataSetChanged();
-                            }
-                        } catch (Exception ex) {
-                            Log.e("XLight", ex.getMessage(), ex);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onRequestSensorInfoFail(int code, String errMsg) {
-
-            }
-        });
-    }
-
-    /**
-     * 将GridView改成单行横向布局
-     */
-    public void changeGridView() {
-        // item宽度
-//        int itemWidth = dip2px(95);
-//        // item之间的间隔
-//        int itemPaddingH = dip2px(15);
-//        int size = devicenodes.size();
-//        // 计算GridView宽度
-//        int gvWidth = size * (itemWidth + itemPaddingH) + 80;
-//
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-//        gvLight.setLayoutParams(params);
-//        gvLight.setColumnWidth(itemWidth);
-//        gvLight.setHorizontalSpacing(itemPaddingH);
-//        gvLight.setStretchMode(GridView.NO_STRETCH);
-//        gvLight.setNumColumns(size);
-    }
-
-    /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     *
-     * @param dpValue dp值
-     * @return px值
-     */
-    public int dip2px(float dpValue) {
-        final float scale = this.getContext().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
     }
 
     public void initComponents(View view) {
         gvLight = (GridView) view.findViewById(R.id.gvLight);
-        save_money = (TextView) view.findViewById(R.id.save_money);
         default_text = (TextView) view.findViewById(R.id.default_text);
-        DHTt = (TextView) view.findViewById(R.id.txtDHTt);
-        DHTh = (TextView) view.findViewById(R.id.txtDHTh);
-        ALS = (TextView) view.findViewById(R.id.txtALS);
-        PM25 = (TextView) view.findViewById(R.id.txtPM25);
-        CO2 = (TextView) view.findViewById(R.id.txtCO2);
-        CH2O = (TextView) view.findViewById(R.id.txtCH2O);
-        TVOC = (TextView) view.findViewById(R.id.txtTVOC);
-        txtSensor = (TextView) view.findViewById(R.id.txtSensor);
-        txtUnit = (TextView) view.findViewById(R.id.txtUnit);
         txtCity = (TextView) view.findViewById(R.id.txtCity);
         txtWeather = (TextView) view.findViewById(R.id.txtWeather);
         txtRefresh = (TextView) view.findViewById(R.id.txtRefresh);
         txtOutDHTt = (TextView) view.findViewById(R.id.txtOutDHTt);
-
         imgMenu = (ImageView) view.findViewById(R.id.home_menu);
         weatherIcon = (ImageView) view.findViewById(R.id.weatherIcon);
         imgMessage = (ImageView) view.findViewById(R.id.home_message);
-        imgDHTt = (ImageView) view.findViewById(R.id.imgDHTt);
-        imgDHTh = (ImageView) view.findViewById(R.id.imgDHTh);
-        imgALS = (ImageView) view.findViewById(R.id.imgALS);
-        imgCH2O = (ImageView) view.findViewById(R.id.imgCH2O);
-        imgCO2 = (ImageView) view.findViewById(R.id.imgCO2);
-        imgPM25 = (ImageView) view.findViewById(R.id.imgPM25);
-        imgTVOC = (ImageView) view.findViewById(R.id.imgTVOC);
         rlAdd = (RelativeLayout) view.findViewById(R.id.rl_add);
         imgMenu.setOnClickListener(this);
         imgMessage.setOnClickListener(this);
-        imgDHTt.setOnClickListener(this);
-        imgDHTh.setOnClickListener(this);
-        imgALS.setOnClickListener(this);
-        imgCH2O.setOnClickListener(this);
-        imgCO2.setOnClickListener(this);
-        imgPM25.setOnClickListener(this);
-        imgTVOC.setOnClickListener(this);
         rlAdd.setOnClickListener(this);
         txtRefresh.setOnClickListener(this);
-    }
-
-    public void resetBg() {
-        imgALS.setImageDrawable(getResources().getDrawable(R.drawable.bgt__ld));
-        imgDHTh.setImageDrawable(getResources().getDrawable(R.drawable.bgt__sd));
-        imgDHTt.setImageDrawable(getResources().getDrawable(R.drawable.bgt__wd));
-        imgPM25.setImageDrawable(getResources().getDrawable(R.drawable.bgt__wm));
-        imgCO2.setImageDrawable(getResources().getDrawable(R.drawable.bgt__co2));
-        imgCH2O.setImageDrawable(getResources().getDrawable(R.drawable.bgt__jq));
-        imgTVOC.setImageDrawable(getResources().getDrawable(R.drawable.bgt_tovc));
     }
 
     public void initLocation() {

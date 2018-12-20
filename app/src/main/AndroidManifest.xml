@@ -56,8 +56,6 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="507c00f6bfe8b88795da5632c6714eb3"></meta-data>
-
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5916f9dc310c935a8a000a10" />
@@ -70,7 +68,7 @@
             android:value="XLight" />
 
         <activity
-            android:name=".main.WelcomActivity"
+            android:name=".main.WelcomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -119,10 +117,6 @@
             android:name=".deviceList.DeviceListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".scenario.ColorSelectActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentFullScreenTheme" />
-        <activity
             android:name=".share.ShareDeviceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -150,13 +144,6 @@
             android:name=".settings.ResetPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.FastBindingActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".settings.UserInvitationActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".settings.ShakeActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -171,55 +158,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name=".control.activity.AddControlRuleActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.condition.EntryConditionActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.result.ControlRuseltActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.condition.TimingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.condition.TemControlActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.condition.BriressControlActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.dialog.DialogActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/dialog_style" />
-        <activity
-            android:name=".control.activity.dialog.DialogTimeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/dialog_style" />
-        <activity
-            android:name=".control.activity.dialog.DialogTemActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/dialog_style" />
-        <activity
             android:name=".control.activity.dialog.DialogRowNameActivity"
             android:screenOrientation="portrait"
             android:theme="@style/dialog_style" />
-        <activity
-            android:name=".control.activity.dialog.DialogWeelActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/dialog_style" />
-        <activity
-            android:name=".control.activity.result.SelectScenarioActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.result.DeviceControlSelectActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.result.EmailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".control.activity.result.AppNotifyActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".room.FamilyMemberActivity"
             android:screenOrientation="portrait" />

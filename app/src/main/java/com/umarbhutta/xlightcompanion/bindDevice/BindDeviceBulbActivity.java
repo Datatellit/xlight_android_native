@@ -79,7 +79,7 @@ public class BindDeviceBulbActivity extends BaseActivity implements View.OnClick
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mCardAdapter = new CardPagerAdapter();
         mCardAdapter.addCardItem(new CardItem(R.drawable.rainbow));
-        mCardAdapter.addCardItem(new CardItem(R.drawable.sunny));
+        // mCardAdapter.addCardItem(new CardItem(R.drawable.sunny));
         mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
         mViewPager.setAdapter(mCardAdapter);
         mViewPager.setPageTransformer(false, mCardShadowTransformer);

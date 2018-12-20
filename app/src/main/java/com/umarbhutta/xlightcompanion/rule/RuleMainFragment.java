@@ -6,24 +6,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
-import com.umarbhutta.xlightcompanion.control.activity.AddControlRuleActivity;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
-import com.umarbhutta.xlightcompanion.news.MessageListAdapter;
-import com.umarbhutta.xlightcompanion.okHttp.model.MessageResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.RuleItem;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
@@ -94,7 +86,7 @@ public class RuleMainFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btn_add:
                 // 跳转到添加场景页面
-                onFabPressed(AddControlRuleActivity.class);
+//                onFabPressed(AddControlRuleActivity.class);
                 break;
         }
     }

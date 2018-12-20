@@ -7,7 +7,7 @@ import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.EditSceneParams;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 
 /**
  * Created by guangbinw on 2017/3/14.
@@ -16,7 +16,7 @@ import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
 public class RequestEditScene implements HttpUtils.OnHttpRequestCallBack {
 
     private Context context;
-    private CommentRequstCallback mCommentRequstCallback;
+    private CommentRequestCallback mCommentRequestCallback;
 
     public static RequestEditScene getInstance() {
         return new RequestEditScene();
@@ -27,11 +27,11 @@ public class RequestEditScene implements HttpUtils.OnHttpRequestCallBack {
      *
      * @param context
      * @param params
-     * @param mCommentRequstCallback
+     * @param mCommentRequestCallback
      */
-    public void editScene(Context context, int id, EditSceneParams params, CommentRequstCallback mCommentRequstCallback) {
+    public void editScene(Context context, int id, EditSceneParams params, CommentRequestCallback mCommentRequestCallback) {
         this.context = context;
-        this.mCommentRequstCallback = mCommentRequstCallback;
+        this.mCommentRequestCallback = mCommentRequestCallback;
         if (UserUtils.isLogin(context)) {
 
             Gson gson = new Gson();
@@ -44,15 +44,15 @@ public class RequestEditScene implements HttpUtils.OnHttpRequestCallBack {
 
     @Override
     public void onHttpRequestSuccess(Object result) {
-        if (null != mCommentRequstCallback) {
-            mCommentRequstCallback.onCommentRequstCallbackSuccess();
+        if (null != mCommentRequestCallback) {
+            mCommentRequestCallback.onCommentRequestCallbackSuccess();
         }
     }
 
     @Override
     public void onHttpRequestFail(int code, String errMsg) {
-        if (null != mCommentRequstCallback) {
-            mCommentRequstCallback.onCommentRequstCallbackFail(code, errMsg);
+        if (null != mCommentRequestCallback) {
+            mCommentRequestCallback.onCommentRequestCallbackFail(code, errMsg);
         }
     }
 

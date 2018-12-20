@@ -254,7 +254,7 @@ public class CCTFragment extends Fragment implements View.OnClickListener {
         if (sr.filter != 0) {
             if (sr.filter == 5) {
                 ControlDeviceActivity.mCurrentDevice.SetSpecialEffect(sr.filter, new int[]{900, sr.brightness, 0});
-                ToastUtil.showToast(this.getContext(), getString(R.string.sleep_notify));
+                ToastUtil.showToast(this.getContext(), String.format(getString(R.string.sleep_notify).toString(), "15"));
             } else {
                 ControlDeviceActivity.devicenodes.filter = sr.filter;
                 ControlDeviceActivity.mCurrentDevice.SetSpecialEffect(sr.filter);

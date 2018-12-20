@@ -60,19 +60,25 @@ public class UserUtils {
                 // 进行登录
                 return true;
             } else {
-                return true;
+                // 进行有效性的check，如果不通过，则返回true
+                if (checkTokenValid(((AnonymousParams) result).access_token)) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         } else {
             if (curTime.getTime() > ((LoginResult) result).expires.getTime()) {
                 // 进行登录
                 return true;
+            } else {
+                // 进行有效性的check，如果不通过，则返回true
+                if (checkTokenValid(((LoginResult) result).access_token)) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
-        }
-        // 进行有效性的check，如果不通过，则返回true
-        if (checkTokenValid(((LoginResult) result).access_token)) {
-            return false;
-        } else {
-            return true;
         }
     }
 
@@ -83,19 +89,20 @@ public class UserUtils {
                 .connectTimeout(10, TimeUnit.SECONDS)//设置连接超时时间;
                 .build();
         Request request = new Request.Builder()
-                .url(String.format(NetConfig.SERVER_ADDRESS_DOMAIN))
+                .url(NetConfig.URL_DEVICE_DETAIL_INFO + "?access_token=" + token)
                 .build();
         Call call = okHttpClient.newCall(request);
         try {
             Response response = call.execute();
-            Log.e("XLight", response.body().toString());
-            JSONObject jsonObject = new JSONObject(response.body().toString());
+            Log.e("XLight", response.body().string());
+            JSONObject jsonObject = new JSONObject(response.body().string());
             if (jsonObject.getInt("code") == 10000 || jsonObject.getInt("code") == 10002) {
                 return false;
             } else {
                 return true;
             }
         } catch (Exception ex) {
+            Log.e("XLight", ex.getMessage());
             return false;
         }
     }

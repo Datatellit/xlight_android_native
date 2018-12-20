@@ -9,12 +9,10 @@
     <include layout="@layout/top_layout" />
 
     <ScrollView
-        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/sv_ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

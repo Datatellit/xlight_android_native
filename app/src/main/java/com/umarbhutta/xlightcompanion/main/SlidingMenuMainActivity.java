@@ -34,7 +34,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.seismic.ShakeDetector;
 import com.umarbhutta.xlightcompanion.App;
@@ -56,15 +55,12 @@ import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.LoginResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.ShakeInfo;
-import com.umarbhutta.xlightcompanion.report.ReportFragment;
 import com.umarbhutta.xlightcompanion.room.RoomMainFragment;
 import com.umarbhutta.xlightcompanion.rule.RuleMainFragment;
 import com.umarbhutta.xlightcompanion.scenario.ScenarioMainFragment;
-import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.settings.BaseFragmentActivity;
 import com.umarbhutta.xlightcompanion.settings.SettingFragment;
 import com.umarbhutta.xlightcompanion.settings.UserMsgModifyActivity;
-import com.umarbhutta.xlightcompanion.share.ShareMainFragment;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
 import com.umarbhutta.xlightcompanion.views.CircleImageView;
 import com.umeng.analytics.MobclickAgent;
@@ -74,11 +70,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -498,7 +490,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
             return;
         }
 
-        showProgressDialog(getString(R.string.commit_img));
+        showProgressDialog(getString(R.string.executing));
 
         JSONObject object = new JSONObject();
         try {
@@ -517,7 +509,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
                     @Override
                     public void run() {
                         SlidingMenuMainActivity.this.cancelProgressDialog();
-                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.config_success));
+                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.setting_success));
                     }
                 });
             }
@@ -528,7 +520,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
                     @Override
                     public void run() {
                         SlidingMenuMainActivity.this.cancelProgressDialog();
-                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.config_fail));
+                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.failed));
                     }
                 });
             }

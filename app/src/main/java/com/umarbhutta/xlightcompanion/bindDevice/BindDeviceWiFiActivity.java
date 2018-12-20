@@ -590,11 +590,19 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
             } else {
                 ToastUtil.dismissLoading();
                 ToastUtil.showToast(this, R.string.add_device_wifi_disconnect);
+                Intent intent = new Intent(getApplicationContext(), BindDeviceErrorActivity.class);
+                intent.putExtra("type", type);
+                startActivity(intent);
+                finish();
             }
         } catch (Exception e) {
             ToastUtil.dismissLoading();
             ToastUtil.showToast(this, R.string.add_device_wifi_disconnect);
             Log.e("XLight", e.getMessage(), e);
+            Intent intent = new Intent(getApplicationContext(), BindDeviceErrorActivity.class);
+            intent.putExtra("type", type);
+            startActivity(intent);
+            finish();
         }
         runOnUiThread(new Runnable() {
             @Override
@@ -893,6 +901,10 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
                     } else {
                         ToastUtil.dismissLoading();
                         ToastUtil.showToast(getApplicationContext(), R.string.add_device_wifi_disconnect);
+                        Intent intent = new Intent(getApplicationContext(), BindDeviceErrorActivity.class);
+                        intent.putExtra("type", type);
+                        startActivity(intent);
+                        finish();
                     }
                 }
                 break;

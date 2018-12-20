@@ -6,7 +6,7 @@ import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class RequestRuleSwitchDevice implements HttpUtils.OnHttpRequestCallBack {
 
     private Context context;
-    private CommentRequstCallback mCommentRequstCallback;
+    private CommentRequestCallback mCommentRequestCallback;
 
     public static RequestRuleSwitchDevice getInstance() {
         return new RequestRuleSwitchDevice();
@@ -30,11 +30,11 @@ public class RequestRuleSwitchDevice implements HttpUtils.OnHttpRequestCallBack 
      * @param context
      * @param deviceId
      * @param status                 1代表启用，0代表禁用
-     * @param mCommentRequstCallback
+     * @param mCommentRequestCallback
      */
-    public void switchRule(Context context, int deviceId, int status, CommentRequstCallback mCommentRequstCallback) {
+    public void switchRule(Context context, int deviceId, int status, CommentRequestCallback mCommentRequestCallback) {
         this.context = context;
-        this.mCommentRequstCallback = mCommentRequstCallback;
+        this.mCommentRequestCallback = mCommentRequestCallback;
 
         try {
             JSONObject object = new JSONObject();
@@ -53,15 +53,15 @@ public class RequestRuleSwitchDevice implements HttpUtils.OnHttpRequestCallBack 
     @Override
     public void onHttpRequestSuccess(Object result) {
         Logger.i("result 开关 = 成功");
-        if (null != mCommentRequstCallback) {
-            mCommentRequstCallback.onCommentRequstCallbackSuccess();
+        if (null != mCommentRequestCallback) {
+            mCommentRequestCallback.onCommentRequestCallbackSuccess();
         }
     }
 
     @Override
     public void onHttpRequestFail(int code, String errMsg) {
-        if (null != mCommentRequstCallback) {
-            mCommentRequstCallback.onCommentRequstCallbackFail(code, errMsg);
+        if (null != mCommentRequestCallback) {
+            mCommentRequestCallback.onCommentRequestCallbackFail(code, errMsg);
         }
     }
 

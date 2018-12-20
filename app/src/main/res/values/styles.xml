@@ -24,15 +24,7 @@
         <item name="actionSheetTextSize">16sp</item>
     </style>
     <!--全屏加透明-->
-    <style name="TranslucentFullScreenTheme" parent="FullScreenTheme">
-        <item name="android:windowBackground">@color/color_select_bg</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
     <!--全屏-->
-    <style name="FullScreenTheme" parent="AppTheme">
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowNoTitle">true</item>
-    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

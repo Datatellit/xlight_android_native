@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class RequestSendVerifyCode implements HttpUtils.OnHttpRequestCallBack {
 
     private Context context;
-    private CommentRequstCallback mCommentRequstCallback;
+    private CommentRequestCallback mCommentRequestCallback;
 
     public static RequestSendVerifyCode getInstance() {
         return new RequestSendVerifyCode();
@@ -25,9 +25,9 @@ public class RequestSendVerifyCode implements HttpUtils.OnHttpRequestCallBack {
     /**
      * 发送验证码
      */
-    public void sendCode(Context context, String email, CommentRequstCallback mCommentRequstCallback) {
+    public void sendCode(Context context, String email, CommentRequestCallback mCommentRequestCallback) {
         this.context = context;
-        this.mCommentRequstCallback = mCommentRequstCallback;
+        this.mCommentRequestCallback = mCommentRequestCallback;
 
 
         JSONObject object = new JSONObject();
@@ -43,15 +43,15 @@ public class RequestSendVerifyCode implements HttpUtils.OnHttpRequestCallBack {
 
     @Override
     public void onHttpRequestSuccess(Object result) {
-        if (null != mCommentRequstCallback) {
-            mCommentRequstCallback.onCommentRequstCallbackSuccess();
+        if (null != mCommentRequestCallback) {
+            mCommentRequestCallback.onCommentRequestCallbackSuccess();
         }
     }
 
     @Override
     public void onHttpRequestFail(int code, String errMsg) {
-        if (null != mCommentRequstCallback) {
-            mCommentRequstCallback.onCommentRequstCallbackFail(code, errMsg);
+        if (null != mCommentRequestCallback) {
+            mCommentRequestCallback.onCommentRequestCallbackFail(code, errMsg);
         }
     }
 

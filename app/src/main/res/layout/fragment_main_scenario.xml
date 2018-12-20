@@ -9,7 +9,6 @@
     <include layout="@layout/top_main_layout" />
 
     <ScrollView
-        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -26,7 +25,6 @@
                 android:layout_below="@+id/ll_main_top">
 
                 <TextView
-                    android:id="@+id/tv_no_scenario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"

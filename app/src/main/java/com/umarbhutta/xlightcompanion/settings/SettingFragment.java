@@ -78,11 +78,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         settingStr.add(getString(R.string.persion_inco));
         settingStr.add(getString(R.string.modify_pwd));
-        settingStr.add(getString(R.string.txt_family));
+//        settingStr.add(getString(R.string.txt_family));
         settingStr.add(getString(R.string.txt_myController));
         settingStr.add(getString(R.string.shake));
-//        settingStr.add("用户邀请");
-//        settingStr.add("快速绑定");
         settingStr.add(getString(R.string.logout));
 
         settingListAdapter.notifyDataSetChanged();
@@ -106,16 +104,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                         }
                         onFabPressed(ModifyPasswordActivity.class);
                         break;
-                    case 2://家庭成员
-                        if (!UserUtils.isLogin(getActivity())) {
-                            onFabPressed(LoginActivity.class);
-                            getActivity().finish();
-                            return;
-                        }
-                        // 家庭成员页面
-                        onFabPressed(FamilyMemberActivity.class);
-                        break;
-                    case 3://摇一摇
+//                    case 2://家庭成员
+//                        if (!UserUtils.isLogin(getActivity())) {
+//                            onFabPressed(LoginActivity.class);
+//                            getActivity().finish();
+//                            return;
+//                        }
+//                        // 家庭成员页面
+//                        onFabPressed(FamilyMemberActivity.class);
+//                        break;
+                    case 2://摇一摇
                         if (!UserUtils.isLogin(getActivity())) {
                             onFabPressed(LoginActivity.class);
                             getActivity().finish();
@@ -123,7 +121,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                         }
                         onFabPressed(DeviceListActivity.class);
                         break;
-                    case 4://摇一摇
+                    case 3://摇一摇
                         if (!UserUtils.isLogin(getActivity())) {
                             onFabPressed(LoginActivity.class);
                             getActivity().finish();
@@ -137,7 +135,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 //                    case 4://快速绑定
 //                        onFabPressed(FastBindingActivity.class);
 //                        break;
-                    case 5://退出登录
+                    case 4://退出登录
                         showDeleteDialog();
                         break;
                 }

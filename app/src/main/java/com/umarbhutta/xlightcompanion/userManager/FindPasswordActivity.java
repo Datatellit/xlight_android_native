@@ -15,7 +15,7 @@ import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.StringUtil;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSendVerifyCode;
-import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequstCallback;
+import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.settings.ResetPasswordActivity;
 
@@ -26,7 +26,6 @@ import com.umarbhutta.xlightcompanion.settings.ResetPasswordActivity;
 public class FindPasswordActivity extends BaseActivity implements View.OnClickListener {
 
     private LinearLayout llBack;
-    private TextView btnSure;
     private TextView tvTitle;
     private EditText et_user_account;
 
@@ -54,9 +53,7 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.tvEditSure).setVisibility(View.INVISIBLE);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvTitle.setText(R.string.find_pwd);
-
         et_user_account = (EditText) findViewById(R.id.et_user_account);
-
     }
 
     @Override
@@ -96,14 +93,15 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
             ToastUtil.showToast(this, R.string.email_error);
             return;
         }
-
-        RequestSendVerifyCode.getInstance().sendCode(this, email, new CommentRequstCallback() {
+        showProgressDialog(getString(R.string.loading));
+        RequestSendVerifyCode.getInstance().sendCode(this, email, new CommentRequestCallback() {
             @Override
-            public void onCommentRequstCallbackSuccess() {
+            public void onCommentRequestCallbackSuccess() {
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        cancelProgressDialog();
                         Intent intent = new Intent(FindPasswordActivity.this, ResetPasswordActivity.class);
                         intent.putExtra("email", email);
                         startActivity(intent);
@@ -115,15 +113,14 @@ public class FindPasswordActivity extends BaseActivity implements View.OnClickLi
             }
 
             @Override
-            public void onCommentRequstCallbackFail(int code, final String errMsg) {
-
+            public void onCommentRequestCallbackFail(int code, final String errMsg) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        cancelProgressDialog();
                         ToastUtil.showToast(FindPasswordActivity.this, "" + errMsg);
                     }
                 });
-
             }
         });
     }
