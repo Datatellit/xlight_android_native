@@ -63,7 +63,7 @@ public class LightItemAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Devicenodes device = deviceList.get(position);
-        LightItemAdapter.ViewHolder holder = null;
+        ViewHolder holder = null;
         if (convertView == null) {
             holder = new LightItemAdapter.ViewHolder();
             convertView = inflater.inflate(R.layout.light_item, null);

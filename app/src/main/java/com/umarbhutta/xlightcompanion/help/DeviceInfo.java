@@ -25,8 +25,12 @@ public class DeviceInfo {
     获取手机IMEI
      */
     public static String getIMEI(Context context) {
-        TelephonyManager TelephonyMgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
-        return TelephonyMgr.getDeviceId();
+        try {
+            TelephonyManager TelephonyMgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            return TelephonyMgr.getDeviceId();
+        } catch (Exception ex) {
+            return "";
+        }
     }
 
     /*

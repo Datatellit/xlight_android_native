@@ -96,7 +96,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
     private String selectIcon;
     private SceneResult sceneResult;
     private ImageButton imageButton;
-    int[] image = {R.drawable.scene, R.drawable.scene_wakeup, R.drawable.scene_goout, R.drawable.scene_xx, R.drawable.scene_eat, R.drawable.scene_book, R.drawable.scene_sleep};
+    int[] image = {R.drawable.scene, R.drawable.scene_wakeup, R.drawable.scene_goout, R.drawable.scene_xx, R.drawable.scene_eat, R.drawable.scene_book, R.drawable.scene_sleep, R.drawable.scene_hj, R.drawable.scene_tv, R.drawable.scene_yx, R.drawable.scene_yl, R.drawable.dy};
 
 
     @Override

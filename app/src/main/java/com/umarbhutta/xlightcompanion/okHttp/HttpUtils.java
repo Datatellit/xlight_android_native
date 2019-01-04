@@ -116,7 +116,7 @@ public class HttpUtils extends BaseHttp {
     public void okOnError(String errResult) {
         Log.d("XLight", "okHttp error," + errResult);
         if (null != mOnHttpRequestCallBack) {
-            mOnHttpRequestCallBack.onHttpRequestFail(NetConfig.ERROR_PARSE, "网络异常，请检查网络");
+            mOnHttpRequestCallBack.onHttpRequestFail(NetConfig.ERROR_PARSE, App.Inst.getString(R.string.net_error));
         }
     }
 
@@ -222,7 +222,7 @@ public class HttpUtils extends BaseHttp {
         } catch (Exception e) {
             e.printStackTrace();
             if (null != mOnHttpRequestCallBack) {
-                mOnHttpRequestCallBack.onHttpRequestFail(NetConfig.ERROR_PARSE, NetConfig.ERROR_PARSE_MSG);
+                mOnHttpRequestCallBack.onHttpRequestFail(NetConfig.ERROR_PARSE, App.Inst.getString(R.string.parse_error));
             }
         }
     }
@@ -232,7 +232,6 @@ public class HttpUtils extends BaseHttp {
 
         void onHttpRequestFail(int code, String errMsg);
     }
-
 
 
 }

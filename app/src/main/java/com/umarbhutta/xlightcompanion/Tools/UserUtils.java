@@ -61,11 +61,12 @@ public class UserUtils {
                 return true;
             } else {
                 // 进行有效性的check，如果不通过，则返回true
-                if (checkTokenValid(((AnonymousParams) result).access_token)) {
-                    return false;
-                } else {
-                    return true;
-                }
+//                if (checkTokenValid(((AnonymousParams) result).access_token)) {
+//                    return false;
+//                } else {
+//                    return true;
+//                }
+                return false;
             }
         } else {
             if (curTime.getTime() > ((LoginResult) result).expires.getTime()) {
@@ -73,11 +74,12 @@ public class UserUtils {
                 return true;
             } else {
                 // 进行有效性的check，如果不通过，则返回true
-                if (checkTokenValid(((LoginResult) result).access_token)) {
-                    return false;
-                } else {
-                    return true;
-                }
+//                if (checkTokenValid(((LoginResult) result).access_token)) {
+//                    return false;
+//                } else {
+//                    return true;
+//                }
+                return false;
             }
         }
     }
@@ -144,7 +146,11 @@ public class UserUtils {
      * @return
      */
     public static AnonymousParams getAnonymousInfo(Context context) {
-        return (AnonymousParams) SharedPreferencesUtils.getObject(context, SharedPreferencesUtils.KEY__ANONYMOUSINFO, null);
+        try {
+            return (AnonymousParams) SharedPreferencesUtils.getObject(context, SharedPreferencesUtils.KEY__ANONYMOUSINFO, null);
+        } catch (Exception ex) {
+            return new AnonymousParams();
+        }
     }
 
     public static AnonymousParams getAnonymous(Context context) {

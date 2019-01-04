@@ -8,9 +8,14 @@ public class WeatherDetails {
     private String mIcon;
     private double mTempF;
     private int mTempC;
+    private double minTempF;
+    private int minTempC;
+    private double maxTempF;
+    private int maxTempC;
+    private String summaryHour;
+    private int humidity;
     private double mApparentTempF;
     private int mApparentTempC;
-    private int mHumidity;
     private String summary;
 
     public WeatherDetails() {
@@ -33,31 +38,68 @@ public class WeatherDetails {
         this.mIcon = mIcon;
     }
 
+    public void setMin(final double mTemp) {
+        this.minTempF = mTemp;
+        this.minTempC = (int) ((mTemp - 32.0) * (5.0 / 9.0) + 0.5);
+    }
+
+    public int getMin(final String unit) {
+        if (unit == "fahrenheit") {
+            return (int) this.minTempF;
+        } else {
+            return this.minTempC;
+        }
+    }
+
+    public void setMax(final double mTemp) {
+        this.maxTempF = mTemp;
+        this.maxTempC = (int) ((mTemp - 32.0) * (5.0 / 9.0) + 0.5);
+    }
+
+    public int getMax(final String unit) {
+        if (unit == "fahrenheit") {
+            return (int) this.maxTempF;
+        } else {
+            return this.maxTempC;
+        }
+    }
+
+    public void setHumidity(final double humidity) {
+        this.humidity = (int) (humidity * 100);
+    }
+
+    public int getHumidity() {
+        return this.humidity;
+    }
+
+    public void setSummaryHour(final String summary) {
+        this.summaryHour = summary;
+    }
+
+    public String getSummaryHour() {
+        return this.summaryHour;
+    }
+
+
     public int getTemp(final String unit) {
         if (unit == "fahrenheit") {
-            return (int) mTempF;
+            return (int) this.mTempF;
         } else {
-            return mTempC;
+            return this.mTempC;
         }
     }
 
     public void setTemp(final double mTemp) {
         this.mTempF = mTemp;
 
-        mTempC = (int) ((mTempF - 32.0) * (5.0 / 9.0) + 0.5);
+        this.mTempC = (int) ((this.mTempF - 32.0) * (5.0 / 9.0) + 0.5);
     }
 
-    public int getmHumidity() {
-        return mHumidity;
-    }
 
     public String getSummary() {
         return this.summary;
     }
 
-    public void setHumidity(final int humidity) {
-        this.mHumidity = humidity;
-    }
 
     public int getApparentTemp(final String unit) {
         if (unit == "fahrenheit") {
