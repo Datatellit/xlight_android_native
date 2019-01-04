@@ -37,7 +37,7 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
         initView();
         initData();
         //功能归类分区方法，必须调用>>>>>>>>>>
-        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.color_wel_status).statusBarDarkFont(true).init();
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.white).statusBarDarkFont(true).init();
     }
 
     //定义ViewPager对象
@@ -51,7 +51,6 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
 
     // 定义各个界面View对象
     private View view1, view2, view4;
-    private Button startBtn;
     //底部小点的图片
     private ImageView[] points;
 
@@ -67,27 +66,23 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
         ImageView iv_one = (ImageView) view1.findViewById(R.id.iv_one);
         view2 = mLi.inflate(R.layout.guide_page2, null);
         ImageView iv_two = (ImageView) view2.findViewById(R.id.iv_two);
-//      view3 = mLi.inflate(R.layout.guide_page3, null);
         view4 = mLi.inflate(R.layout.guide_page4, null);
-        startBtn = (Button) view4.findViewById(R.id.startBtn);
         ImageView iv_three = (ImageView) view4.findViewById(R.id.iv_three);
 
         if (language.endsWith("zh")) {
             iv_one.setImageResource(R.drawable.xlight_zh_one);
             iv_two.setImageResource(R.drawable.xlight_zh_two);
             iv_three.setImageResource(R.drawable.xlight_zh_three);
-            startBtn.setBackgroundResource(R.drawable.zh_go);
         } else {
             iv_one.setImageResource(R.drawable.xlight_en_one);
             iv_two.setImageResource(R.drawable.xlight_en_two);
             iv_three.setImageResource(R.drawable.xlight_en_three);
-            startBtn.setBackgroundResource(R.drawable.go);
         }
 //        Logger.e("language", language);
 //    其中languag为语言码：
 //    zh：汉语
 //    en：英语
-        startBtn.setOnClickListener(new View.OnClickListener() {
+        iv_three.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //跳转到主页面
@@ -117,33 +112,33 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
         viewPager.setAdapter(vpAdapter);
         vpAdapter.notifyDataSetChanged();
         //初始化底部小点
-        initPoint(views.size());
+        // initPoint(views.size());
     }
 
     /**
      * 初始化底部小点
      */
     private void initPoint(int views) {
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.point);
-
-        points = new ImageView[views];
-
-        //循环取得小点图片
-        for (int i = 0; i < views; i++) {
-            //得到一个LinearLayout下面的每一个子元素
-            points[i] = (ImageView) linearLayout.getChildAt(i);
-            //默认都设为灰色
-            points[i].setEnabled(true);
-            //给每个小点设置监听
-//            points[i].setOnClickListener(this);
-            //设置位置tag，方便取出与当前位置对应
-            points[i].setTag(i);
-        }
-
-        //设置当面默认的位置
-        currentIndex = 0;
-        //设置为白色，即选中状态
-        points[currentIndex].setEnabled(false);
+//        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.point);
+//
+//        points = new ImageView[views];
+//
+//        //循环取得小点图片
+//        for (int i = 0; i < views; i++) {
+//            //得到一个LinearLayout下面的每一个子元素
+//            points[i] = (ImageView) linearLayout.getChildAt(i);
+//            //默认都设为灰色
+//            points[i].setEnabled(true);
+//            //给每个小点设置监听
+////            points[i].setOnClickListener(this);
+//            //设置位置tag，方便取出与当前位置对应
+//            points[i].setTag(i);
+//        }
+//
+//        //设置当面默认的位置
+//        currentIndex = 0;
+//        //设置为白色，即选中状态
+//        points[currentIndex].setEnabled(false);
     }
 
     /**
@@ -170,7 +165,7 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
     @Override
     public void onPageSelected(int position) {
         //设置底部小点选中状态
-        setCurDot(position);
+        // setCurDot(position);
     }
     /**
      * 通过点击事件来切换当前的页面
@@ -196,13 +191,13 @@ public class SplashActivity extends Activity implements OnPageChangeListener {
      * 设置当前的小点的位置
      */
     private void setCurDot(int positon) {
-        if (positon < 0 || positon > 3 || currentIndex == positon) {
-            return;
-        }
-        points[positon].setEnabled(false);
-        points[currentIndex].setEnabled(true);
-
-        currentIndex = positon;
+//        if (positon < 0 || positon > 3 || currentIndex == positon) {
+//            return;
+//        }
+//        points[positon].setEnabled(false);
+//        points[currentIndex].setEnabled(true);
+//
+//        currentIndex = positon;
     }
 
 

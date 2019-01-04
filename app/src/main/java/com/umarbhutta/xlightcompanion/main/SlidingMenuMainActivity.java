@@ -46,6 +46,7 @@ import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.control.ControlRuleFragment;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
+import com.umarbhutta.xlightcompanion.help.AlexaFragment;
 import com.umarbhutta.xlightcompanion.help.HelpFragment;
 import com.umarbhutta.xlightcompanion.imgloader.ImageLoaderOptions;
 import com.umarbhutta.xlightcompanion.news.NewsMainFragment;
@@ -58,6 +59,7 @@ import com.umarbhutta.xlightcompanion.okHttp.model.ShakeInfo;
 import com.umarbhutta.xlightcompanion.room.RoomMainFragment;
 import com.umarbhutta.xlightcompanion.rule.RuleMainFragment;
 import com.umarbhutta.xlightcompanion.scenario.ScenarioMainFragment;
+import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.settings.BaseFragmentActivity;
 import com.umarbhutta.xlightcompanion.settings.SettingFragment;
 import com.umarbhutta.xlightcompanion.settings.UserMsgModifyActivity;
@@ -77,7 +79,7 @@ import java.util.Map;
  * Created by Administrator
  */
 
-public class SlidingMenuMainActivity extends BaseFragmentActivity implements View.OnClickListener {
+public class SlidingMenuMainActivity extends BaseActivity implements View.OnClickListener {
     private Fragment mContent;
 
     private SensorManager sensorManager;
@@ -96,7 +98,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
     private long lastTime = 0;
     private LinearLayout llPerName;
     private ArrayList<TextView> lstTv;
-    private TextView itemGlance, itemControl, itemScenario, itemLogout, itemSettings, itemHelp, itemNews, itemRoom;
+    private TextView itemGlance, itemControl, itemScenario, itemLogout, itemSettings, itemHelp, itemNews, itemRoom, itemAlexa;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,6 +127,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
         if (null == sensorManager) {
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            Log.e("XLight", "listen shake event");
             sd = new ShakeDetector(new ShakeDetector.Listener() {
                 @Override
                 public void hearShake() {
@@ -165,6 +168,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
         itemSettings = (TextView) findViewById(R.id.nav_settings);
         itemNews = (TextView) findViewById(R.id.nav_news);
         itemHelp = (TextView) findViewById(R.id.nav_help);
+        itemAlexa = (TextView) findViewById(R.id.nav_alexa);
         llLogin = (LinearLayout) findViewById(R.id.ll_login);
         itemGlance.setOnClickListener(this);
         itemControl.setOnClickListener(this);
@@ -172,6 +176,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
         itemNews.setOnClickListener(this);
         itemSettings.setOnClickListener(this);
         itemRoom.setOnClickListener(this);
+        itemAlexa.setOnClickListener(this);
         itemHelp.setOnClickListener(this);
         nav_exit.setOnClickListener(this);
         userIcon.setOnClickListener(this);
@@ -183,6 +188,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
         lstTv.add(itemNews);
         lstTv.add(itemSettings);
         lstTv.add(itemRoom);
+        lstTv.add(itemAlexa);
         lstTv.add(itemHelp);
 
 
@@ -260,11 +266,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
         if (mContent.getClass() == fragment.getClass()) {
             return;
         }
-//        if (!fragment.isAdded()) {
-//            fragmentTransaction.add(R.id.content_frame, fragment);
-//        } else {
         fragmentTransaction.replace(R.id.content_frame, fragment);
-//        }
         mContent = fragment;
         fragmentTransaction.commit();
         Handler h = new Handler();
@@ -273,6 +275,13 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
                 // getSlidingMenu().showContent();
             }
         }, 50);
+    }
+
+    public void switchContent(final Fragment fragment, String menu) {
+        if (menu.equals("scene")) {
+            noSelected(itemScenario);
+        }
+        switchContent(fragment);
     }
 
     public void switchMessage() {
@@ -394,6 +403,10 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
                 noSelected(itemSettings);
                 fragment = new SettingFragment();//设置
                 break;
+            case R.id.nav_alexa:
+                noSelected(itemAlexa);
+                fragment = new AlexaFragment();//帮助
+                break;
             case R.id.nav_help:
                 noSelected(itemHelp);
                 fragment = new HelpFragment();//帮助
@@ -477,21 +490,21 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
      * 触发摇一摇动作
      */
     private void shakeAction() {
-        if (System.currentTimeMillis() - lastTime < 1500) {
+        long curTime = System.currentTimeMillis();
+        Log.e("XLight", "shake time" + curTime + "," + lastTime);
+        if (curTime - lastTime < 1500) {
             return;
         }
-        lastTime = System.currentTimeMillis();
-        vibrator.vibrate(200);
-        if (!UserUtils.isLogin(this)) {
-            return;
-        }
-
         if (null == mShakeInfo) {
             return;
         }
-
-        showProgressDialog(getString(R.string.executing));
-
+        if (!UserUtils.isLogin(this)) {
+            return;
+        }
+        lastTime = curTime;
+        vibrator.vibrate(200);
+        Log.e("XLight", "start exec shake");
+        //showProgressDialog(getString(R.string.executing));
         JSONObject object = new JSONObject();
         try {
             object.put("userId", UserUtils.getUserInfo(SlidingMenuMainActivity.this).getId());
@@ -509,7 +522,7 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
                     @Override
                     public void run() {
                         SlidingMenuMainActivity.this.cancelProgressDialog();
-                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.setting_success));
+                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.executing));
                     }
                 });
             }
@@ -540,16 +553,16 @@ public class SlidingMenuMainActivity extends BaseFragmentActivity implements Vie
             @Override
             public void onHttpRequestSuccess(Object result) {
                 ShakeInfo mMShakeInfo = (ShakeInfo) result;
-//                Logger.i("shake", "shakeInfo = " + mMShakeInfo);
                 if (null != mMShakeInfo && null != mMShakeInfo.data && mMShakeInfo.data.size() > 0) {
                     mShakeInfo = mMShakeInfo.data.get(0);
+                } else {
+                    mShakeInfo = null;
                 }
-
             }
 
             @Override
             public void onHttpRequestFail(int code, String errMsg) {
-//                Logger.i("shake", "shakeInfo = 失败");
+                mShakeInfo = null;
             }
         });
     }

@@ -277,51 +277,27 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
 
     public void resolveScene(final SceneResult scene) {
         try {
-//            JSONArray ja = new JSONArray(scene.cmd);
-//            Map<String, JSONArray> maps = new HashMap<>();
-//            for (int i = 0; i < ja.length(); i++) {
-//                JSONObject jb = ja.getJSONObject(i);
-//                String deviceId = jb.getString("deviceId");
-//                jb.remove("deviceId");
-//                JSONArray child;
-//                //开始进行命令合并
-//                if (maps.containsKey(deviceId)) {
-//                    //已经存在，进行命令合并
-//                    child = (JSONArray) maps.get(deviceId);
-//                } else {
-//                    child = new JSONArray();
-//                }
-//                child.put(jb);
-//                maps.put(deviceId, child);
-//            }
-//            //生成发送格式
-//            ja = new JSONArray();
-//            for (String key : maps.keySet()) {
-//                JSONObject jb = new JSONObject();
-//                JSONObject log = new JSONObject();
-//                log.put("userId", UserUtils.getUserInfo(getContext()).id);
-//                log.put("detail", "切换到" + scene.name + "场景");
-//                log.put("logtype", 1);
-//                log.put("logform", "APP");
-//                jb.put("deviceid", key);
-//                jb.put("args", ((JSONArray) maps.get(key)));
-//                jb.put("logs", log);
-//                ja.put(jb);
-//            }
-//            JSONObject jb = new JSONObject();
-//            jb.put("data", ja);
             HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, scene.id, UserUtils.getAccessToken(getContext())), "", null, new HttpUtils.OnHttpRequestCallBack() {
                 @Override
                 public void onHttpRequestSuccess(Object result) {
-                    ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
+                        }
+                    });
                 }
 
                 @Override
                 public void onHttpRequestFail(int code, String errMsg) {
-                    ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
+                        }
+                    });
                 }
             });
-            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
         } catch (Exception e) {
             ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
         }
