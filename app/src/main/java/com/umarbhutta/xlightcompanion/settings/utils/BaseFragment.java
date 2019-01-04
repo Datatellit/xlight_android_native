@@ -1,7 +1,6 @@
 package com.umarbhutta.xlightcompanion.settings.utils;
 
 //import android.app.Fragment;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,15 +10,12 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
-import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends  Fragment {
     private boolean isRegistered = false;
     private NetBroadcastReceiver netWorkChangReceiver;
-    private String TAG = "XLight";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,19 +60,4 @@ public class BaseFragment extends Fragment {
             }
         }
     }
-
-    /**
-     * Android M运行时权限请求封装
-     *
-     * @param runnable    请求权限回调
-     * @param permissions 请求的权限（数组类型），直接从Manifest中读取相应的值，比如Manifest.permission.WRITE_CONTACTS
-     */
-    public void selfPermissionGranted(Context context, BaseActivity.PermissionCallback runnable, String... permissions) {
-        Log.i(TAG, "selfPermissionGranted");
-        if (context != null && context instanceof BaseActivity) {
-            Log.i(TAG, "getActivity()!=null");
-            ((BaseActivity) getActivity()).selfPermissionGranted(context, runnable, permissions);
-        }
-    }
-
 }

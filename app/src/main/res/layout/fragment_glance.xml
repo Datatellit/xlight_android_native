@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
     <!--Root容器-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants"
-        android:focusableInTouchMode="true"
         android:orientation="vertical">
         <!--Header-->
         <LinearLayout
@@ -25,12 +23,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/margin_l_r"
-                android:paddingRight="@dimen/margin_l_r"
-                android:paddingTop="@dimen/margin_l_r">
+                android:padding="@dimen/margin_l_r">
 
                 <LinearLayout
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <ImageView
@@ -44,60 +40,37 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:gravity="center">
 
-                    <LinearLayout
-                        android:id="@+id/llGps"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/txtCity"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:text="--"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/gps" />
-
-                        <TextView
-                            android:id="@+id/txtCity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="--"
-                            android:textColor="@color/white"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <TextView
                         android:id="@+id/txtRefresh"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:visibility="gone">
+                        android:text="@string/refresh"
+                        android:textColor="@color/menu_selected"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="@string/refresh"
-                            android:textColor="@color/white"
-                            android:textStyle="italic" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right|center_vertical">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/txtWeather"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:singleLine="true"
                         android:text="--"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
@@ -125,7 +98,7 @@
                         android:id="@+id/txtOutDHTt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="--"
+                        android:text="---"
                         android:textColor="@color/white"
                         android:textSize="60sp" />
 
@@ -140,9 +113,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingLeft="@dimen/margin_l_r"
-                    android:paddingRight="@dimen/margin_l_r">
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_horizontal">
 
                     <TextView
                         android:id="@+id/txtMin"
@@ -177,11 +149,9 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/txtSummary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:singleLine="true"
                         android:text="--"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -191,13 +161,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:src="@drawable/hum" />
+                    android:gravity="center_horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -207,7 +171,6 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/txtHumidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
@@ -226,7 +189,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="6dp"
                     android:gravity="center_horizontal">
 
                     <LinearLayout
@@ -258,229 +221,128 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ScrollView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_l_r"
+            android:paddingBottom="0dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scene_ctrl"
+                    android:textColor="#ff222222"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_scene_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtAddScene"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_scene"
+                    android:textColor="#ff555555"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/txtAddScene"
+                    android:src="@mipmap/add" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--Title-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_l_r"
+            android:paddingBottom="0dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/my_device"
+                    android:textColor="#ff222222"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_more"
+                    android:textColor="#ff555555"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/txtAdd"
+                    android:src="@mipmap/add" />
+            </RelativeLayout>
+        </LinearLayout>
+        <!--Light Grid-->
+        <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="none">-->
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/default_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:focusableInTouchMode="true"
-                android:orientation="vertical">
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="@dimen/margin_l_r"
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:text="@string/you_have_no_device_and_add"
+                android:visibility="gone" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="10dp">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/scene_ctrl"
-                            android:textColor="#ff222222"
-                            android:textSize="17sp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rl_scene_add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/txtAddScene"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/add_scene"
-                            android:textColor="#ff555555"
-                            android:textSize="12sp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_toRightOf="@id/txtAddScene"
-                            android:src="@mipmap/add" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llScene"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginLeft="@dimen/margin_l_r"
-                    android:layout_marginRight="@dimen/margin_l_r"
-                    android:background="@drawable/home_shadow"
-                    android:elevation="5dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/no_scene"
-                        android:textColor="#808080"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <HorizontalScrollView
-                    android:id="@+id/hsvSceneList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.umarbhutta.xlightcompanion.gridView.MyGridView
-                            android:id="@+id/gvScenario"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:numColumns="3"
-                            android:paddingLeft="@dimen/margin_l_r"
-                            android:paddingRight="@dimen/margin_l_r"
-                            android:scrollbars="none"
-                            android:stretchMode="columnWidth"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-                <!--Title-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="10dp">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/my_device"
-                            android:textColor="#ff222222"
-                            android:textSize="17sp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/rl_add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/txtAdd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/add_more"
-                            android:textColor="#ff555555"
-                            android:textSize="13sp" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_toRightOf="@id/txtAdd"
-                            android:src="@mipmap/add" />
-                    </RelativeLayout>
-                </LinearLayout>
-                <!--Light Grid-->
-                <LinearLayout
-                    android:id="@+id/llNoDevices"
-                    android:layout_width="match_parent"
-                    android:layout_height="255dp"
-                    android:layout_marginBottom="@dimen/margin_l_r"
-                    android:layout_marginLeft="@dimen/margin_l_r"
-                    android:layout_marginRight="@dimen/margin_l_r"
-                    android:background="@drawable/home_shadow"
-                    android:elevation="5dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/box" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/you_have_no_device_and_add"
-                            android:textColor="#808080"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <com.flyco.roundview.RoundLinearLayout
-                        android:id="@+id/fly_rl_add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="10dp"
-                        app:rv_cornerRadius="4dp"
-                        app:rv_strokeColor="#D9D9D9"
-                        app:rv_strokeWidth="1dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/add_more"
-                            android:textColor="#ff555555"
-                            android:textSize="14sp" />
-                    </com.flyco.roundview.RoundLinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
-
-                    <com.umarbhutta.xlightcompanion.gridView.MyGridView
-                        android:id="@+id/gvLight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:numColumns="1"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:scrollbars="none"
-                        android:stretchMode="columnWidth"
-                        android:verticalSpacing="5dp"></com.umarbhutta.xlightcompanion.gridView.MyGridView>
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-
+            <GridView
+                android:id="@+id/gvLight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnWidth="95dp"
+                android:fadeScrollbars="true"
+                android:gravity="center"
+                android:horizontalSpacing="10dp"
+                android:numColumns="auto_fit"
+                android:paddingBottom="0dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:scrollbars="vertical"
+                android:stretchMode="spacingWidth"
+                android:verticalSpacing="10dp"></GridView>
+        </LinearLayout>
         <!--</ScrollView>-->
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

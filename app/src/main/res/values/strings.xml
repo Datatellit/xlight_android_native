@@ -161,7 +161,6 @@
     <string name="modify_fail">Edit failed</string>
     <string name="first_page">Home</string>
     <string name="help">Help</string>
-    <string name="echo">Amazon Alexa</string>
     <string name="add_scene">Add Scenario</string>
     <string name="please_input_scene_name">Enter the name of scenario</string>
     <string name="edit_scene_success">Edit scenario successfully</string>
@@ -176,7 +175,7 @@
     <string name="shake">Shake</string>
     <string name="logout">Sign Out</string>
     <string name="kaiguan_switch">Switching</string>
-    <string name="device_select_device">Choose Device</string>
+    <string name="device_select_device">Device（Select Shake default device）</string>
     <string name="pic_select_fail">Image selection failed</string>
     <string name="your_sdcard_error">Your memory card has a problem, temporarily cannot modify the head</string>
     <string name="file_has_no">File does not Exist</string>
@@ -213,7 +212,7 @@
     <string name="this_month_has_save_money_more">Save electricity fee ￥</string>
     <string name="this_month_has_save_money_more_two">Yuan this month.</string>
     <string name="my_device">My Devices</string>
-    <string name="you_have_no_device_and_add">No device, Please add</string>
+    <string name="you_have_no_device_and_add">No device, click + to add device</string>
     <string name="no_add_scene">You have not added scenarios</string>
     <string name="excute_ad">Execution Action：</string>
     <string name="adt">Conditions：</string>
@@ -254,7 +253,7 @@
     <string name="hint_find_pwd">Please enter the eamil address you signed up with to receive a verification code</string>
     <string name="again_exit">Press again to exit the program</string>
 
-    <string name="add_more">Add Device</string>
+    <string name="add_more">Add More</string>
 
     <string name="room">Room</string>
     <string name="message">Message</string>
@@ -349,26 +348,5 @@
 
     <string name="hum">Humidity:</string>
     <string name="aqi">Air quality:</string>
-    <string name="scene_ctrl">Scene Control</string>
-
-    <string name="no_scene">No scene, please click \"+\" to add</string>
-
-
-    <string name="high">High</string>
-    <string name="normal">Normal</string>
-    <string name="low">Low</string>
-    <string name="warm">Warmer</string>
-    <string name="cool">Cooler</string>
-    <string name="more">More</string>
-
-    <string name="shakingState">Enable Shaking</string>
-
-    <string name="p_dialog_title">Notify</string>
-    <string name="p_sure">Confirm</string>
-    <string name="p_cancel">Cancel</string>
-    <string name="p_set">Setting</string>
-    <string name="defaule_first_message">You need to authorize this permission to use the relevant functions normally.</string>
-    <string name="defaule_always_message">You need to set the appropriate permissions before you can work properly.</string>
-
-    <string name="parse_error">Data parse error</string>
+    <string name="scene_ctrl">Scene control</string>
 </resources>

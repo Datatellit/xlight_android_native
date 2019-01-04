@@ -1,25 +1,19 @@
 package com.umarbhutta.xlightcompanion.glance;
 
-import android.Manifest;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,12 +38,9 @@ import com.umarbhutta.xlightcompanion.Tools.SensorTool;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
-import com.umarbhutta.xlightcompanion.adapter.LightItemAdapter;
 import com.umarbhutta.xlightcompanion.bindDevice.BindDeviceConfirmActivity;
 import com.umarbhutta.xlightcompanion.main.ControlDeviceActivity;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
-import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
-import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
 import com.umarbhutta.xlightcompanion.okHttp.model.DeviceInfoResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.DeviceState;
@@ -60,16 +51,10 @@ import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
 import com.umarbhutta.xlightcompanion.okHttp.model.SceneResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.Sensorsdata;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestFirstPageInfo;
-import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSceneListInfo;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSensorInfo;
-import com.umarbhutta.xlightcompanion.scenario.ScenarioListAdapter;
-import com.umarbhutta.xlightcompanion.scenario.ScenarioMainFragment;
-import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.settings.utils.BaseFragment;
-import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -87,12 +72,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     /**
      * 设备列表
      */
-    private com.umarbhutta.xlightcompanion.adapter.LightItemAdapter adapterLight;
+    private LightItemAdapter adapterLight;
     private GridView gvLight;
     private GridView gvScene;
 
     public List<SceneResult> mSceneList = new ArrayList<SceneResult>();
-    ScenarioListAdapter sceneListAdapter;
     private ProgressDialog progressDialog;
     private Handler m_deviceHandler;
     private Handler m_sparkHandler;
@@ -101,21 +85,16 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     public boolean codeChange = false;
     WeatherDetails mWeatherDetails;
 
-    LinearLayout llNoDevices;
-    LinearLayout llScene;
-    HorizontalScrollView hsvSceneList;
+    TextView default_text;
     TextView txtCity;
-    LinearLayout llGps;
     TextView txtWeather;
-    LinearLayout txtRefresh;
+    TextView txtRefresh;
     TextView txtOutDHTt;
-    TextView txtMin;
-    TextView txtMax;
-    TextView txtSummary;
-    TextView txtHumidity;
     ImageView imgMenu;
+    ImageView imgMessage;
     ImageView weatherIcon;
     RelativeLayout rlAdd;
+    Sensorsdata sd;
 
     /**
      * 位置信息
@@ -138,7 +117,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 if (netMobile == 0) {
                     // 无网络
                     txtRefresh.setVisibility(View.VISIBLE);
-                    llGps.setVisibility(View.GONE);
                     try {
                         ToastUtil.showToast(getContext(), getString(R.string.net_error));
                     } catch (Exception ex) {
@@ -146,9 +124,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     }
                 } else {
                     // 连接上网络
-                    if (txtRefresh != null) {
-                        txtRefresh.setVisibility(View.GONE);
-                    }
+//                    txtRefresh.setVisibility(View.GONE);
                 }
             }
         });
@@ -158,17 +134,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_glance, container, false);
         initComponents(view);
-        this.selfPermissionGranted(getContext(), new BaseActivity.PermissionCallback() {
-            @Override
-            public void hasPermission() {
-                initLocation();
-            }
-
-            @Override
-            public void noPermission() {
-                ToastUtil.showToast(getContext(), R.string.defaule_first_message);
-            }
-        }, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE});
+        initLocation();
         getBaseInfo();
         initHandler();
         return view;
@@ -183,27 +149,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     }
 
     // the meat of switching the above fragment
-    private void switchFragment(android.support.v4.app.Fragment activity) {
-        if (getActivity() == null)
-            return;
-
-        if (getActivity() instanceof SlidingMenuMainActivity) {
-            SlidingMenuMainActivity ra = (SlidingMenuMainActivity) getActivity();
-            ra.switchContent(activity, "scene");
-        }
-    }
-
-    public void switchFragment(Class activity) {
-        if (getActivity() == null)
-            return;
-
-        if (getActivity() instanceof SlidingMenuMainActivity) {
-            SlidingMenuMainActivity ra = (SlidingMenuMainActivity) getActivity();
-            ra.onActivityPressed(activity);
-        }
-    }
-
-
     private void switchFragment() {
         if (getActivity() == null)
             return;
@@ -214,21 +159,25 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         }
     }
 
+    private void onFabPressed() {
+        if (getActivity() == null)
+            return;
+
+        if (getActivity() instanceof SlidingMenuMainActivity) {
+            SlidingMenuMainActivity ra = (SlidingMenuMainActivity) getActivity();
+            ra.switchMessage();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_scene_add:
-                if (UserUtils.isLogin(getContext())) {
-                    switchFragment(new ScenarioMainFragment());
-                } else {
-                    // 跳转到登录页
-                    switchFragment(LoginActivity.class);
-                }
+            case R.id.home_message:
+                onFabPressed();
                 break;
             case R.id.home_menu:
                 switchFragment();
                 break;
-            case R.id.fly_rl_add:
             case R.id.rl_add:
                 ActionSheet.createBuilder(getContext(), getFragmentManager())
                         .setCancelButtonTitle(getString(R.string.cancel))
@@ -285,6 +234,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         super.onDestroyView();
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -309,6 +259,17 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         Log.e(TAG, "listen device status for =>" + xltDevice.getControllerID());
         xltDevice.addDeviceEventHandler(m_deviceHandler);
         xltDevice.addSparkEventHandler(m_sparkHandler);
+    }
+
+
+    public String getUnit(int value) {
+        if (value > 80) {
+            return getResources().getString(R.string.great);
+        } else if (value > 60) {
+            return getResources().getString(R.string.good);
+        } else {
+            return getResources().getString(R.string.bad);
+        }
     }
 
     public void initHandler() {
@@ -393,135 +354,57 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         };
     }
 
-    private void getSceneList() {
-        RequestSceneListInfo.getInstance().getSceneListInfo(getActivity(), new RequestSceneListInfo.OnRequestSceneInfoCallback() {
-            @Override
-            public void onRequestFirstPageInfoSuccess(final List<SceneResult> sceneInfoResult) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != sceneInfoResult && sceneInfoResult.size() > 0) {
-                            mSceneList.clear();
-                            llScene.setVisibility(View.GONE);
-                            hsvSceneList.setVisibility(View.VISIBLE);
-                            mSceneList.addAll(sceneInfoResult);
-                            sceneListAdapter = new ScenarioListAdapter(getContext(), mSceneList, true);
-                            sceneListAdapter.setOnClickCallBack(new ScenarioListAdapter.OnClickCallBack() {
-                                @Override
-                                public void onClickCallBack(int position) {
-                                    for (SceneResult s : mSceneList) {
-                                        s.checked = false;
-                                    }
-                                    mSceneList.get(position).checked = true;
-                                    resolveScene(mSceneList.get(position));
-                                    sceneListAdapter.notifyDataSetChanged();
-                                }
-                            });
-                            gvScene.setAdapter(sceneListAdapter);
-                            changeGridView(gvScene, mSceneList.size());
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onRequestFirstPageInfoFail(int code, final String errMsg) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtil.showToast(getActivity(), "" + errMsg);
-                    }
-                });
-            }
-        });
-    }
-
-    public void resolveScene(final SceneResult scene) {
-        try {
-            HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, scene.id, UserUtils.getAccessToken(getContext())), "", null, new HttpUtils.OnHttpRequestCallBack() {
-                @Override
-                public void onHttpRequestSuccess(Object result) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
-                        }
-                    });
-                }
-
-                @Override
-                public void onHttpRequestFail(int code, String errMsg) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
-                        }
-                    });
-                }
-            });
-        } catch (Exception e) {
-            ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
-        }
-    }
-
     public void getBaseInfo() {
         progressDialog = ProgressDialogUtils.showProgressDialog(getContext(), getString(R.string.loading));
         progressDialog.show();
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
-            llGps.setVisibility(View.GONE);
             ToastUtil.showToast(getContext(), R.string.net_error);
             progressDialog.dismiss();
             return;
         } else {
             txtRefresh.setVisibility(View.GONE);
-            llGps.setVisibility(View.VISIBLE);
         }
-        try {
-            getSceneList();
-            RequestFirstPageInfo.getInstance(getActivity()).getBaseInfo(new RequestFirstPageInfo.OnRequestFirstPageInfoCallback() {
-                @Override
-                public void onRequestFirstPageInfoSuccess(final DeviceInfoResult mDeviceInfoResult) {
-                    Log.e("XLight", "get first page data success");
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (progressDialog != null) {
-                                progressDialog.dismiss();
-                            }
-                            List<Rows> devices = mDeviceInfoResult.rows;
-                            deviceList.clear();
-                            deviceList.addAll(devices);
-                            if (adapterLight != null) {
-                                Log.d("XLight", "update device list at request after");
-                                codeChange = true;
-                                adapterLight.notifyDataSetChanged();
-                                codeChange = false;
-                            }
-                            addDeviceMapsSDK();
+        RequestFirstPageInfo.getInstance(getActivity()).getBaseInfo(new RequestFirstPageInfo.OnRequestFirstPageInfoCallback() {
+            @Override
+            public void onRequestFirstPageInfoSuccess(final DeviceInfoResult mDeviceInfoResult) {
+                Log.e("XLight", "get first page data success");
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
                         }
-                    });
-                }
-
-                @Override
-                public void onRequestFirstPageInfoFail(int code, String errMsg) {
-                    Log.d("XLight", "request first data error");
-                    final String err = errMsg;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //失败的处理
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
-                            ToastUtil.showToast(getContext(), err);
+                        List<Rows> devices = mDeviceInfoResult.rows;
+                        deviceList.clear();
+                        deviceList.addAll(devices);
+                        if (adapterLight != null) {
+                            Log.d("XLight", "update device list at request after");
+                            codeChange = true;
+                            adapterLight.notifyDataSetChanged();
+                            codeChange = false;
                         }
-                    });
-                }
-            });
-        } catch (Exception ex) {
+                        addDeviceMapsSDK();
+                    }
+                });
+            }
 
-        }
+            @Override
+            public void onRequestFirstPageInfoFail(int code, String errMsg) {
+                Log.d("XLight", "request first data error");
+                final String err = errMsg;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //失败的处理
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                        ToastUtil.showToast(getContext(), err);
+                    }
+                });
+            }
+        });
     }
 
     private int initDeviceCount = 0;
@@ -529,7 +412,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     public void addDeviceMapsSDK() {
         if (deviceList != null && deviceList.size() == 0) {
             devicenodes.clear();
-            llNoDevices.setVisibility(View.VISIBLE);
+            default_text.setVisibility(View.VISIBLE);
             if (adapterLight != null) {
                 adapterLight.notifyDataSetChanged();
             }
@@ -537,7 +420,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             devicenodes.clear();
             initDeviceCount = 0;
 //            Log.e("XLight", "device count:" + deviceList.size());
-            llNoDevices.setVisibility(View.GONE);
+            default_text.setVisibility(View.GONE);
             SharedPreferencesUtils.putObject(getActivity(), SharedPreferencesUtils.KEY_DEVICE_LIST, deviceList);
 //            if (SlidingMenuMainActivity.xltDeviceMaps != null) {
 //                SlidingMenuMainActivity.xltDeviceMaps.clear();
@@ -587,6 +470,9 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                         }
                         devicenodes.addAll(device.devicenodes);
                     }
+//                if (deviceList.get(i).sharedevice != null) {
+//                    deviceList.get(i).isShare = 1;
+//                }
                     if (!progressDialog.isShowing() && SlidingMenuMainActivity.xltDeviceMaps.size() == 0) {
                         progressDialog.show();
                     }
@@ -628,7 +514,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                                         public void run() {
                                             ToastUtil.showToast(getContext(), String.format(getString(R.string.device_connect_failed), device.devicename));
                                             txtRefresh.setVisibility(View.VISIBLE);
-                                            llGps.setVisibility(View.GONE);
                                         }
                                     });
                                 }
@@ -642,41 +527,25 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 lstDevice.add(r.coreid);
             }
             if (adapterLight == null) {
-                adapterLight = new com.umarbhutta.xlightcompanion.adapter.LightItemAdapter(getContext(), devicenodes);
+                adapterLight = new LightItemAdapter(getContext(), devicenodes, true);
                 gvLight.setAdapter(adapterLight);
                 // 直接控制事件
-                adapterLight.setOnClickListener(new com.umarbhutta.xlightcompanion.adapter.LightItemAdapter.OnClickListener() {
+                adapterLight.setOnClickListener(new LightItemAdapter.OnClickListener() {
                     @Override
-                    public void onClickListener(com.umarbhutta.xlightcompanion.adapter.LightItemAdapter.CLICK_TYPE type, int position) {
+                    public void onClickListener(LightItemAdapter.CLICK_TYPE type, int position) {
                         Devicenodes dn = devicenodes.get(position);
                         SlidingMenuMainActivity.m_mainDevice = SlidingMenuMainActivity.xltDeviceMaps.get(dn.coreid);
-                        if (SlidingMenuMainActivity.m_mainDevice == null || !SlidingMenuMainActivity.m_mainDevice.isCloudOK()) {
+                        if (SlidingMenuMainActivity.m_mainDevice == null || !SlidingMenuMainActivity.m_mainDevice.getCurDevice().isConnected() || !SlidingMenuMainActivity.m_mainDevice.isCloudOK()) {
                             ToastUtil.showToast(getContext(), R.string.device_disconnect);
                             txtRefresh.setVisibility(View.VISIBLE);
-                            llGps.setVisibility(View.GONE);
                             return;
                         }
-                        if (type == LightItemAdapter.CLICK_TYPE.SWITCH) {
+                        if (type == LightItemAdapter.CLICK_TYPE.BOTTOM) {
                             dn.ison = dn.ison == 1 ? xltDevice.STATE_OFF : xltDevice.STATE_ON;
                             SlidingMenuMainActivity.m_mainDevice.PowerSwitch(dn.nodeno, dn.ison);
                             // 更新状态
                             adapterLight.notifyDataSetChanged();
-                        } else if (type == LightItemAdapter.CLICK_TYPE.LOW) {
-                            dn.brightness = 30;
-                            SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.brightness);
-                        } else if (type == LightItemAdapter.CLICK_TYPE.NORMAL) {
-                            dn.brightness = 50;
-                            SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.brightness);
-                        } else if (type == LightItemAdapter.CLICK_TYPE.HIGH) {
-                            dn.brightness = 90;
-                            SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.brightness);
-                        } else if (type == LightItemAdapter.CLICK_TYPE.COOL) {
-                            dn.cct = 6500;
-                            SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.cct);
-                        } else if (type == LightItemAdapter.CLICK_TYPE.WARM) {
-                            dn.cct = 2700;
-                            SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.cct);
-                        } else if (type == LightItemAdapter.CLICK_TYPE.MORE) {
+                        } else {
                             // 点击事件 跳转到编辑设备页面
                             Intent intent = new Intent(getActivity(), ControlDeviceActivity.class);
                             intent.putExtra("info", dn);
@@ -690,9 +559,9 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 adapterLight.notifyDataSetChanged();
                 codeChange = false;
                 if (null != deviceList && deviceList.size() > 0) {
-                    llNoDevices.setVisibility(View.GONE);
+                    default_text.setVisibility(View.GONE);
                 } else {
-                    llNoDevices.setVisibility(View.VISIBLE);
+                    default_text.setVisibility(View.VISIBLE);
                 }
             }
             // getSensorAndStateInfo(lstDevice);
@@ -701,30 +570,17 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
 
     public void initComponents(View view) {
         gvLight = (GridView) view.findViewById(R.id.gvLight);
-        gvScene = (GridView) view.findViewById(R.id.gvScenario);
-        llNoDevices = (LinearLayout) view.findViewById(R.id.llNoDevices);
-        hsvSceneList = (HorizontalScrollView) view.findViewById(R.id.hsvSceneList);
-        llScene = (LinearLayout) view.findViewById(R.id.llScene);
+        default_text = (TextView) view.findViewById(R.id.default_text);
         txtCity = (TextView) view.findViewById(R.id.txtCity);
-        llGps = (LinearLayout) view.findViewById(R.id.llGps);
         txtWeather = (TextView) view.findViewById(R.id.txtWeather);
-        txtRefresh = (LinearLayout) view.findViewById(R.id.txtRefresh);
+        txtRefresh = (TextView) view.findViewById(R.id.txtRefresh);
         txtOutDHTt = (TextView) view.findViewById(R.id.txtOutDHTt);
-        txtMin = (TextView) view.findViewById(R.id.txtMin);
-        txtMax = (TextView) view.findViewById(R.id.txtMax);
-        txtSummary = (TextView) view.findViewById(R.id.txtSummary);
-        txtHumidity = (TextView) view.findViewById(R.id.txtHumidity);
         imgMenu = (ImageView) view.findViewById(R.id.home_menu);
         weatherIcon = (ImageView) view.findViewById(R.id.weatherIcon);
+        imgMessage = (ImageView) view.findViewById(R.id.home_message);
         rlAdd = (RelativeLayout) view.findViewById(R.id.rl_add);
         imgMenu.setOnClickListener(this);
-
-
-        ((LinearLayout) view.findViewById(R.id.fly_rl_add)).setOnClickListener(this);
-        ((RelativeLayout) view.findViewById(R.id.rl_scene_add)).setOnClickListener(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ((LinearLayout) view.findViewById(R.id.root)).setBackgroundColor(getResources().getColor(R.color.white));
-        }
+        imgMessage.setOnClickListener(this);
         rlAdd.setOnClickListener(this);
         txtRefresh.setOnClickListener(this);
     }
@@ -742,11 +598,9 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             mLatitude = location.getLatitude();
             city = location.getCity();
             country = location.getCountry();
-            Log.e("XLight", String.format("long:%s,latitude:%s,city:%s,country:%s", mLongitude, mLatitude, city, country));
+            Log.e("XLight", String.format("long:%s,latitude:%s,ciry:%s,country:%s", mLongitude, mLatitude, city, country));
             //请求天气信息
             updateLocationInfo();
-            // 启动定位
-            locationClient.startLocation();
         } else {
             // 启动定位
             locationClient.startLocation();
@@ -789,7 +643,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     if (!TextUtils.isEmpty(city)) {
                         txtCity.setText(city);
                     } else {
-                        if (TextUtils.isEmpty(country)) {
+                        if (country == null) {
                             country = getString(R.string.share_list_unknown);
                         }
                         txtCity.setText("" + country);
@@ -799,12 +653,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             });
     }
 
-    int requestTotal = 0;
-
     /**
      * 获取title信息
      */
     private void getWeather() {
+
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
             return;
@@ -829,10 +682,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             public void onFailure(Request request, IOException e) {
                 try {
                     // 重新获取
-                    if (requestTotal < 3) {
-                        getWeather();
-                    }
-                    requestTotal++;
+                    getWeather();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -893,12 +743,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         weatherDetails.setIcon(currently.getString("icon"));
         weatherDetails.setSummary(currently.getString("summary"));
         weatherDetails.setTemp(currently.getDouble("apparentTemperature"));
-        weatherDetails.setHumidity(currently.getDouble("humidity"));
-        JSONObject hourly = forecast.getJSONObject("hourly");
-        weatherDetails.setSummaryHour(hourly.getString("summary"));
-        JSONObject daily = forecast.getJSONObject("daily").getJSONArray("data").getJSONObject(0);
-        weatherDetails.setMin(daily.getDouble("temperatureLow"));
-        weatherDetails.setMax(daily.getDouble("temperatureHigh"));
         return weatherDetails;
     }
 
@@ -906,10 +750,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         weatherIcon.setImageDrawable(getWeatherIcon(mWeatherDetails.getIcon()));
         txtWeather.setText(mWeatherDetails.getSummary());
         txtOutDHTt.setText("" + mWeatherDetails.getTemp(""));
-        txtSummary.setText("" + mWeatherDetails.getSummaryHour());
-        txtMin.setText("" + mWeatherDetails.getMin(""));
-        txtMax.setText("" + mWeatherDetails.getMax(""));
-        txtHumidity.setText("" + mWeatherDetails.getHumidity());
     }
 
 
@@ -934,27 +774,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
         mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
         return mOption;
-    }
-
-    public void changeGridView(GridView gv, int size) {
-        // item宽度
-        int itemWidth = dip2px(155);
-        // item之间的间隔
-        int itemPaddingH = dip2px(0);
-        // 计算GridView宽度
-        int gvWidth = size * (itemWidth + itemPaddingH) + 80;
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gvWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-        gv.setLayoutParams(params);
-        gv.setColumnWidth(itemWidth);
-        gv.setHorizontalSpacing(itemPaddingH);
-        gv.setStretchMode(GridView.NO_STRETCH);
-        gv.setNumColumns(size);
-    }
-
-    public int dip2px(float dpValue) {
-        final float scale = this.getContext().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
     }
 
 

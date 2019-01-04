@@ -17,7 +17,6 @@ public class SceneResult implements Serializable {
     public String remark;
     public Date createdAt;
     public Date updatedAt;
-    public boolean checked = false;
     public List<UserScene> userscenes;
 
     public String toString() {

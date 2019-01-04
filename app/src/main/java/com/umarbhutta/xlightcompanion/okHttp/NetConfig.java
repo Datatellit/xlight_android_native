@@ -6,9 +6,9 @@ package com.umarbhutta.xlightcompanion.okHttp;
 
 public class NetConfig {
 
-//    public static final String SERVER_IP = "www.baidu.com";
-//    public static final String SERVER_ADDRESS_DOMAIN = "http://211.159.174.249:8082";
-//    public static final String DCI_ADDRESS_DOMAIN = "http://211.159.174.249:8081";
+    public static final String SERVER_IP = "www.baidu.com";
+    public static final String SERVER_ADDRESS_DOMAIN = "http://211.159.174.249:8082";
+    public static final String DCI_ADDRESS_DOMAIN = "http://211.159.174.249:8081";
 
 
 //    public static final String SERVER_IP = "192.168.1.138";
@@ -17,9 +17,9 @@ public class NetConfig {
 //
 //    public static final String SERVER_ADDRESS_DS = "http://192.168.1.138:8063";
 
-    public static final String SERVER_IP = "www.baidu.com";
-    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.datatellit.com";
-    public static final String DCI_ADDRESS_DOMAIN = "http://iot.datatellit.com";
+//    public static final String SERVER_IP = "www.baidu.com";
+//    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.datatellit.com";
+//    public static final String DCI_ADDRESS_DOMAIN = "http://iot.datatellit.com";
 
     /**
      * 正式版开关
@@ -180,10 +180,6 @@ public class NetConfig {
      * 获取摇一摇配置信息
      */
     public static final String URL_GET_CONFIG_SHAKE_INFO = SERVER_ADDRESS_DOMAIN + "/shakes?access_token=";
-    /**
-     * 删除摇一摇配置信息
-     */
-    public static final String URL_DELETE_CONFIG_SHAKE_INFO = SERVER_ADDRESS_DOMAIN + "/shakes/%s?access_token=";
     /**
      * 编辑规则
      */

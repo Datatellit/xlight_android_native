@@ -166,7 +166,6 @@
     <string name="modify_fail">编辑失败</string>
     <string name="first_page">首页</string>
     <string name="help">帮助</string>
-    <string name="echo">亚马逊音箱</string>
     <string name="add_scene">添加场景</string>
     <string name="please_input_scene_name">请填写场景名称</string>
     <string name="edit_scene_success">编辑场景成功</string>
@@ -181,7 +180,7 @@
     <string name="shake">摇一摇</string>
     <string name="logout">退出登录</string>
     <string name="kaiguan_switch">开关切换</string>
-    <string name="device_select_device">选择设备</string>
+    <string name="device_select_device">设备（选择摇一摇默认设备）</string>
     <string name="pic_select_fail">图片选择失败</string>
     <string name="your_sdcard_error">您的存储卡有问题，暂时不能修改头像哦</string>
     <string name="file_has_no">文件不存在</string>
@@ -216,7 +215,7 @@
     <string name="this_month_has_save_money_more">本月节省电费约¥</string>
     <string name="this_month_has_save_money_more_two">元。</string>
     <string name="my_device">我的设备</string>
-    <string name="you_have_no_device_and_add">当前暂无设备，请添加</string>
+    <string name="you_have_no_device_and_add">您还没有设备，点击右上角+添加设备</string>
     <string name="no_add_scene">您还没有添加场景</string>
     <string name="excute_ad">执行动作：</string>
     <string name="adt">条件：</string>
@@ -254,7 +253,7 @@
     <string name="hint_find_pwd">请输入登录Xlight的邮箱，我们会发送验证码到您的邮箱</string>
     <string name="again_exit">再按一次退出程序</string>
 
-    <string name="add_more">添加设备</string>
+    <string name="add_more">添加更多</string>
 
     <string name="room">房间</string>
     <string name="message">消息</string>
@@ -352,26 +351,4 @@
     <string name="hum">湿度：</string>
     <string name="aqi">空气质量：</string>
     <string name="scene_ctrl">场景控制</string>
-
-    <string name="no_scene">当前暂无场景，请点击“+”添加</string>
-
-
-    <string name="high">高亮度</string>
-    <string name="normal">标准</string>
-    <string name="low">低亮度</string>
-    <string name="warm">白炽灯</string>
-    <string name="cool">日光灯</string>
-    <string name="more">更多</string>
-
-    <string name="shakingState">启用摇一摇</string>
-
-
-    <string name="p_dialog_title">提示</string>
-    <string name="p_sure">确定</string>
-    <string name="p_cancel">取消</string>
-    <string name="p_set">设置</string>
-    <string name="defaule_first_message">您需要授权该权限才可以正常使用相关功能。</string>
-    <string name="defaule_always_message">当前应用缺少相应的权限，您需要设置相应的权限后才可正常相关功。</string>
-
-    <string name="parse_error">数据解析异常</string>
 </resources>

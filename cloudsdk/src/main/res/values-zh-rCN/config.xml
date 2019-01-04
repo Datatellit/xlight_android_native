@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="api_base_uri">https://iot.datatellit.com</string>
-    <!--<string name="api_base_uri">http://211.159.174.249:8081/</string>-->
+    <!--<string name="api_base_uri">https://iot.datatellit.com</string>-->
+    <string name="api_base_uri">http://211.159.174.249:8081/</string>
 
     <!-- This value should match one of the members of Retrofit's LogLevel class:
     NONE, BASIC, HEADERS, HEADERS_AND_ARGS, or FULL

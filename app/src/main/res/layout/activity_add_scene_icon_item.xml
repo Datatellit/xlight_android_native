@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/imgIcon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/scene" />
 </LinearLayout>

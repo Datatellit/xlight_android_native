@@ -187,23 +187,10 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/nav_alexa"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:layout_below="@+id/nav_news"
-            android:drawableLeft="@drawable/echo"
-            android:drawablePadding="@dimen/drawable_left"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/padding_left_menu"
-            android:text="@string/echo"
-            android:textColor="@color/color_menu_text"
-            android:textSize="@dimen/text_size_menu" />
-
-        <TextView
             android:id="@+id/nav_help"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
-            android:layout_below="@+id/nav_alexa"
+            android:layout_below="@+id/nav_news"
             android:drawableLeft="@mipmap/help"
             android:drawablePadding="@dimen/drawable_left"
             android:gravity="center_vertical"
