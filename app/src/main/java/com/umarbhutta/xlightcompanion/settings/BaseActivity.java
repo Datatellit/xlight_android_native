@@ -28,8 +28,6 @@ import android.view.WindowManager;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.PushAgent;
 
 /**
  * create by：guangbinw on 16/3/30 17:01
@@ -73,13 +71,13 @@ public class BaseActivity extends FragmentActivity {
             pageName = getLocalClassName();
         }
         super.onResume();
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -299,8 +297,10 @@ public class BaseActivity extends FragmentActivity {
                         }
                 } else {
                     Log.i(TAG, "Permission=" + permissions[i]);
-                    permissionRunnable.noPermission();
-                    permissionRunnable = null; //我在回调的地方,弹出自定义对话框,引导用户去开启权限
+                    if (permissionRunnable != null) {
+                        permissionRunnable.noPermission();
+                        permissionRunnable = null; //我在回调的地方,弹出自定义对话框,引导用户去开启权限
+                    }
                     break;
                 }
             }

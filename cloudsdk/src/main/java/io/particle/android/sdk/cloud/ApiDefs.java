@@ -30,12 +30,13 @@ import retrofit.mime.TypedOutput;
  */
 public class ApiDefs {
 
-    // FIXME: turn some of these common strings into constants?
-
     /**
      * The main Particle cloud API
      */
     public interface CloudApi {
+
+        @GET("/v1/sims/{lastIccid}/data_usage")
+        Response getCurrentDataUsage(@Path("lastIccid") String lastIccid);
 
         @GET("/v1/devices")
         List<Models.SimpleDevice> getDevices();
@@ -96,7 +97,13 @@ public class ApiDefs {
         ClaimCodeResponse generateClaimCode(@Field("blank") String blankBody);
 
         @FormUrlEncoded
+        @POST("/v1/products/{productId}/device_claims")
+        ClaimCodeResponse generateClaimCodeForOrg(@Field("blank") String blankBody,
+                                                  @Path("productId") Integer productId);
+
+        @FormUrlEncoded
         @POST("/v1/orgs/{orgSlug}/products/{productSlug}/device_claims")
+        @Deprecated
         ClaimCodeResponse generateClaimCodeForOrg(@Field("blank") String blankBody,
                                                   @Path("orgSlug") String orgSlug,
                                                   @Path("productSlug") String productSlug);
@@ -122,26 +129,50 @@ public class ApiDefs {
         @POST("/v1/users")
         Response signUp(@Body SignUpInfo signUpInfo);
 
+        // NOTE: the `LogInResponse` used here as a return type is intentional.  It looks
+        // a little odd, but that's how this endpoint works.
+        @POST("/v1/products/{productId}/customers")
+        Responses.LogInResponse signUpAndLogInWithCustomer(@Body SignUpInfo signUpInfo,
+                                                           @Path("productId") Integer productId);
 
         // NOTE: the `LogInResponse` used here as a return type is intentional.  It looks
         // a little odd, but that's how this endpoint works.
         @POST("/v1/orgs/{orgSlug}/customers")
+        @Deprecated
         Responses.LogInResponse signUpAndLogInWithCustomer(@Body SignUpInfo signUpInfo,
                                                            @Path("orgSlug") String orgSlug);
 
         @FormUrlEncoded
         @POST("/oauth/token")
-        Responses.LogInResponse logIn(@Field("client_id") String clientId,
-                                      @Field("client_secret") String clientSecret,
-                                      @Field("grant_type") String grantType,
+        Responses.LogInResponse logIn(@Field("grant_type") String grantType,
                                       @Field("username") String username,
                                       @Field("password") String password);
 
         @FormUrlEncoded
-        @POST("/v1/password/reset")
-//        @POST("/v1/orgs/{orgName}/customers/reset_password")
-        Response requestPasswordReset(@Field("email") String email);//,
-//                                      @Path("orgName") String orgName);
-    }
+        @POST("/oauth/token")
+        Responses.LogInResponse authenticate(@Field("grant_type") String grantType,
+                                      @Field("mfa_token") String mfaToken,
+                                      @Field("otp") String otp);
 
+        @FormUrlEncoded
+        @POST("/oauth/token")
+        Responses.LogInResponse logIn(@Field("grant_type") String grantType,
+                                      @Field("refresh_token") String refreshToken);
+
+        @FormUrlEncoded
+        @POST("/v1/user/password-reset")
+        Response requestPasswordReset(@Field("username") String email);
+
+        @FormUrlEncoded
+        @POST("/v1/products/{productId}/customers/reset_password")
+        Response requestPasswordResetForCustomer(@Field("email") String email,
+                                                 @Path("productId") Integer productId);
+
+        @FormUrlEncoded
+        @POST("/v1/orgs/{orgName}/customers/reset_password")
+        @Deprecated
+        Response requestPasswordResetForCustomer(@Field("email") String email,
+                                                 @Path("orgName") String orgName);
+
+    }
 }

@@ -7,8 +7,8 @@ package com.umarbhutta.xlightcompanion.okHttp;
 public class NetConfig {
 
 //    public static final String SERVER_IP = "www.baidu.com";
-//    public static final String SERVER_ADDRESS_DOMAIN = "http://211.159.174.249:8082";
-//    public static final String DCI_ADDRESS_DOMAIN = "http://211.159.174.249:8081";
+//    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.dev.datatellit.com";
+//    public static final String DCI_ADDRESS_DOMAIN = "http://iot.dev.datatellit.com";
 
 
 //    public static final String SERVER_IP = "192.168.1.138";
@@ -18,8 +18,12 @@ public class NetConfig {
 //    public static final String SERVER_ADDRESS_DS = "http://192.168.1.138:8063";
 
     public static final String SERVER_IP = "www.baidu.com";
-    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.datatellit.com";
-    public static final String DCI_ADDRESS_DOMAIN = "http://iot.datatellit.com";
+    public static final String SERVER_ADDRESS_DOMAIN = "https://dmi.xlight.io";
+    public static final String DCI_ADDRESS_DOMAIN = "https://iot.xlight.io";
+    public static final String GOOGLE_KEY = "AIzaSyAgx9S4tDrNqhs4gtmO-wsYzOXroHXCToo";
+    public static final String AMAP_KEY = "cb76d881acf1c0e2b92dab0aa8e2fb45";
+    public static final String DarkSKY_Key = "b6756abd11c020e6e9914c9fb4730169";
+    public static final String Locationiq_KEY = "efc9ab0b505a11";
 
     /**
      * 正式版开关
@@ -205,7 +209,20 @@ public class NetConfig {
     public static final String URL_GET_SHARE = SERVER_ADDRESS_DOMAIN + "/shares?access_token=%s&userId=%s&send=%s";
 
     /**
+     * 获取设备集成关系
+     */
+    public static final String URL_GET_INTEGRATED = SERVER_ADDRESS_DOMAIN + "/integrateddevices?access_token=";
+
+    /**
      * 更新共享
      */
     public static final String URL_UPDATE_SHARE = SERVER_ADDRESS_DOMAIN + "/shares/%s?access_token=%s";
+
+    public static final String WEATHER_API = "https://api.forecast.io/forecast/";
+
+    public static final String GOOGLE_MAP_API = "https://maps.googleapis.com/maps/api/geocode/json";
+
+    public static final String AMAP_API = "https://restapi.amap.com/v3/geocode/regeo";
+
+    public static final String Locationiq_API = "https://us1.locationiq.com/v1/reverse.php";
 }

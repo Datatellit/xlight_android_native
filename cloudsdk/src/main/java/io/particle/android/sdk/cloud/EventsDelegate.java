@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.particle.android.sdk.cloud.ApiDefs.CloudApi;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.utils.TLog;
 import retrofit.RetrofitError;
 
@@ -213,8 +214,6 @@ class EventsDelegate {
         }
     }
 
-
-    // FIXME: Start sharing some of the strings with the constants that need to be defined in ApiDefs
     private static class EventApiUris {
 
         private final String EVENTS = "events";

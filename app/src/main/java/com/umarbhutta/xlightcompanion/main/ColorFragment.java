@@ -63,14 +63,14 @@ public class ColorFragment extends Fragment implements View.OnClickListener {
 
 
     static class ColorEnum {
-        private static int[] pink = {255, 111, 192};
-        private static int[] purple = {205, 126, 255};
-        private static int[] blue = {113, 129, 255};
-        private static int[] sky = {123, 219, 255};
-        private static int[] green = {122, 255, 196};
-        private static int[] orange = {255, 200, 81};
-        private static int[] red = {255, 67, 67};
-        private static int[] yellow = {236, 248, 59};
+        private static int[] pink = {255, 191, 204};
+        private static int[] purple = {160, 33, 239};
+        private static int[] blue = {0, 0, 255};
+        private static int[] green = {0, 255, 0};
+        private static int[] red = {255, 0, 0};
+//        private static int[] sky = {123, 219, 255};
+//        private static int[] orange = {255, 200, 81};
+//        private static int[] yellow = {236, 248, 59};
     }
 
     public static ColorFragment getInstance() {

@@ -73,6 +73,10 @@ public class EventParser {
                     if (jObject.has("CCT")) {
                         m_parentDevice.setCCT(nodeId, jObject.getInt("CCT"));
                         bdlControl.putInt("CCT", jObject.getInt("CCT"));
+                    } else {
+                        if (jObject.has("W") && jObject.getInt("W") > 2000) {
+                            m_parentDevice.setCCT(nodeId, ringId, jObject.getInt("W"));
+                        }
                     }
                     if (jObject.has("W")) {
                         m_parentDevice.setWhite(nodeId, ringId, jObject.getInt("W"));

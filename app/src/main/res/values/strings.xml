@@ -11,13 +11,13 @@
     <string name="account_is_null">Account is empty</string>
     <string name="password_is_null">Password is empty</string>
     <string name="login_success">Login Successfully</string>
-    <string name="net_error">network incorrect，please check network</string>
+    <string name="net_error">network incorrect,please check network</string>
     <string name="registe_success">Sign up Successfully</string>
     <string name="input_old_pwd">Please enter the original password</string>
     <string name="input_new_pwd">Please enter a new password</string>
     <string name="input_new_pwd_again">Please enter the new password again</string>
     <string name="two_pwd_not_same">Entered passwords differ</string>
-    <string name="modify_pwd_success">Password reset complete</string>
+    <string name="modify_pwd_success">Password reset complete,please login again.</string>
     <string name="commit_img">Submitting...</string>
     <string name="internal_storage">Internal Storage</string>
     <string name="photo_set_fail">Setup failed, please try again!</string>
@@ -60,9 +60,9 @@
     <string name="add_device_one_desc">The on-board LED should be blinking blue.If not,hold the SETUP button for 3 seconds</string>
     <string name="add_device_one_sure_title">Controller is powered on</string>
     <string name="add_device_one_sure_desc">Controller is powered on and blue light has blinked</string>
-    <string name="add_device_end_title">No controller found</string>
+    <string name="add_device_end_title">Device binding failed</string>
     <string name="add_device_end_desc">Please try again and then reconnect</string>
-    <string name="add_device_end_list1">1、Please turn on the phone Bluetooth</string>
+    <string name="add_device_end_list1">1、Please press the Reset button on the controller</string>
     <string name="add_device_end_list2">2、Please re-power controller</string>
     <string name="add_device_end_list3">3、Disconnect the controller from other phones</string>
     <string name="add_device_end_list4">4、Connect your phone near the controller during the connection</string>
@@ -152,7 +152,7 @@
     <string name="set_logout">Are you sure logging out?</string>
     <string name="queding">Confirm</string>
     <string name="delete_this_rule">Confirm to delete this rule?</string>
-    <string name="select_main_device">Select main device</string>
+    <string name="select_main_device">My Gateway</string>
     <string name="setting_success">Setting successfully</string>
     <string name="unbind_device_tap">Unbundling device prompt</string>
     <string name="sure_unbind_device">Confirm unbind this device?</string>
@@ -164,8 +164,8 @@
     <string name="echo">Amazon Alexa</string>
     <string name="add_scene">Add Scenario</string>
     <string name="please_input_scene_name">Enter the name of scenario</string>
-    <string name="edit_scene_success">Edit scenario successfully</string>
-    <string name="add_scene_success">add scenario successfully</string>
+    <string name="edit_scene_success">Edit scenario successfully.if you use alexa,please discover devices.</string>
+    <string name="add_scene_success">add scenario successfully.if you use alexa,please discover devices.</string>
     <string name="delete_scene_tap">Delete scenario tips</string>
     <string name="sure_delete_this_scene">Confirm to delete the scenario</string>
     <string name="modify_pwd">Change Password</string>
@@ -183,8 +183,8 @@
     <string name="avar_set_fail">Head set failed, please try again later</string>
     <string name="avar_setting_fail">Head set failed, please try again later</string>
     <string name="user_info">User Info</string>
-    <string name="women">Woman</string>
-    <string name="man">Man</string>
+    <string name="women">Female</string>
+    <string name="man">Male</string>
     <string name="bu_queding">Secrecy</string>
     <string name="modify_nick">Modify Nickname</string>
     <string name="nick_name">Nickname</string>
@@ -195,7 +195,7 @@
     <string name="input_pwd">Enter password</string>
     <string name="regist">Sign up</string>
     <string name="regist_protocal">Agreement</string>
-    <string name="please_select_main_device">Please select the main device</string>
+    <string name="please_select_main_device">Long press unbind device</string>
     <!--<string name="you_have_no_device">You have not added a device yet</string>-->
     <string name="you_have_no_device">No main device,please back to the home page,click the "+" to add device</string>
     <string name="please_input_pwd_again">Enter password again</string>
@@ -301,8 +301,8 @@
 
     <string name="color1">Pink</string>
     <string name="color2">Purple</string>
-    <string name="color3">Sky Blue</string>
-    <string name="color4">Rose Red</string>
+    <string name="color3">Blue</string>
+    <string name="color4">Red</string>
     <string name="color5">Green</string>
     <string name="color6">More</string>
 
@@ -342,7 +342,9 @@
     <string name="device_online">Device [%s] online</string>
     <string name="session_timeout">Session timeout</string>
 
-    <string name="delay">Delay times(minute)</string>
+    <string name="delay">Delay times(min)</string>
+    <string name="delay_remark">* Set the time when the device needs to be turned off, and enable the delay, the device will be turned off within the specified time.</string>
+    <string name="delay_remark1">* Manually adjusting the status of the fixture will trigger the cancellation of this delay off function.</string>
     <string name="delay_on">Enable Delay</string>
     <string name="enabled">Enabled</string>
     <string name="delay_0">Delay time must be greater than 0</string>
@@ -357,8 +359,8 @@
     <string name="high">High</string>
     <string name="normal">Normal</string>
     <string name="low">Low</string>
-    <string name="warm">Warmer</string>
-    <string name="cool">Cooler</string>
+    <string name="warm">Soft</string>
+    <string name="cool">Sunlight</string>
     <string name="more">More</string>
 
     <string name="shakingState">Enable Shaking</string>
@@ -371,4 +373,6 @@
     <string name="defaule_always_message">You need to set the appropriate permissions before you can work properly.</string>
 
     <string name="parse_error">Data parse error</string>
+
+    <string name="deivce_modify_success">Save device success.if use alexa,please discover devices.</string>
 </resources>

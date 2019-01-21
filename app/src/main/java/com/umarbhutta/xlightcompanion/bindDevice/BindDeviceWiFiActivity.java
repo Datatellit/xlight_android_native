@@ -236,7 +236,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
             updateWifiHandler.sendEmptyMessageDelayed(1, 5000);
             ReceiverBluetooth();
         } else {
-            apConnector = new ApConnector(this);
+            apConnector = new ApConnector(this, null, null);
             stopScanWifi = true;
             getWifiList();
             initAPInfo();
@@ -424,7 +424,7 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
     public void initAPInfo() {
         try {
             softApSSID = SSID.from(wifiAdmin.getWifiInfo());
-            apConnector = new ApConnector(getApplicationContext());
+            apConnector = new ApConnector(getApplicationContext(), null, null);
             WifiConfiguration config = ApConnector.buildUnsecuredConfig(softApSSID);
             apConnector.connectToAP(config, new ApConnector.Client() {
                 @Override
@@ -459,29 +459,29 @@ public class BindDeviceWiFiActivity extends BaseActivity implements View.OnClick
         @Override
         public void run() {
             try {
-                commandClient = CommandClient.newClientUsingDefaultsForDevices(getApplicationContext(), softApSSID);
-                //1、获取coreID
-                DeviceIdCommand.Response response = commandClient.sendCommand(
-                        new DeviceIdCommand(), DeviceIdCommand.Response.class);
-                coreID = response.deviceIdHex.toLowerCase(Locale.ROOT);
-                //2、获取密钥
-                PublicKeyCommand.Response response1 = commandClient.sendCommand(
-                        new PublicKeyCommand(), PublicKeyCommand.Response.class);
-                publicKey = Crypto.readPublicKeyFromHexEncodedDerString(response1.publicKey);
-                //3、check ownership
-                SetCommand.Response response2 = commandClient.sendCommand(
-                        new SetCommand("cc", "AYKZwDUEe8ZoFL+CoujbjRa/6h1h8kmbN3roGvnFpTW/5EThZThcQ4z7o7sVZKk"), SetCommand.Response.class);
-                if (truthy(response2.responseCode)) {
-                    // a non-zero response indicates an error, ala UNIX return codes
-                    Log.e("XLight", "Received non-zero return code from set command: "
-                            + response2.responseCode);
-                }
-                //4、搜索wifi信息
-                ScanApCommand.Response response3 = commandClient.sendCommand(new ScanApCommand(), ScanApCommand.Response.class);
-                aps = response3.getScans();
-                Message message = new Message();
-                message.what = 11;
-                updateWifiHandler.sendMessage(message);
+//                commandClient = new CommandClient("", 10, null);
+//                //1、获取coreID
+//                DeviceIdCommand.Response response = commandClient.sendCommand(
+//                        new DeviceIdCommand(), DeviceIdCommand.Response.class);
+//                coreID = response.deviceIdHex.toLowerCase(Locale.ROOT);
+//                //2、获取密钥
+//                PublicKeyCommand.Response response1 = commandClient.sendCommand(
+//                        new PublicKeyCommand(), PublicKeyCommand.Response.class);
+//                publicKey = Crypto.readPublicKeyFromHexEncodedDerString(response1.publicKey);
+//                //3、check ownership
+//                SetCommand.Response response2 = commandClient.sendCommand(
+//                        new SetCommand("cc", "AYKZwDUEe8ZoFL+CoujbjRa/6h1h8kmbN3roGvnFpTW/5EThZThcQ4z7o7sVZKk"), SetCommand.Response.class);
+//                if (truthy(response2.responseCode)) {
+//                    // a non-zero response indicates an error, ala UNIX return codes
+//                    Log.e("XLight", "Received non-zero return code from set command: "
+//                            + response2.responseCode);
+//                }
+//                //4、搜索wifi信息
+//                ScanApCommand.Response response3 = commandClient.sendCommand(new ScanApCommand(), ScanApCommand.Response.class);
+//                aps = response3.getScans();
+//                Message message = new Message();
+//                message.what = 11;
+//                updateWifiHandler.sendMessage(message);
             } catch (Exception e) {
                 if (e.getMessage() == "timeout") {
                     retry++;

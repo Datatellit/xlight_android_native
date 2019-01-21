@@ -15,6 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
 -keep class com.baidu.** {*;}
 -keep class vi.com.** {*;}
 -dontwarn com.baidu.**
@@ -35,6 +37,10 @@
 -keep class com.xiaomi.** {*;}
 -keep class com.huawei.** {*;}
 -keep class org.apache.thrift.** {*;}
+
+ -keep class com.amap.api.location.**{*;}
+ -keep class com.amap.api.fence.**{*;}
+ -keep class com.autonavi.aps.amapapi.model.**{*;}
 
 -keep class com.alibaba.sdk.android.**{*;}
 -keep class com.ut.**{*;}

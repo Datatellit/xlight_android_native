@@ -1,9 +1,11 @@
 package com.umarbhutta.xlightcompanion.deviceList;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.UiThread;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,13 +22,18 @@ import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.adapter.DeviceListAdapter;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
+import com.umarbhutta.xlightcompanion.okHttp.model.DeviceInfoResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
+import com.umarbhutta.xlightcompanion.okHttp.requests.RequestIntegratedInfo;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestSettingMainDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestUnBindDevice;
 import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
 import com.umarbhutta.xlightcompanion.share.ShareDeviceActivity;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
+import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/4.
@@ -41,7 +48,8 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
     private ListView listView;
     public static int selectPosition = 0;
     private DeviceListAdapter adapter;
-
+    private List<Rows> devices;
+    private ProgressDialog m_dialog;
     private TextView tv_select_main_device;
     private TextView tv_no_device;
     private View view_top_line, view_bottom_line;
@@ -68,17 +76,54 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
         tv_no_device = (TextView) findViewById(R.id.tv_no_device);
         view_top_line = findViewById(R.id.view_top_line);
         view_bottom_line = findViewById(R.id.view_bottom_line);
-        if (GlanceMainFragment.devicenodes != null && GlanceMainFragment.devicenodes.size() > 0) {
+        m_dialog = ProgressDialogUtils.showProgressDialog(this, getString(R.string.loading));
+        if (m_dialog != null && !m_dialog.isShowing()) {
+            m_dialog.show();
+        }
+        RequestIntegratedInfo.getInstance(this).getIntegratedDevices(new RequestIntegratedInfo.OnRequestIntegratedInfoCallback() {
+            @Override
+            public void onRequestIntegratedInfoSuccess(List<Rows> ds) {
+                devices = ds;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (m_dialog.isShowing()) {
+                            m_dialog.dismiss();
+                        }
+                        bindAdapterData();
+                    }
+                });
+            }
+
+            @Override
+            public void onRequestIntegratedInfoFail(int code, String errMsg) {
+                devices = GlanceMainFragment.deviceList;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (m_dialog.isShowing()) {
+                            m_dialog.dismiss();
+                        }
+
+                        bindAdapterData();
+                    }
+                });
+            }
+        });
+
+        ImmersionBar.with(this).statusBarDarkFont(true).titleBar(R.id.ll_top_edit).init();
+    }
+
+    private void bindAdapterData() {
+        if (devices != null && devices.size() > 0) {
             tv_no_device.setVisibility(View.GONE);
             tv_select_main_device.setVisibility(View.VISIBLE);
             listView.setVisibility(View.VISIBLE);
-            adapter = new DeviceListAdapter(this, GlanceMainFragment.deviceList);
+            adapter = new DeviceListAdapter(this, devices);
             listView.setAdapter(adapter);
             adapter.setOnClickCallBack(new DeviceListAdapter.OnClickCallBack() {
                 @Override
                 public void onClickCallBack(int position) {
-                    selectPosition = position;
-                    setMainDevice(position);
                 }
             });
             adapter.setOnShareClickCallBack(new DeviceListAdapter.OnShareClickCallBack() {
@@ -88,7 +133,7 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
                     if (UserUtils.isLogin(getApplicationContext())) {
                         //打开分享页面
                         Intent intent = new Intent(getApplicationContext(), ShareDeviceActivity.class);
-                        intent.putExtra("deviceId", GlanceMainFragment.deviceList.get(position).id);
+                        intent.putExtra("deviceId", devices.get(position).id);
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -106,13 +151,6 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
             view_top_line.setVisibility(View.GONE);
             view_bottom_line.setVisibility(View.GONE);
         }
-
-
-        if (null == GlanceMainFragment.deviceList || GlanceMainFragment.deviceList.size() <= 0) {
-//            ToastUtil.showToast(this, R.string.you_have_no_device_and_add);
-        }
-
-        ImmersionBar.with(this).statusBarDarkFont(true).titleBar(R.id.ll_top_edit).init();
     }
 
     //设置主设备
@@ -203,7 +241,7 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
             return;
         }
 
-        showProgressDialog(getString(R.string.setting));
+        ToastUtil.showLoading(this);
 
         RequestUnBindDevice.getInstance().unBindController(this, "" + GlanceMainFragment.deviceList.get(position).id,
                 new CommentRequestCallback() {
@@ -212,17 +250,9 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                cancelProgressDialog();
+                                ToastUtil.dismissLoading();
                                 ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_sucess));
-                                Rows r = GlanceMainFragment.deviceList.get(position);
-                                for (int i = 0; i < GlanceMainFragment.devicenodes.size(); ) {
-                                    if (GlanceMainFragment.devicenodes.get(i).coreid == r.coreid) {
-                                        GlanceMainFragment.devicenodes.remove(i);
-                                    } else {
-                                        i++;
-                                    }
-                                }
-                                GlanceMainFragment.deviceList.remove(position);
+                                devices.remove(position);
                                 //移除对应的node
                                 adapter.notifyDataSetChanged();
                             }
@@ -234,7 +264,7 @@ public class DeviceListActivity extends BaseActivity implements AdapterView.OnIt
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                cancelProgressDialog();
+                                ToastUtil.dismissLoading();
                                 ToastUtil.showToast(DeviceListActivity.this, getString(R.string.unbind_fail));
                             }
                         });

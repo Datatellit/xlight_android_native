@@ -1,2 +1,2 @@
-include ':app', ':cloudsdk', ':devicesetup', ':push'
+include ':app', ':cloudsdk', ':push',':devicesetup'
 

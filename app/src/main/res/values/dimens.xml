@@ -5,7 +5,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="right_arrow_size">12dp</dimen>
-
+    <dimen name="text_size_menu">15sp</dimen>
     <dimen name="margin_l_r">16dp</dimen>
 
     <dimen name="margin_item">30dp</dimen>

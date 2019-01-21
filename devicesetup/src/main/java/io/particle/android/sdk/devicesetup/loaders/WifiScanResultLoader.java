@@ -32,7 +32,7 @@ public class WifiScanResultLoader extends BetterAsyncTaskLoader<Set<ScanResultNe
     private volatile Set<ScanResultNetwork> mostRecentResult;
     private volatile int loadCount = 0;
 
-    public WifiScanResultLoader(Context context) {
+    public WifiScanResultLoader(Context context, WifiFacade wifiFacade) {
         super(context);
         Context appCtx = context.getApplicationContext();
         receiver = SimpleReceiver.newReceiver(
@@ -41,7 +41,7 @@ public class WifiScanResultLoader extends BetterAsyncTaskLoader<Set<ScanResultNe
                     log.d("Received WifiManager.SCAN_RESULTS_AVAILABLE_ACTION broadcast");
                     forceLoad();
                 });
-        wifiFacade = WifiFacade.get(context);
+        this.wifiFacade = wifiFacade;
     }
 
     @Override
@@ -91,10 +91,12 @@ public class WifiScanResultLoader extends BetterAsyncTaskLoader<Set<ScanResultNe
 
 
     private final Predicate<ScanResult> ssidStartsWithProductName = input -> {
-        if (input == null || !truthy(input.SSID)) {
+        if (!truthy(input.SSID)) {
             return false;
         }
         String softApPrefix = (getContext().getString(R.string.network_name_prefix) + "-").toLowerCase(Locale.ROOT);
+
+        log.d("startwidth: " + softApPrefix + ",ssid:" + input.SSID.toLowerCase(Locale.ROOT));
         return input.SSID.toLowerCase(Locale.ROOT).startsWith(softApPrefix);
     };
 

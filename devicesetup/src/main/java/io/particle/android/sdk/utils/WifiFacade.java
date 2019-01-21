@@ -3,6 +3,7 @@ package io.particle.android.sdk.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
@@ -11,7 +12,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build.VERSION_CODES;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -107,16 +107,22 @@ public class WifiFacade {
 
     @Nullable
     @RequiresApi(api = VERSION_CODES.LOLLIPOP)
-    public Network getNetworkForSSID(SSID ssid) {
+    public Network getNetworkObjectForCurrentWifiConnection() {
         // Android doesn't have any means of directly asking
         // "I want the Network obj for the Wi-Fi network with SSID <foo>".
-        // Instead, you have to infer it based on a field.  Let's hope that
-        // the behavior of "NetworkInfo.getExtraInfo()" doesn't ever change...
+        // Instead, you have to infer it based on the fact that you can only
+        // have one connected Wi-Fi connection at a time.
+        // (Update: one *regular* Wi-Fi connection, anyway.  See below.)
+
         return Funcy.findFirstMatch(
                 Arrays.asList(connectivityManager.getAllNetworks()),
                 network -> {
-                    NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
-                    return Py.truthy(networkInfo.getExtraInfo()) && SSID.from(networkInfo.getExtraInfo()).equals(ssid);
+                    NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+                    // Don't try using the P2P Wi-Fi interfaces on recent Samsung devices
+                    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
+                        return false;
+                    }
+                    return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
                 }
         );
     }
@@ -187,7 +193,6 @@ public class WifiFacade {
         log.d("startScan()");
         return wifiManager.startScan();
     }
-
 
     private List<WifiConfiguration> getConfiguredNetworks() {
         List<WifiConfiguration> configuredNetworks = wifiManager.getConfiguredNetworks();

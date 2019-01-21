@@ -1,14 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 // This is the library version used when deploying the artifact
-version = '0.4.1'
+version = '0.5.1'
 
 ext {
     bintrayRepo = 'android'
     bintrayName = 'cloud-sdk'
     bintrayOrg = 'particle'
-    
+
     publishedGroupId = 'io.particle'
     libraryName = 'Particle (formerly Spark) Android Cloud SDK library '
     artifact = 'cloudsdk'
@@ -35,8 +34,8 @@ ext {
 
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     dexOptions {
         javaMaxHeapSize "2g"
@@ -44,7 +43,7 @@ android {
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 27
         versionCode 1
         versionName project.version
         consumerProguardFiles 'consumer-proguard-rules.pro'
@@ -62,15 +61,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.code.findbugs:jsr305:3.0.1'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.squareup.okhttp:okhttp:2.7.5'
-    compile 'com.squareup.okio:okio:1.9.0'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    provided 'com.android.support:support-fragment:25.2.0'
-    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.3.0'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.google.code.findbugs:jsr305:3.0.2'
+    api 'com.google.code.gson:gson:2.8.2'
+    api 'com.squareup.okhttp:okhttp:2.7.5'
+    api 'com.squareup.okio:okio:1.9.0'
+    api 'com.squareup.retrofit:retrofit:1.9.0'
+    api 'org.greenrobot:eventbus:3.0.0'
+    api 'com.android.support:support-fragment:27.1.1'
+}
+
+repositories {
+    maven {
+        url 'https://maven.google.com'
+    }
 }
 
 apply from: '../pom_generator_v1.gradle'
@@ -83,6 +87,3 @@ if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
 }
-
-
-apply plugin: 'com.getkeepsafe.dexcount'

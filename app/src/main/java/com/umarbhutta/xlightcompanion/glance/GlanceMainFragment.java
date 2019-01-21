@@ -2,9 +2,18 @@ package com.umarbhutta.xlightcompanion.glance;
 
 import android.Manifest;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,10 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.baoyz.actionsheet.ActionSheet;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
@@ -35,11 +40,14 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umarbhutta.xlightcompanion.R;
+import com.umarbhutta.xlightcompanion.SDK.Cloud.ParticleAdapter;
 import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
+import com.umarbhutta.xlightcompanion.Tools.NoFastClickUtils;
 import com.umarbhutta.xlightcompanion.Tools.SensorTool;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
@@ -79,6 +87,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import io.particle.android.sdk.devicesetup.ParticleDeviceSetupLibrary;
+
 /**
  */
 public class GlanceMainFragment extends BaseFragment implements ImageView.OnClickListener {
@@ -93,12 +103,12 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
 
     public List<SceneResult> mSceneList = new ArrayList<SceneResult>();
     ScenarioListAdapter sceneListAdapter;
-    private ProgressDialog progressDialog;
     private Handler m_deviceHandler;
     private Handler m_sparkHandler;
     public static List<Rows> deviceList = new ArrayList<Rows>();
     public static List<Devicenodes> devicenodes = new ArrayList<Devicenodes>();
     public boolean codeChange = false;
+    ProgressDialog m_dialog;
     WeatherDetails mWeatherDetails;
 
     LinearLayout llNoDevices;
@@ -120,18 +130,13 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     /**
      * 位置信息
      */
-    public static String city = "";
-    public static String country = "";
-    public static double mLongitude = -80.5204;
-    public static double mLatitude = 43.4643;
-    // 高德定位
-    private AMapLocationClient locationClient = null;
-
     protected ImmersionBar mImmersionBar;
+    private boolean isShowError = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ParticleDeviceSetupLibrary.init(getActivity());
         this.setNetEvent(new NetEvevt() {
             @Override
             public void onNetChange(int netMobile) {
@@ -140,18 +145,21 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     txtRefresh.setVisibility(View.VISIBLE);
                     llGps.setVisibility(View.GONE);
                     try {
-                        ToastUtil.showToast(getContext(), getString(R.string.net_error));
+                        if (isShowError) {
+                            ToastUtil.showToast(getContext(), getString(R.string.net_error));
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 } else {
                     // 连接上网络
                     if (txtRefresh != null) {
-                        txtRefresh.setVisibility(View.GONE);
+                        // txtRefresh.setVisibility(View.GONE);
                     }
                 }
             }
         });
+        m_dialog = ProgressDialogUtils.showProgressDialog(getContext(), getString(R.string.loading));
     }
 
     @Override
@@ -161,14 +169,15 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         this.selfPermissionGranted(getContext(), new BaseActivity.PermissionCallback() {
             @Override
             public void hasPermission() {
-                initLocation();
+                getLocation(getContext());
             }
 
             @Override
             public void noPermission() {
                 ToastUtil.showToast(getContext(), R.string.defaule_first_message);
+                getLocation(getContext());
             }
-        }, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE});
+        }, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
         getBaseInfo();
         initHandler();
         return view;
@@ -242,9 +251,26 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
 
                             @Override
                             public void onOtherButtonClick(ActionSheet actionSheet, int index) {
-                                Intent intent = new Intent(getContext(), BindDeviceConfirmActivity.class);
-                                intent.putExtra("type", 1);
-                                startActivityForResult(intent, 1);
+//                                Intent intent = new Intent(getContext(), BindDeviceConfirmActivity.class);
+//                                intent.putExtra("type", 1);
+//                                startActivityForResult(intent, 1);
+                                isShowError = false;
+                                if (!ParticleAdapter.isAuthenticated()) {
+                                    // 尝试进行登录操作
+                                    if (UserUtils.isLogin(getContext())) {
+                                        LoginResult lr = UserUtils.getUserInfo(getActivity());
+                                        if (lr == null) {
+                                            AnonymousParams ap = UserUtils.getAnonymousInfo(getContext());
+                                            ParticleAdapter.authenticate(ap.uniqueId, ap.uniqueId);
+                                        } else {
+                                            ParticleAdapter.authenticate(lr.username, lr.password);
+                                        }
+                                    } else {
+                                        AnonymousParams ap = UserUtils.getAnonymousInfo(getContext());
+                                        ParticleAdapter.authenticate(ap.uniqueId, ap.uniqueId);
+                                    }
+                                }
+                                ParticleDeviceSetupLibrary.startDeviceSetup(getActivity(), SlidingMenuMainActivity.class);
                                 actionSheet.dismiss();
                             }
                         }).show();
@@ -278,6 +304,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 Log.e(TAG, String.format("%s connection is %s", xltDevice.getControllerID(), xltDevice.getCurDevice().isConnected()));
             }
         }
+        isShowError = true;
     }
 
     @Override
@@ -292,7 +319,13 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             Devicenodes ds = (Devicenodes) data.getSerializableExtra("devicenodes");
             for (Devicenodes d : devicenodes) {
                 if (d.id == ds.id) {
-                    d = ds;
+                    d.devicenodename = ds.devicenodename;
+                    d.ison = ds.ison;
+                    d.cct = ds.cct;
+                    d.brightness = ds.brightness;
+                    d.color = ds.color;
+                    d.filter = ds.filter;
+                    Log.e("XLight", "id equals " + d.id);
                 }
             }
             adapterLight.notifyDataSetChanged();
@@ -314,7 +347,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     public void initHandler() {
         m_deviceHandler = new Handler(this.getContext().getMainLooper()) {
             public void handleMessage(Message msg) {
-//                Log.e(TAG, "GlanceMainFragment_msg=" + msg.getData().toString());
+                Log.e(TAG, "GlanceMainFragment_msg=" + msg.getData().toString());
                 if (deviceList != null && deviceList.size() > 0) {
                     // 寻找设备
                     for (Devicenodes d : devicenodes) {
@@ -409,6 +442,9 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                             sceneListAdapter.setOnClickCallBack(new ScenarioListAdapter.OnClickCallBack() {
                                 @Override
                                 public void onClickCallBack(int position) {
+                                    if (NoFastClickUtils.isFastClick()) {
+                                        return;
+                                    }
                                     for (SceneResult s : mSceneList) {
                                         s.checked = false;
                                     }
@@ -438,6 +474,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
 
     public void resolveScene(final SceneResult scene) {
         try {
+//            CrashReport.testJavaCrash();
+//            CrashReport.testNativeCrash();
             HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, scene.id, UserUtils.getAccessToken(getContext())), "", null, new HttpUtils.OnHttpRequestCallBack() {
                 @Override
                 public void onHttpRequestSuccess(Object result) {
@@ -465,13 +503,15 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     }
 
     public void getBaseInfo() {
-        progressDialog = ProgressDialogUtils.showProgressDialog(getContext(), getString(R.string.loading));
-        progressDialog.show();
+        if (!m_dialog.isShowing())
+            m_dialog.show();
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
             llGps.setVisibility(View.GONE);
             ToastUtil.showToast(getContext(), R.string.net_error);
-            progressDialog.dismiss();
+            if (m_dialog != null && m_dialog.isShowing()) {
+                m_dialog.dismiss();
+            }
             return;
         } else {
             txtRefresh.setVisibility(View.GONE);
@@ -486,8 +526,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (progressDialog != null) {
-                                progressDialog.dismiss();
+                            if (m_dialog != null && m_dialog.isShowing()) {
+                                m_dialog.dismiss();
                             }
                             List<Rows> devices = mDeviceInfoResult.rows;
                             deviceList.clear();
@@ -511,8 +551,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                         @Override
                         public void run() {
                             //失败的处理
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
+                            if (m_dialog != null && m_dialog.isShowing()) {
+                                m_dialog.dismiss();
                             }
                             ToastUtil.showToast(getContext(), err);
                         }
@@ -587,8 +627,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                         }
                         devicenodes.addAll(device.devicenodes);
                     }
-                    if (!progressDialog.isShowing() && SlidingMenuMainActivity.xltDeviceMaps.size() == 0) {
-                        progressDialog.show();
+                    if (m_dialog != null && !m_dialog.isShowing()) {
+                        m_dialog.show();
                     }
                     if (device.coreid != null) {
                         Log.e("XLight", "reconnect:" + device.coreid);
@@ -599,18 +639,20 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                                 Logger.e(TAG, String.format("coreID:%s,Bridge:%s,isControlConnect=%s", device.coreid, bridge, connected));
                                 initDeviceCount++;
                                 Log.e("XLight", "deviceSize:" + deviceList.size() + ",currentSize:" + initDeviceCount);
-                                if (deviceList.size() == initDeviceCount && progressDialog.isShowing()) {
-                                    progressDialog.dismiss();
+                                if (deviceList.size() == initDeviceCount) {
+                                    if (m_dialog != null && m_dialog.isShowing()) {
+                                        m_dialog.dismiss();
+                                    }
                                 }
                                 m_XltDevice.m_onConnected = null;
                                 //判断是否连接成功
                                 if (connected && bridge == xltDevice.BridgeType.Cloud) {
                                     SlidingMenuMainActivity.xltDeviceMaps.put(device.coreid, m_XltDevice);
                                     if (device.maindevice == 1 && device.isShare == 0) {//主设备 TODO TODO  设置监听 广播回调
-                                        if (SlidingMenuMainActivity.m_mainDevice != null) {
-                                            SlidingMenuMainActivity.m_mainDevice.Disconnect();
-                                            SlidingMenuMainActivity.m_mainDevice = null;
-                                        }
+//                                        if (SlidingMenuMainActivity.m_mainDevice != null) {
+//                                            SlidingMenuMainActivity.m_mainDevice.Disconnect();
+//                                            SlidingMenuMainActivity.m_mainDevice = null;
+//                                        }
                                         SlidingMenuMainActivity.m_mainDevice = m_XltDevice;
                                     }
                                     // 设置所有控制器的设备状态监听
@@ -672,10 +714,10 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                             SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.brightness);
                         } else if (type == LightItemAdapter.CLICK_TYPE.COOL) {
                             dn.cct = 6500;
-                            SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.cct);
+                            SlidingMenuMainActivity.m_mainDevice.ChangeCCT(dn.nodeno, dn.cct);
                         } else if (type == LightItemAdapter.CLICK_TYPE.WARM) {
                             dn.cct = 2700;
-                            SlidingMenuMainActivity.m_mainDevice.ChangeBrightness(dn.nodeno, dn.cct);
+                            SlidingMenuMainActivity.m_mainDevice.ChangeCCT(dn.nodeno, dn.cct);
                         } else if (type == LightItemAdapter.CLICK_TYPE.MORE) {
                             // 点击事件 跳转到编辑设备页面
                             Intent intent = new Intent(getActivity(), ControlDeviceActivity.class);
@@ -729,72 +771,122 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         txtRefresh.setOnClickListener(this);
     }
 
-    public void initLocation() {
-        locationClient = new AMapLocationClient(this.getActivity());
-        //设置定位参数
-        locationClient.setLocationOption(getDefaultOption());
-        // 设置定位监听
-        locationClient.setLocationListener(locationListener);
-        AMapLocation location = locationClient.getLastKnownLocation();
-        if (location != null) {
-            Log.e(TAG, "getLastKnownLocation success");
-            mLongitude = location.getLongitude();
-            mLatitude = location.getLatitude();
-            city = location.getCity();
-            country = location.getCountry();
-            Log.e("XLight", String.format("long:%s,latitude:%s,city:%s,country:%s", mLongitude, mLatitude, city, country));
-            //请求天气信息
-            updateLocationInfo();
-            // 启动定位
-            locationClient.startLocation();
-        } else {
-            // 启动定位
-            locationClient.startLocation();
+    /**
+     * 判断GPS是否开启,GPS或者AGPS开启一个就认为是开启的
+     *
+     * @param context
+     * @return true 表示开启
+     */
+    public static boolean isOPen(final Context context) {
+        LocationManager locationManager
+                = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        // 通过GPS卫星定位,定位级别可以精确到街(通过24颗卫星定位,在室外和空旷的地方定位准确、速度快)
+        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // 通过WLAN或移动网络(3G/2G)确定的位置(也称作AGPS,辅助GPS定位。主要用于在室内或遮盖物(建筑群或茂密的深林等)密集的地方定位)
+        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (gps || network) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 强制打开GPS
+     *
+     * @param context
+     */
+    public static void openGPS(Context context) {
+        Intent GPSIntent = new Intent();
+        GPSIntent.setClassName("com.android.settings",
+                "com.android.settings.widget.SettingsAppWidgetProvider");
+        GPSIntent.addCategory("android.intent.category.ALTERNATIVE");
+        GPSIntent.setData(Uri.parse("custom:3"));
+        try {
+            PendingIntent.getBroadcast(context, 0, GPSIntent, 0).send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
         }
     }
 
-    AMapLocationListener locationListener = new AMapLocationListener() {
-        @Override
-        public void onLocationChanged(AMapLocation loc) {
-            if (null != loc && loc.getErrorCode() == 0) {
-                //解析定位结果
-                mLongitude = loc.getLongitude();
-                mLatitude = loc.getLatitude();
-                city = loc.getCity();
-                country = loc.getCountry();
-                Log.i("XLight", String.format("long:%s,latitude:%s,city:%s,country:%s", mLongitude, mLatitude, city, country));
-                //请求天气信息
-                updateLocationInfo();
-                locationClient.stopLocation();
-            } else {
-                // 定位失败，显示提示
-                Log.e("XLight", "location Error, ErrCode:"
-                        + loc.getErrorCode() + ", errInfo:"
-                        + loc.getErrorInfo());
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtil.showToast(getActivity(), R.string.open_gps);
-                    }
-                });
+    private LocationManager locationManager;
+    private String locationProvider;
+
+    private void getLocation(Context context) {
+        //1.获取位置管理器
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        //2.获取位置提供器，GPS或是NetWork
+        List<String> providers = locationManager.getProviders(true);
+        if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
+            //如果是网络定位
+            locationProvider = LocationManager.NETWORK_PROVIDER;
+        } else if (providers.contains(LocationManager.GPS_PROVIDER)) {
+            //如果是GPS定位
+            locationProvider = LocationManager.GPS_PROVIDER;
+        } else {
+            return;
+        }
+        //3.获取上次的位置，一般第一次运行，此值为null
+        Location location = locationManager.getLastKnownLocation(locationProvider);
+        if (location != null) {
+            // 获取城市
+            updateLocationInfo(location);
+        } else {
+            // 监视地理位置变化，第二个和第三个参数分别为更新的最短时间minTime和最短距离minDistace
+            locationManager.requestLocationUpdates(locationProvider, 2000, 0, mListener);
+        }
+    }
+
+    public void getCity(Location location) {
+        List<Address> addList = null;
+        Geocoder ge = new Geocoder(getContext());
+        try {
+            addList = ge.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (addList != null && addList.size() > 0) {
+            for (int i = 0; i < addList.size(); i++) {
+                Address ad = addList.get(i);
+                txtCity.setText(ad.getLocality());
+                Log.e("XLight", String.format("long:%s,latitude:%s,city:%s", location.getLongitude(), location.getLatitude(), ad.getLocality()));
             }
+        } else {
+            getCityByAmapAPI(location);
+        }
+//        if (TextUtils.isEmpty(txtCity.getText().toString())) {
+//            txtCity.setText(getString(R.string.share_list_unknown));
+//        }
+    }
+
+    LocationListener mListener = new LocationListener() {
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+        }
+
+        // 如果位置发生变化，重新显示
+        @Override
+        public void onLocationChanged(Location location) {
+            updateLocationInfo(location);
+            locationManager.removeUpdates(mListener);
         }
     };
 
-    private void updateLocationInfo() {
+    private void updateLocationInfo(Location location) {
         if (getActivity() != null)
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (!TextUtils.isEmpty(city)) {
-                        txtCity.setText(city);
-                    } else {
-                        if (TextUtils.isEmpty(country)) {
-                            country = getString(R.string.share_list_unknown);
-                        }
-                        txtCity.setText("" + country);
-                    }
-                    getWeather();
+                    getCity(location);
+                    getWeather(location);
                 }
             });
     }
@@ -804,7 +896,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     /**
      * 获取title信息
      */
-    private void getWeather() {
+    private void getWeather(Location location) {
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
             return;
@@ -812,7 +904,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             txtRefresh.setVisibility(View.GONE);
         }
 
-        String forecastUrl = "https://api.forecast.io/forecast/" + CloudAccount.DarkSky_apiKey + "/" + mLatitude + "," + mLongitude + "?" + (isZh() ? "lang=zh" : "lang=en");
+        String forecastUrl = NetConfig.WEATHER_API + NetConfig.DarkSKY_Key + "/" + location.getLatitude() + "," + location.getLongitude() + "?" + (isZh() ? "lang=zh" : "lang=en");
         Log.e(TAG, forecastUrl);
         OkHttpClient client = new OkHttpClient();
         //build request
@@ -822,7 +914,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         client.setConnectTimeout(10, TimeUnit.SECONDS);
         //put request in call object to use for returning data
         Call call = client.newCall(request);
-        Log.i("XLight", String.format("request weahter info->%s,%s", mLatitude, mLongitude));
+        Log.i("XLight", String.format("request weahter info->%s,%s", location.getLatitude(), location.getLongitude()));
         //make async call
         call.enqueue(new Callback() {
             @Override
@@ -830,7 +922,12 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 try {
                     // 重新获取
                     if (requestTotal < 3) {
-                        getWeather();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWeather(location);
+                            }
+                        });
                     }
                     requestTotal++;
                 } catch (Exception ex) {
@@ -860,6 +957,258 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                         });
                     }
                 } catch (IOException | JSONException | NullPointerException e) {
+                    Logger.i("Exception caught: " + e);
+                }
+            }
+        });
+    }
+
+    private void getCityByGoogleAPI(Location location) {
+        if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
+            txtRefresh.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            txtRefresh.setVisibility(View.GONE);
+        }
+
+        String getCity = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + location.getLatitude() + "," + location.getLongitude() + "&sensor=false&key=" + NetConfig.GOOGLE_KEY;
+        Log.e(TAG, getCity);
+        OkHttpClient client = new OkHttpClient();
+        //build request
+        Request request = new Request.Builder()
+                .url(getCity)
+                .build();
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        //put request in call object to use for returning data
+        Call call = client.newCall(request);
+        Log.i("XLight", String.format("request city info->%s,%s", location.getLatitude(), location.getLongitude()));
+        //make async call
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                try {
+                    // 重新获取
+                    if (requestTotal < 3) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getCity(location);
+                            }
+                        });
+                    }
+                    requestTotal++;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                try {
+                    String jsonData = response.body().string();
+                    Log.i("XLight", "request city success->" + jsonData);
+                    if (response.isSuccessful()) {
+                        mWeatherDetails = getWeatherDetails(jsonData);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            }
+                        });
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            }
+                        });
+                    }
+                } catch (IOException | JSONException | NullPointerException e) {
+                    Logger.i("Exception caught: " + e);
+                }
+            }
+        });
+    }
+
+    private void getCityByAmapAPI(Location location) {
+        if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
+            txtRefresh.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            txtRefresh.setVisibility(View.GONE);
+        }
+
+        String getCity = NetConfig.AMAP_API + "?location=" + location.getLongitude() + "," + location.getLatitude() + "&output=json&key=" + NetConfig.AMAP_KEY;
+        Log.e(TAG, getCity);
+        OkHttpClient client = new OkHttpClient();
+        //build request
+        Request request = new Request.Builder()
+                .url(getCity)
+                .build();
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        //put request in call object to use for returning data
+        Call call = client.newCall(request);
+        Log.i("XLight", String.format("amap request city info->%s,%s", location.getLatitude(), location.getLongitude()));
+        //make async call
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                try {
+                    // 重新获取
+                    if (requestTotal < 3) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getCityByAmapAPI(location);
+                            }
+                        });
+                    }
+                    requestTotal++;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                try {
+                    String jsonData = response.body().string();
+                    Log.i("XLight", "amap request city success->" + jsonData);
+                    if (response.isSuccessful()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    JSONObject jb = new JSONObject(jsonData);
+                                    if (jb.getInt("status") == 1 && !jb.isNull("regeocode")) {
+                                        // 获取，如果是国外调用另一个
+                                        JSONObject address = jb.getJSONObject("regeocode").getJSONObject("addressComponent");
+                                        if (address.getString("country").equals("中国")) {
+                                            // 开始赋值
+                                            if (address.getString("city").equals("[]")) {
+                                                txtCity.setText(address.getString("province"));
+                                            } else if (!address.isNull("city")) {
+                                                txtCity.setText(address.getString("city"));
+                                            } else {
+                                                txtCity.setText(getString(R.string.share_list_unknown));
+                                            }
+                                        } else {
+                                            getCityByLocationiqAPI(location);
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (requestTotal < 3) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            getCityByAmapAPI(location);
+                                        }
+                                    });
+                                }
+                                requestTotal++;
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    Logger.i("Exception caught: " + e);
+                }
+            }
+        });
+    }
+
+    private void getCityByLocationiqAPI(Location location) {
+        if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
+            txtRefresh.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            txtRefresh.setVisibility(View.GONE);
+        }
+
+        String getCity = NetConfig.Locationiq_API + "?key=" + NetConfig.Locationiq_KEY + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&format=json&zoom=10";
+        Log.e(TAG, getCity);
+        OkHttpClient client = new OkHttpClient();
+        //build request
+        Request request = new Request.Builder()
+                .url(getCity)
+                .build();
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        //put request in call object to use for returning data
+        Call call = client.newCall(request);
+        Log.i("XLight", String.format("locationiq request city info->%s,%s", location.getLatitude(), location.getLongitude()));
+        //make async call
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                try {
+                    // 重新获取
+                    if (requestTotal < 3) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getCityByLocationiqAPI(location);
+                            }
+                        });
+                    }
+                    requestTotal++;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                try {
+                    String jsonData = response.body().string();
+                    Log.i("XLight", "locationiq request city success->" + jsonData);
+                    if (response.isSuccessful()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    JSONObject jb = new JSONObject(jsonData);
+                                    if (!jb.isNull("address")) {
+                                        JSONObject address = jb.getJSONObject("address");
+                                        if (!address.isNull("city")) {
+                                            txtCity.setText(address.getString("city"));
+                                        } else if (!address.isNull("county")) {
+                                            txtCity.setText(address.getString("county"));
+                                        } else if (!address.isNull("state")) {
+                                            txtCity.setText(address.getString("state"));
+                                        } else {
+                                            txtCity.setText(getString(R.string.share_list_unknown));
+                                        }
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 重新获取
+                                if (requestTotal < 3) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            getCityByLocationiqAPI(location);
+                                        }
+                                    });
+                                }
+                                requestTotal++;
+                            }
+                        });
+                    }
+                } catch (Exception e) {
                     Logger.i("Exception caught: " + e);
                 }
             }
@@ -912,30 +1261,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         txtHumidity.setText("" + mWeatherDetails.getHumidity());
     }
 
-
-    /**
-     * 默认的定位参数
-     *
-     * @author hongming.wang
-     * @since 2.8.0
-     */
-    private AMapLocationClientOption getDefaultOption() {
-        AMapLocationClientOption mOption = new AMapLocationClientOption();
-        mOption.setMockEnable(true);
-        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
-        mOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
-        mOption.setHttpTimeOut(10000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
-        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
-        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
-        mOption.setOnceLocation(true);//可选，设置是否单次定位。默认是false
-        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
-        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
-        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
-        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
-        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
-        return mOption;
-    }
-
     public void changeGridView(GridView gv, int size) {
         // item宽度
         int itemWidth = dip2px(155);
@@ -956,7 +1281,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         final float scale = this.getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
-
 
     public boolean isZh() {
         Locale locale = getResources().getConfiguration().locale;

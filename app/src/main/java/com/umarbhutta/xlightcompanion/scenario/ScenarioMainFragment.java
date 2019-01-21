@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
+import com.umarbhutta.xlightcompanion.Tools.NoFastClickUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
@@ -70,7 +71,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_scenario, container, false);
-
+        mDialog = ProgressDialogUtils.showProgressDialog(getContext(), getString(R.string.loading));
         iv_menu = (ImageView) view.findViewById(R.id.iv_menu);
         iv_menu.setOnClickListener(this);
         textTitle = (TextView) view.findViewById(R.id.tvTitle);
@@ -119,6 +120,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
         builder.setPositiveButton(getString(R.string.queding), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ToastUtil.showLoading(getContext());
                 deleteScene(position);
             }
         });
@@ -140,6 +142,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        ToastUtil.dismissLoading();
                         ToastUtil.showToast(getActivity(), R.string.delete_success);
                         mCusSceneList.remove(position);
                         sceneCusListAdapter.notifyDataSetChanged();
@@ -152,6 +155,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        ToastUtil.dismissLoading();
                         ToastUtil.showToast(getActivity(), "" + errMsg);
                     }
                 });
@@ -182,10 +186,8 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
     private ProgressDialog mDialog;
 
     private void getSceneList() {
-        mDialog = ProgressDialogUtils.showProgressDialog(getActivity(), getString(R.string.loading));
-        if (mDialog != null) {
+        if (!mDialog.isShowing())
             mDialog.show();
-        }
         RequestSceneListInfo.getInstance().getSceneListInfo(getActivity(), new RequestSceneListInfo.OnRequestSceneInfoCallback() {
             @Override
             public void onRequestFirstPageInfoSuccess(final List<SceneResult> sceneInfoResult) {
@@ -193,9 +195,8 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (mDialog != null) {
+                            if (mDialog.isShowing())
                                 mDialog.dismiss();
-                            }
                             if (null != sceneInfoResult && sceneInfoResult.size() > 0) {
                                 mSceneList.clear();
                                 mSceneList.addAll(sceneInfoResult);
@@ -212,9 +213,8 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (mDialog != null) {
+                            if (mDialog.isShowing())
                                 mDialog.dismiss();
-                            }
                             ToastUtil.showToast(getActivity(), "" + errMsg);
                         }
                     });
@@ -256,6 +256,9 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
             sceneCusListAdapter.setOnClickCallBack(new ScenarioListAdapter.OnClickCallBack() {
                 @Override
                 public void onClickCallBack(int position) {
+                    if (NoFastClickUtils.isFastClick()) {
+                        return;
+                    }
                     resolveScene(mCusSceneList.get(position));
                 }
             });
@@ -277,12 +280,14 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
 
     public void resolveScene(final SceneResult scene) {
         try {
+            ToastUtil.showLoading(getContext());
             HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, scene.id, UserUtils.getAccessToken(getContext())), "", null, new HttpUtils.OnHttpRequestCallBack() {
                 @Override
                 public void onHttpRequestSuccess(Object result) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            ToastUtil.dismissLoading();
                             ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_success), scene.name));
                         }
                     });
@@ -293,6 +298,7 @@ public class ScenarioMainFragment extends Fragment implements View.OnClickListen
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            ToastUtil.dismissLoading();
                             ToastUtil.showToast(getContext(), String.format(getString(R.string.scene_change_failed), scene.name));
                         }
                     });

@@ -1,6 +1,7 @@
 package com.umarbhutta.xlightcompanion.settings;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -15,12 +16,18 @@ import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
+import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
+import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
+import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
+import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.CommentResult;
 import com.umarbhutta.xlightcompanion.okHttp.model.ModifyPwdParam;
+import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
 /**
@@ -36,7 +43,7 @@ public class ModifyPasswordActivity extends BaseActivity implements HttpUtils.On
     private EditText et_new_passwordTv;
     private EditText et_new_password_againTv;
     private ProgressDialog dialog;
-    private ImageButton ib_clear1,ib_clear2,ib_clear3;
+    private ImageButton ib_clear1, ib_clear2, ib_clear3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,6 +217,8 @@ public class ModifyPasswordActivity extends BaseActivity implements HttpUtils.On
                 CommentResult info = (CommentResult) result;
                 if (info.code == 1) {
                     ToastUtil.showToast(ModifyPasswordActivity.this, getString(R.string.modify_pwd_success));
+                    // 登出
+                    logout();
                     finish();
                 } else {
                     ToastUtil.showToast(ModifyPasswordActivity.this, info.msg);
@@ -229,6 +238,38 @@ public class ModifyPasswordActivity extends BaseActivity implements HttpUtils.On
             }
         });
 
+    }
+
+    private void logout() {
+        if (GlanceMainFragment.devicenodes != null || GlanceMainFragment.devicenodes.size() > 0) {
+            GlanceMainFragment.devicenodes.clear();
+        }
+        SlidingMenuMainActivity.mShakeInfo = null;
+        SharedPreferencesUtils.putObject(this, SharedPreferencesUtils.KEY_DEVICE_LIST, null);
+        UserUtils.saveUserInfo(this, null);
+        if (UserUtils.isExpires(this, SharedPreferencesUtils.KEY__ANONYMOUSINFO)) {
+            //开始匿名登录
+            AnonymousParams anonymousParams = UserUtils.getAnonymous(this);
+            Gson gson = new Gson();
+            String paramStr = gson.toJson(anonymousParams);
+            HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ANONYMOUS_LOGIN, paramStr, AnonymousResult.class, new HttpUtils.OnHttpRequestCallBack() {
+                @Override
+                public void onHttpRequestSuccess(Object result) {
+                    //登录成功，设置到本次的UserUtils对象中
+                    AnonymousResult ar = (AnonymousResult) result;
+                    UserUtils.saveAnonymousInfo(getBaseContext(), ar);
+                }
+
+                @Override
+                public void onHttpRequestFail(int code, String errMsg) {
+
+                }
+            });
+        }
+        //登出后回到首页
+        Intent intent = new Intent(this, SlidingMenuMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override

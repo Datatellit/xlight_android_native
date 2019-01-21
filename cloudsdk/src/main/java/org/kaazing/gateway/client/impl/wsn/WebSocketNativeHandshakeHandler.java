@@ -21,12 +21,6 @@
 
 package org.kaazing.gateway.client.impl.wsn;
 
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.kaazing.gateway.client.impl.CommandMessage;
 import org.kaazing.gateway.client.impl.WebSocketChannel;
 import org.kaazing.gateway.client.impl.WebSocketHandler;
@@ -38,6 +32,12 @@ import org.kaazing.gateway.client.impl.ws.WebSocketCompositeChannel;
 import org.kaazing.gateway.client.impl.ws.WebSocketHandshakeObject;
 import org.kaazing.gateway.client.impl.ws.WebSocketSelectedChannel;
 import org.kaazing.gateway.client.util.WrappedByteBuffer;
+
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /*
  * WebSocket Native Handler Chain
@@ -82,9 +82,7 @@ public class WebSocketNativeHandshakeHandler extends WebSocketHandlerAdapter {
         else {
             nextProtocols = new String[protocols.length+1];
             nextProtocols[0] = WebSocketHandshakeObject.KAAZING_EXTENDED_HANDSHAKE;
-            for (int i=0; i<protocols.length; i++) {
-                nextProtocols[i+1] = protocols[i];
-            }
+            System.arraycopy(protocols, 0, nextProtocols, 1, protocols.length);
         }
         nextHandler.processConnect(channel, uri, nextProtocols);
     }
@@ -162,7 +160,7 @@ public class WebSocketNativeHandshakeHandler extends WebSocketHandlerAdapter {
     }
 
     protected static String[] getLines(String payload) {
-        List<String> lineList = new ArrayList<String>();
+        List<String> lineList = new ArrayList<>();
         int i=0;
         
         while (i < payload.length()) {

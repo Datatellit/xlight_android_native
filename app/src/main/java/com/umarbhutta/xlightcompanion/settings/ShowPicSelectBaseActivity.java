@@ -1,7 +1,9 @@
 package com.umarbhutta.xlightcompanion.settings;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,12 +13,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
+import com.umarbhutta.xlightcompanion.BuildConfig;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
@@ -40,7 +44,7 @@ public abstract class ShowPicSelectBaseActivity extends BaseActivity {
     private static final int PHOTO_REQUEST_TAKEPHOTO = 2004;
     private final String photo_name = "lightphotoc.jpg";
     private final String scop_name = "lightscrop.jpg";
-
+    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
     /**
      * 原图
      */
@@ -108,21 +112,19 @@ public abstract class ShowPicSelectBaseActivity extends BaseActivity {
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-
                 case PHOTO_REQUEST_GALLERY://图库中选择的
-
 //                    Logger.i("图库中选中 了图片 = " + (null == intent));
-
                     if (intent != null) {
                         // 选择图片模式，会回复一个URI
-                        startPhotoZoom(intent.getData());
+                        String url = getPath(this, intent.getData());
+                        startPhotoZoom(getImageContentUri(getBaseContext(), new File(url)));
                     } else {
                         ToastUtil.showToast(this, getString(R.string.photo_set_fail));
                     }
                     break;
                 case PHOTO_REQUEST_TAKEPHOTO: //拍照
                     getTempFile();
-                    startPhotoZoom(Uri.fromFile(tempFile));
+                    startPhotoZoom(getImageContentUri(getBaseContext(), tempFile));
                     break;
 
                 case CROP_PICTURE:
@@ -163,12 +165,12 @@ public abstract class ShowPicSelectBaseActivity extends BaseActivity {
 
         Intent intent = new Intent("com.android.camera.action.CROP");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            String url = getPath(this, uri);
-            intent.setDataAndType(Uri.fromFile(new File(url)), "image/*");
-        } else {
-            intent.setDataAndType(uri, "image/*");
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            String url = getPath(this, uri);
+//            intent.setDataAndType(Uri.fromFile(new File(url)), "image/*");
+//        } else {
+        intent.setDataAndType(uri, "image/*");
+//        }
 
         intent.putExtra("crop", "true");
 
@@ -189,10 +191,28 @@ public abstract class ShowPicSelectBaseActivity extends BaseActivity {
         intent.putExtra("return-data", false);
         intent.putExtra("noFaceDetection", true);
         getScropFile();
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(cropFile));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cropFile));
         startActivityForResult(intent, CROP_PICTURE);
     }
+
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=? ", new String[]{filePath}, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
+
 
     /**
      * 获得rootview
@@ -236,33 +256,45 @@ public abstract class ShowPicSelectBaseActivity extends BaseActivity {
             }
             int id = v.getId();
             if (id == R.id.btn_take_photo) { //拍照
-                // 删除上一次截图的临时文件
-//                boolean enabled = FileUtils.deletePhotoAtPathAndName(tempFile.getAbsolutePath());
-//                Logger.i("删除上一次的临时图片");
-//                if (!enabled) {
-//                    ToastUtil.showToast(SelectPhotoBaseActivity.this, getString(R.string.sdcard_error));
-//                    return;
-//                }
-                // 保存本次截图临时文件名字
+                Intent cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri imageUri;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    imageUri = FileProvider.getUriForFile(getBaseContext(), AUTHORITY, tempFile);
+                } else {
+                    imageUri = Uri.fromFile(tempFile);
+                }
 
-//                Logger.i("文件目录 = " + tempFile.getAbsolutePath());
-
-                Uri imageUri = Uri.fromFile(tempFile);
-                Intent cameraintent = new Intent(
-                        MediaStore.ACTION_IMAGE_CAPTURE);
                 // 指定调用相机拍照后照片的储存路径
-                cameraintent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        imageUri);
-                ShowPicSelectBaseActivity.this.startActivityForResult(cameraintent,
-                        PHOTO_REQUEST_TAKEPHOTO);
+                cameraintent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                selfPermissionGranted(getBaseContext(), new PermissionCallback() {
+                    @Override
+                    public void hasPermission() {
+                        ShowPicSelectBaseActivity.this.startActivityForResult(cameraintent,
+                                PHOTO_REQUEST_TAKEPHOTO);
+                    }
 
+                    @Override
+                    public void noPermission() {
+                        ToastUtil.showToast(getBaseContext(), R.string.defaule_first_message);
+                    }
+                }, new String[]{Manifest.permission.CAMERA});
             } else if (id == R.id.btn_pick_photo) { //图库中选择
                 Intent openAlbumIntent = new Intent(
                         Intent.ACTION_GET_CONTENT);
                 openAlbumIntent.setDataAndType(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         "image/*");
-                ShowPicSelectBaseActivity.this.startActivityForResult(openAlbumIntent, PHOTO_REQUEST_GALLERY);
+                selfPermissionGranted(getBaseContext(), new PermissionCallback() {
+                    @Override
+                    public void hasPermission() {
+                        ShowPicSelectBaseActivity.this.startActivityForResult(openAlbumIntent, PHOTO_REQUEST_GALLERY);
+                    }
+
+                    @Override
+                    public void noPermission() {
+                        ToastUtil.showToast(getBaseContext(), R.string.defaule_first_message);
+                    }
+                }, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE});
             }
         }
     };

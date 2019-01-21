@@ -21,23 +21,23 @@
 
 package org.kaazing.gateway.client.impl.ws;
 
-import java.net.URI;
-import java.util.LinkedList;
-import java.util.List;
-
-
-//import org.kaazing.gateway.client.html5.WebSocket;
 import org.kaazing.gateway.client.impl.WebSocketChannel;
 import org.kaazing.gateway.client.impl.util.WSCompositeURI;
 import org.kaazing.net.auth.ChallengeHandler;
 import org.kaazing.net.impl.util.ResumableTimer;
+
+import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
+
+//import org.kaazing.gateway.client.html5.WebSocket;
 
 public class WebSocketCompositeChannel extends WebSocketChannel {
     public WebSocketSelectedChannel selectedChannel;
 
     String[]                        requestedProtocols;
 
-    protected List<String>          connectionStrategies = new LinkedList<String>();
+    protected List<String>          connectionStrategies = new LinkedList<>();
     protected ReadyState            readyState = ReadyState.CLOSED;
     protected boolean               closing = false;
 

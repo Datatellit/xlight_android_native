@@ -21,12 +21,6 @@
 
 package org.kaazing.gateway.client.impl.wseb;
 
-import static org.kaazing.gateway.client.impl.Channel.HEADER_SEQUENCE;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.kaazing.gateway.client.impl.Channel;
 import org.kaazing.gateway.client.impl.WebSocketChannel;
 import org.kaazing.gateway.client.impl.http.HttpRequest;
 import org.kaazing.gateway.client.impl.http.HttpRequest.Method;
@@ -40,6 +34,11 @@ import org.kaazing.gateway.client.impl.ws.WebSocketCompositeChannel;
 import org.kaazing.gateway.client.impl.ws.WebSocketSelectedChannel;
 import org.kaazing.gateway.client.util.HttpURI;
 import org.kaazing.gateway.client.util.WrappedByteBuffer;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.kaazing.gateway.client.impl.Channel.HEADER_SEQUENCE;
 /*
  * WebSocket Emulated Handler Chain
  * EmulateHandler  
@@ -57,12 +56,7 @@ class CreateHandlerImpl implements CreateHandler {
     private static final String CLASS_NAME = CreateHandler.class.getName();
     private static final Logger LOG = Logger.getLogger(CLASS_NAME);
     
-    static CreateHandlerFactory FACTORY = new CreateHandlerFactory() {
-        @Override
-        public CreateHandler createCreateHandler() {
-            return new CreateHandlerImpl();
-        }
-    };
+    static CreateHandlerFactory FACTORY = CreateHandlerImpl::new;
     
     private static final String HEADER_WEBSOCKET_PROTOCOL = "X-WebSocket-Protocol";
     private static final String HEADER_SEC_EXTENSIONS = "X-WebSocket-Extensions";

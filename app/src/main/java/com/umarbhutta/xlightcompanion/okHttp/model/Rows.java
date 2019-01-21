@@ -40,6 +40,7 @@ public class Rows implements Serializable {
 
     public Devicegroup devicegroup;
     public DeviceUser user;
+    public List<IntegratedDevice> integrateddevices;
     public List<Devicenodes> devicenodes;
     public List<Scenarionodes> scenarionodes;
     public ShareDevice sharedevice;

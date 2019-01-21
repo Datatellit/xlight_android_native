@@ -39,9 +39,12 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="false" />
+    <uses-feature android:name="android.hardware.camera.any" />
 
     <application
         android:name=".App"
@@ -51,21 +54,46 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <service android:name="com.amap.api.location.APSService"></service>
+        <!--<service android:name="com.amap.api.location.APSService"></service>-->
         <!--高德appkey，上线时请替换成正式的-->
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="507c00f6bfe8b88795da5632c6714eb3"></meta-data>
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="5916f9dc310c935a8a000a10" />
-        <meta-data
-            android:name="UMENG_MESSAGE_SECRET"
-            android:value="da3853872705530561e9bd6901092ccd" />
+        <!--<meta-data-->
+            <!--android:name="com.amap.api.v2.apikey"-->
+            <!--android:value="52842bdcc68adcece59f5d75cc1fc2f5"></meta-data>-->
+        <!--<meta-data-->
+            <!--android:name="UMENG_APPKEY"-->
+            <!--android:value="5916f9dc310c935a8a000a10" />-->
+        <!--<meta-data-->
+            <!--android:name="UMENG_MESSAGE_SECRET"-->
+            <!--android:value="da3853872705530561e9bd6901092ccd" />-->
 
+        <!--<meta-data-->
+            <!--android:name="UMENG_CHANNEL"-->
+            <!--android:value="XLight" />-->
         <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="XLight" />
+            android:name="BUGLY_APPID"
+            android:value="f4a54b5aa0" />
+        <!-- 配置APP版本号 -->
+        <meta-data
+            android:name="BUGLY_APP_VERSION"
+            android:value="1.0.7" />
+        <!-- 配置APP渠道号 -->
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="Google Play" />
+        <!-- 配置Bugly调试模式（true或者false）-->
+        <meta-data
+            android:name="BUGLY_ENABLE_DEBUG"
+            android:value="false" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
 
         <activity
             android:name=".main.WelcomeActivity"
@@ -81,8 +109,7 @@
             android:name=".main.SlidingMenuMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".bindDevice.BindDeviceConfirmActivity"
             android:screenOrientation="portrait"

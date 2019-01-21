@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import io.particle.android.sdk.cloud.ParticleCloudException;
+//import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.cloud.ParticleEvent;
@@ -43,12 +43,16 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.e("XLight", "start connect to :" + devID);
                     currDevice = ParticleCloudSDK.getCloud().getDevice(devID);
-                    SubscribeDeviceEvents();
+                    if (!isConnected()) {
+                        SubscribeDeviceEvents();
+                    }
                     setConnect(true);
                     m_parentDevice.onBridgeStatusChanged(xltDevice.BridgeType.Cloud, xltDevice.BCS_CONNECTED);
-                    if (m_parentDevice.m_onConnected != null) {
+                    if (m_parentDevice.m_onConnected != null && currDevice.isConnected()) {
                         Log.e("XLight", "device connected:" + currDevice.getID());
                         m_parentDevice.m_onConnected.onConnected(xltDevice.BridgeType.Cloud, true);
+                    } else {
+                        m_parentDevice.m_onConnected.onConnected(xltDevice.BridgeType.Cloud, false);
                     }
                     // Delay 2 seconds, then Query Main Device
                     Handler myHandler = new Handler(Looper.getMainLooper());
@@ -59,9 +63,9 @@ public class CloudBridge extends BaseBridge {
                         }
                     }, 2000);
 
-                } catch (ParticleCloudException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("XLight", e.getBestMessage());
+                    Log.e("XLight", e.getMessage());
                     m_parentDevice.onBridgeStatusChanged(xltDevice.BridgeType.Cloud, xltDevice.BCS_CONNECTION_FAILED);
                     m_parentDevice.m_onConnected.onConnected(xltDevice.BridgeType.Cloud, false);
                 }
@@ -95,7 +99,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.e(TAG, "JSONCommandPower" + message.get(0) + ",coreID:" + currDevice.getID());
                     resultCode = currDevice.callFunction("JSONCommand", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -119,7 +123,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.e(TAG, "JSONCommandBrightness" + message.get(0));
                     resultCode = currDevice.callFunction("JSONCommand", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -143,7 +147,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.d(TAG, "JSONCommandCCT" + message.get(0));
                     resultCode = currDevice.callFunction("JSONCommand", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -169,7 +173,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.e(TAG, "JSONCommandColor " + message.get(0));
                     resultCode = currDevice.callFunction("JSONCommand", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -197,7 +201,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.e(TAG, "JSONCommandScenario " + message.get(0));
                     resultCode = currDevice.callFunction("JSONCommand", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -226,7 +230,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.e(TAG, "JSONCommandSpecialEffect " + message.get(0));
                     resultCode = currDevice.callFunction("JSONCommand", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -246,7 +250,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.i(TAG, "JSONCommandQueryDevice" + message.get(0));
                     resultCode = currDevice.callFunction("JSONCommand", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -270,7 +274,7 @@ public class CloudBridge extends BaseBridge {
                     Log.e(TAG, "JSONConfigScenario " + message.get(0));
                     resultCode = currDevice.callFunction("JSONConfig", message);
                     x[0] = true;
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -284,7 +288,7 @@ public class CloudBridge extends BaseBridge {
                         Log.e(TAG, "JSONConfigScenario " + message.get(0));
                         resultCode = currDevice.callFunction("JSONConfig", message);
                         x[1] = true;
-                    } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     message.clear();
@@ -299,7 +303,7 @@ public class CloudBridge extends BaseBridge {
                     try {
                         Log.e(TAG, "JSONConfigScenario " + message.get(0));
                         resultCode = currDevice.callFunction("JSONConfig", message);
-                    } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     message.clear();
@@ -328,7 +332,7 @@ public class CloudBridge extends BaseBridge {
                     Log.e(TAG, "JSONConfigSchedule " + message.get(0));
                     resultCode = currDevice.callFunction("JSONConfig", message);
                     x[0] = true;
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -343,7 +347,7 @@ public class CloudBridge extends BaseBridge {
                         resultCode = currDevice.callFunction("JSONConfig", message);
                         x[1] = true;
                         doneSending[0] = 5;
-                    } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     message.clear();
@@ -368,7 +372,7 @@ public class CloudBridge extends BaseBridge {
                     Log.e(TAG, "JSONConfigRule" + message.get(0));
                     resultCode = currDevice.callFunction("JSONConfig", message);
                     x[0] = true;
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -382,7 +386,7 @@ public class CloudBridge extends BaseBridge {
                         Log.i(TAG, "JSONConfigRule" + message.get(0));
                         resultCode = currDevice.callFunction("JSONConfig", message);
                         x[1] = true;
-                    } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     message.clear();
@@ -404,7 +408,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.d(TAG, "JSONGetDeviceStatus " + message.get(0));
                     resultCode = currDevice.callFunction("JSONConfig", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 message.clear();
@@ -424,7 +428,7 @@ public class CloudBridge extends BaseBridge {
                 try {
                     Log.d(TAG, "FastCallPowerSwitch: " + strParam);
                     resultCode = currDevice.callFunction("PowerSwitch", message);
-                } catch (ParticleCloudException | ParticleDevice.FunctionDoesNotExistException | IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -513,6 +517,7 @@ public class CloudBridge extends BaseBridge {
                                 }
                                 setConnect(false);
                                 Thread.sleep(5000);
+                                UnsubscribeDeviceEvents();
                                 SubscribeDeviceEvents();
                             } catch (Exception ex) {
                                 // 又出问题了，先忽略
@@ -537,7 +542,7 @@ public class CloudBridge extends BaseBridge {
                         Log.e(TAG, "UnsubscribeDeviceEvents:" + subscriptionId);
                         currDevice.unsubscribeFromEvents(subscriptionId);
                         subscriptionId = 0;
-                    } catch (ParticleCloudException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.particle.android.sdk.cloud.ApiFactory;
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
 import io.particle.android.sdk.cloud.ParticleDevice;
 
@@ -54,7 +53,7 @@ public class ParticleAdapter {
                     ParticleCloudSDK.getCloud().logIn(user, pass);
                     queryDevices();
                     m_bLoggedIn = true;
-                } catch (ParticleCloudException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -79,7 +78,7 @@ public class ParticleAdapter {
                 sItem = device.getID() + ":" + device.getName();
                 m_deviceID2Name.add(sItem);
             }
-        } catch (ParticleCloudException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             resultCode = -1;
         }

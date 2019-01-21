@@ -1,10 +1,14 @@
 package com.umarbhutta.xlightcompanion.Tools;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.help.DeviceInfo;
+import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousParams;
 import com.umarbhutta.xlightcompanion.okHttp.model.AnonymousResult;
@@ -84,29 +88,34 @@ public class UserUtils {
         }
     }
 
-    public static boolean checkTokenValid(String token) {
+    public static void checkTokenValid(String token, HttpUtils.OnHttpRequestCallBack mOnHttpRequestCallBack) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)//设置读取超时时间
                 .writeTimeout(10, TimeUnit.SECONDS)//设置写的超时时间
                 .connectTimeout(10, TimeUnit.SECONDS)//设置连接超时时间;
                 .build();
-        Request request = new Request.Builder()
-                .url(NetConfig.URL_DEVICE_DETAIL_INFO + "?access_token=" + token)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        try {
-            Response response = call.execute();
-            Log.e("XLight", response.body().string());
-            JSONObject jsonObject = new JSONObject(response.body().string());
-            if (jsonObject.getInt("code") == 10000 || jsonObject.getInt("code") == 10002) {
-                return false;
-            } else {
-                return true;
+        HttpUtils.getInstance().getRequestInfo(NetConfig.URL_DEVICE_DETAIL_INFO + "?access_token=" + token, null, mOnHttpRequestCallBack);
+    }
+
+    public static void anonymousLogin(Context context, HttpUtils.OnHttpRequestCallBack mOnHttpRequestCallBack) {
+        //开始匿名登录
+        AnonymousParams anonymousParams = UserUtils.getAnonymous(context);
+        Gson gson = new Gson();
+        String paramStr = gson.toJson(anonymousParams);
+        HttpUtils.getInstance().postRequestInfo(NetConfig.URL_ANONYMOUS_LOGIN, paramStr, AnonymousResult.class, new HttpUtils.OnHttpRequestCallBack() {
+            @Override
+            public void onHttpRequestSuccess(Object result) {
+                //登录成功，设置到本次的UserUtils对象中
+                AnonymousResult ar = (AnonymousResult) result;
+                saveAnonymousInfo(context, ar);
+                mOnHttpRequestCallBack.onHttpRequestSuccess(result);
             }
-        } catch (Exception ex) {
-            Log.e("XLight", ex.getMessage());
-            return false;
-        }
+
+            @Override
+            public void onHttpRequestFail(int code, String errMsg) {
+                mOnHttpRequestCallBack.onHttpRequestFail(code, errMsg);
+            }
+        });
     }
 
     /**

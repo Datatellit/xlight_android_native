@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Phrase-templated strings -->
+    <string name="msg_device_not_listed">没有找到{device_name}？长按{setup_button_identifier}3秒进入侦听模式；{indicator_light}应该变为{indicator_light_setup_color_name}闪烁</string>
+    <string name="get_ready_title_text">开始设置你的{device_name}!</string>
+    <string name="get_ready_text"><![CDATA[\n
+\u2022 将你的{device_name}通电。\n\n
+\u2022 使用顶针长按{setup_button_identifier}3秒，设备的指示灯变为{indicator_light_setup_color_name}闪烁。\n\n
+\u2022 将你的安卓设备连接到可用的网络中。\n\n
+\u2022 点击开始按钮进入设备配对。]]></string>
+    <string name="wifi_list_header_text">选择你的{device_name}</string>
+    <string name="connecting_text">你的{device_name}正在连接到</string>
+    <string name="your_device_is_connected">你的{device_name}连接成功!</string>
+    <string name="msg_create_account_disclaimer"><![CDATA[点击“注册”即表示您已阅读并同意<a href="{tos_link}">服务条款</a>和<a href="{privacy_policy_link}">隐私权政策。</a>]]></string>
+    <string name="create_account_header_text">创建{brand_name}的账号</string>
+    <string name="log_in_header_text">{brand_name}登录</string>
+    <string name="you_are_logged_in_as">当前登录的用户为：{username}</string>
+    <string name="set_up_another_device">配对其他{device_name}</string>
+    <string name="empty_soft_ap_list_text">(列表中没有找到{device_name}设备)</string>
+    <string name="connecting_to_soft_ap">正在连接到{device_name}…</string>
+    <string name="unable_to_connect_to_soft_ap">重置{device_name}后，请尝试重新运行应用程序，并在需要时切换到侦听模式。</string>
+
+    <!-- regular strings -->
+    <string name="set_up_your_product">开始</string>
+    <string name="title_activity_web_view">WebView</string>
+    <string name="title_activity_get_ready">开始</string>
+    <string name="title_activity_intro">简介</string>
+    <string name="title_activity_manual_network_entry">手动输入</string>
+    <string name="title_activity_create_account">创建账号</string>
+    <string name="title_activity_discover_device">选择设备</string>
+    <string name="title_activity_select_network">选择Wi-Fi网络</string>
+    <string name="title_activity_password_entry">输入Wi-Fi密码</string>
+    <string name="title_activity_connecting">正在连接</string>
+    <string name="title_activity_troubleshooting">故障排查</string>
+    <string name="title_activity_success">成功!</string>
+    <string name="action_settings">设置</string>
+    <string name="msg_no_account">&lt;u&gt;我没有账号&lt;/u&gt;</string>
+    <string name="msg_forgot_password">&lt;u&gt;忘记密码&lt;/u&gt;</string>
+    <string name="action_create_account_short">注册</string>
+    <string name="action_create_account">注册</string>
+    <string name="msg_user_already_has_account">&lt;u&gt;已经存在账号&lt;/u&gt;</string>
+    <string name="activation_code">激活码</string>
+    <string name="troubleshooting">&lt;u&gt;故障排查&lt;/u&gt;</string>
+    <string name="im_ready">开始</string>
+    <string name="connecting">正在连接</string>
+    <string name="connecting_text_2">这将花费一分钟左右的时间。</string>
+    <string name="cancel">取消</string>
+    <string name="test_connection">测试连接</string>
+    <string name="continue_str">继续</string>
+    <string name="you_did_it">YOU DID IT</string>
+    <string name="rescan">重新扫描</string>
+    <string name="log_out">登出</string>
+    <string name="select_your_wifi_network">选择你的Wi-Fi网络</string>
+    <string name="no_wifi_networks_found">(没有找到我的Wi-Fi网络)</string>
+    <string name="check_for_internet_connectivity">请检查网络连接</string>
+    <string name="connect_to_wifi_network">正在连接到Wi-Fi网络</string>
+    <string name="reconnect_to_wifi_network">正在断开与设备的连接</string>
+    <string name="configure_device_wifi_credentials">配置设备Wi-Fi信息</string>
+    <string name="wait_for_device_cloud_connection">等待设备完成云端连接</string>
+    <string name="verify_product_ownership">验证设备的绑定信息</string>
+    <string name="save_device_to_cloud">保存设备信息到云端</string>
+    <string name="action_done">完成</string>
+    <string name="title_activity_password_reset">密码重置</string>
+    <string name="title_activity_two_factor">双重认证</string>
+    <string name="manual_network_name">手动连接网络</string>
+    <string name="manual_network_name_entry">手动输入网络名称</string>
+    <string name="hint_network_name">网络名称</string>
+    <string name="network_requires_password">输入网络密码</string>
+    <string name="reset_password">重置密码</string>
+    <string name="request_password_reset">请求重置密码</string>
+    <string name="this_network_requires_a_password">该网络必须输入一个密码</string>
+    <string name="connect">连接</string>
+    <string name="password">密码</string>
+    <string name="show_password">显示密码</string>
+    <string name="change_network">更换网络</string>
+    <string name="done">完成！</string>
+    <string name="get_ready_could_not_connect_to_cloud">无法与XLight的云端通信。 确保您的Android设备已连接到可用的互联网并重试。</string>
+    <string name="error">错误</string>
+    <string name="ok">OK</string>
+    <string name="access_denied">拒绝访问</string>
+    <string name="wifi_required">必须连接Wi-Fi</string>
+    <string name="location_required">必须获取位置</string>
+    <string name="setup_requires_wifi">配对设备必须Wi-Fi，立即启用Wi-Fi？</string>
+    <string name="enable_wifi">启用Wi-Fi</string>
+    <string name="enable_location">启用定位</string>
+    <string name="exit_setup">退出</string>
+    <string name="location_permission_dialog_text">安装程序需要扫描Wi-Fi才能找到您的新设备。\n\n因为这些扫描还可能显示您的位置，安装程序需要“位置”权限。\n\n在下一个屏幕上按“允许”后，设置将继续。</string>
+    <string name="location_permission_dialog_title">权限许可</string>
+    <string name="got_it">已获取</string>
+    <string name="location_permission_denied_dialog_title">必须需要位置权限</string>
+    <string name="location_permission_denied_dialog_text"><![CDATA[此应用已禁用“位置”权限。 请在设置 - >应用下的此应用的权限中更改此项。]]></string>
+    <string name="reset_password_dialog_title">重置密码</string>
+    <string name="reset_paassword_dialog_please_enter_a_valid_email">请输入一个有效的email地址。</string>
+    <string name="create_account_passswords_do_not_match">密码不匹配。</string>
+    <string name="create_account_unknown_error">未知错误</string>
+    <string name="create_account_error_communicating_with_server">与服务器通信时出错</string>
+    <string name="create_account_account_already_exists_for_email_address">此电子邮件地址的帐户可能已存在。</string>
+    <string name="get_ready_must_be_logged_in_as_customer">抱歉，您必须以%s客户身份登录。</string>
+    <string name="location_permission_denied_cannot_start_setup">位置权限被拒绝，无法启动设置</string>
+    <string name="enterprise_networks_not_supported">移动设置不支持企业Wi-Fi网络。</string>
+    <string name="settings">设置</string>
+    <string name="secured_with_wep">WEP</string>
+    <string name="secured_with_wpa">WPA</string>
+    <string name="secured_with_wpa2">WPA2</string>
+    <string name="dialog_title_owned_by_another_user">当前 %1$s 已经被其他用户绑定。切换绑定用户为 %2$s?</string>
+    <string name="change_owner_question">切换用户?</string>
+    <string name="change_owner">切换用户</string>
+    <string name="device_naming_hint"></string>
+    <string name="device_naming_label">为新设备命名:</string>
+    <string name="device_naming_failure">无法更改设备名称</string>
+    <string name="location_required_message">此访问权限允许您将Android设备与之配对您的XLight控制器完成设置过程。 XLight不会将位置数据用于任何其他数据目的。</string>
+    <string name="enter_login_code_title">输入登录代码</string>
+    <string name="login_code_hint">登录代码</string>
+    <string name="authentication_info">在您的移动设备上打开您的身份验证器应用程序，然后输入6位数的登录代码</string>
+    <string name="verify_button_text">验证</string>
+    <string name="recover_link_text">&lt;u&gt;无法访问您的XLight控制器？请尝试重新登录。&lt;/u&gt;</string>
+    <string name="recovery_link">https://www.xlight.ca</string>
+
+</resources>

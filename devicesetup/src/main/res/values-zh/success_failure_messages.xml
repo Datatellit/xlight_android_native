@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="setup_success_summary">设置已完成！</string>
+    <string name="setup_success_details">恭喜！您已成功设置你的{device_name}！</string>
+
+    <string name="setup_success_unknown_ownership_summary">设置完成！</string>
+    <string name="setup_success_unknown_ownership_details">设置成功，但您不是该设备的所有者，因此我们无法检查{device_name}是否正常连接到云端，请重试一次添加设备过程。</string>
+
+    <string name="setup_failure_claiming_summary">哎呀！</string>
+    <string name="setup_failure_claiming_details">设置过程中无法声明您的{device_name}！ 如果{device_name}指示灯呈蓝色或绿色闪烁，则表示您可能输入了错误的Wi-Fi凭据，您应该再次尝试设置。</string>
+
+    <string name="setup_failure_no_disconnect_from_device_summary">好的!</string>
+    <string name="setup_failure_no_disconnect_from_device_details">设置过程中无法与{device_name}的Wi-Fi网络断开连接。 这是设备的内部问题，因此请在重置{device_name}后重新运行安装程序，并在需要时将其重新置于闪烁的蓝色侦听模式。</string>
+
+    <string name="setup_failure_configure_summary">错误！</string>
+    <string name="setup_failure_configure_details">设置过程中无法为您的{device_name}配置Wi-Fi凭据，请在重置{device_name}后重新尝试运行安装程序，并在需要时将其重新置于闪烁的蓝色侦听模式。</string>
+
+    <string name="setup_failure_lost_connection_to_device">设置过程中失去与{device_name}的连接，然请在重置{device_name}后重新运行安装程序，并在需要时将其重新置于侦听模式。</string>
+
+</resources>

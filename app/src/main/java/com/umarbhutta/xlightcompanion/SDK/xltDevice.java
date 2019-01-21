@@ -1167,6 +1167,7 @@ public class xltDevice {
         if (isBridgeOK(m_currentBridge)) {
             switch (m_currentBridge) {
                 case Cloud:
+                    cldBridge.JSONCommandPower(nodeID, true);
                     rc = cldBridge.JSONCommandColor(nodeID, ring, state, br, ww, r, g, b, m_SID);
                     break;
                 case BLE:

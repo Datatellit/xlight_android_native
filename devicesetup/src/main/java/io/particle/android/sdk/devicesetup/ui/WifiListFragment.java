@@ -1,11 +1,11 @@
 package io.particle.android.sdk.devicesetup.ui;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -34,6 +34,15 @@ import static io.particle.android.sdk.utils.Py.set;
 public class WifiListFragment<T extends WifiNetwork> extends ListFragment
         implements LoaderManager.LoaderCallbacks<Set<T>> {
 
+    private int MAX_SCAN_NUMBER = 5;
+    private int try_number = 0;
+
+    public enum PAGE_TYPE {
+        SCAN_PHOTON,
+        SCAN_WIFI
+    }
+
+    private PAGE_TYPE page = PAGE_TYPE.SCAN_PHOTON;
 
     public interface Client<T extends WifiNetwork> {
 
@@ -60,6 +69,10 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
 
     private Set<T> previousData = set();
 
+    public void setPage(PAGE_TYPE page) {
+        this.page = page;
+    }
+
     public void scanAsync() {
         if (isDetached() || client == null) {
             stopAggroLoading();
@@ -71,8 +84,8 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         client = EZ.getCallbacksOrThrow(this, Client.class);
         if (aggroLoadingHandler == null) {
             aggroLoadingHandler = new Handler();
@@ -80,7 +93,7 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = new WifiNetworkAdapter(getActivity());
         setEmptyText(client.getListEmptyText());
@@ -175,8 +188,14 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
             stopAggroLoading();
             return;
         }
-
+        if (try_number > MAX_SCAN_NUMBER) {
+            stopAggroLoading();
+            return;
+        }
         aggroLoadingRunnable = () -> {
+            if (page == PAGE_TYPE.SCAN_WIFI) {
+                try_number++;
+            }
             log.d("Running aggro loading");
             scanAsync();
             aggroLoadingRunnable = null;
@@ -189,40 +208,41 @@ public class WifiListFragment<T extends WifiNetwork> extends ListFragment
         if (aggroLoadingRunnable != null) {
             aggroLoadingHandler.removeCallbacks(aggroLoadingRunnable);
             aggroLoadingRunnable = null;
+            try_number = 0;
         }
     }
 
 
     private class WifiNetworkAdapter extends ArrayAdapter<T> {
 
-        public WifiNetworkAdapter(Context context) {
+        WifiNetworkAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_1);
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if (convertView == null) {
                 convertView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.row_wifi_scan_result, parent, false);
 
-                // FIXME: remove for branded app, make this tinting configurable or just set it
-                // to white or black automatically, based on whether we're using a light or dark
-                // theme?  Or base it on the color of the text to the left in this row?
                 ImageView theWifi = Ui.findView(convertView, R.id.the_wifi);
                 Drawable whiteWifi = Ui.getTintedDrawable(getContext(), R.drawable.the_wifi,
-                        android.R.color.white);
+                        R.color.element_tint_color);
                 theWifi.setImageDrawable(whiteWifi);
 
                 ImageView securityIcon = Ui.findView(convertView, R.id.wifi_security_indicator_icon);
                 Drawable whiteLock = Ui.getTintedDrawable(getContext(), R.drawable.lock,
-                        android.R.color.white);
+                        R.color.element_tint_color);
                 securityIcon.setImageDrawable(whiteLock);
             }
 
             T wifiNetwork = getItem(position);
-            Ui.setText(convertView, android.R.id.text1, wifiNetwork.getSsid().toString());
-            Ui.findView(convertView, R.id.wifi_security_indicator_icon)
-                    .setVisibility(wifiNetwork.isSecured() ? View.VISIBLE : View.GONE);
+            if (wifiNetwork != null) {
+                Ui.setText(convertView, android.R.id.text1, wifiNetwork.getSsid().toString());
+                Ui.findView(convertView, R.id.wifi_security_indicator_icon)
+                        .setVisibility(wifiNetwork.isSecured() ? View.VISIBLE : View.GONE);
+            }
             return convertView;
         }
 

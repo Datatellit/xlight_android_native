@@ -21,19 +21,19 @@
 
 package org.kaazing.gateway.client.impl.wsn;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.kaazing.gateway.client.impl.CommandMessage;
 import org.kaazing.gateway.client.impl.WebSocketChannel;
 import org.kaazing.gateway.client.impl.WebSocketHandler;
 import org.kaazing.gateway.client.impl.WebSocketHandlerAdapter;
 import org.kaazing.gateway.client.impl.WebSocketHandlerFactory;
 import org.kaazing.gateway.client.impl.WebSocketHandlerListener;
+import org.kaazing.gateway.client.impl.util.WSURI;
 import org.kaazing.gateway.client.impl.ws.WebSocketLoggingHandler;
 import org.kaazing.gateway.client.impl.ws.WebSocketTransportHandler;
-import org.kaazing.gateway.client.impl.util.WSURI;
 import org.kaazing.gateway.client.util.WrappedByteBuffer;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * WebSocket Native Handler Chain
@@ -45,16 +45,8 @@ public class WebSocketNativeHandler extends WebSocketHandlerAdapter {
     private static final String CLASS_NAME = WebSocketNativeHandler.class.getName();
     private static final Logger LOG = Logger.getLogger(CLASS_NAME);
     
-    public static WebSocketHandlerFactory TRANSPORT_HANDLER_FACTORY = new WebSocketHandlerFactory() {
-        @Override
-        public WebSocketHandler createWebSocketHandler() {
-            return new WebSocketTransportHandler();
-        }
-    };
-    
-    private WebSocketNativeAuthenticationHandler authHandler = new WebSocketNativeAuthenticationHandler();
-    private WebSocketNativeHandshakeHandler handshakeHandler = new WebSocketNativeHandshakeHandler();
-    private WebSocketNativeBalancingHandler balancingHandler = new WebSocketNativeBalancingHandler();
+    public static WebSocketHandlerFactory TRANSPORT_HANDLER_FACTORY = WebSocketTransportHandler::new;
+
     // private WebSocketNativeCodec codec = new WebSocketNativeCodec();
 
     /**
@@ -63,8 +55,11 @@ public class WebSocketNativeHandler extends WebSocketHandlerAdapter {
      */
     public WebSocketNativeHandler() {
         LOG.entering(CLASS_NAME, "<init>");
-        
+
+        WebSocketNativeHandshakeHandler handshakeHandler = new WebSocketNativeHandshakeHandler();
+        WebSocketNativeAuthenticationHandler authHandler = new WebSocketNativeAuthenticationHandler();
         authHandler.setNextHandler(handshakeHandler);
+        WebSocketNativeBalancingHandler balancingHandler = new WebSocketNativeBalancingHandler();
         handshakeHandler.setNextHandler(balancingHandler);
 
         WebSocketHandler transportHandler = TRANSPORT_HANDLER_FACTORY.createWebSocketHandler();

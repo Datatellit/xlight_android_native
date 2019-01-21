@@ -29,9 +29,9 @@ public class ImageLoaderOptions {
         BitmapFactory.Options op = new BitmapFactory.Options();
         op.inSampleSize = 4;
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_account_circle)
-                .showImageForEmptyUri(R.drawable.ic_account_circle)
-                .showImageOnFail(R.drawable.ic_account_circle)
+//                .showImageOnLoading(R.drawable.ic_account_circle)
+//                .showImageForEmptyUri(R.drawable.ic_account_circle)
+//                .showImageOnFail(R.drawable.ic_account_circle)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)

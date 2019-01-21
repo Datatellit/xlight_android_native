@@ -21,21 +21,21 @@
 
 package org.kaazing.gateway.client.impl.wseb;
 
-import static org.kaazing.gateway.client.impl.Channel.HEADER_SEQUENCE;
+import org.kaazing.gateway.client.impl.EncoderOutput;
+import org.kaazing.gateway.client.impl.http.HttpRequest;
+import org.kaazing.gateway.client.impl.http.HttpRequest.Method;
+import org.kaazing.gateway.client.impl.http.HttpRequestHandler;
+import org.kaazing.gateway.client.impl.http.HttpRequestListener;
+import org.kaazing.gateway.client.impl.http.HttpRequestTransportHandler;
+import org.kaazing.gateway.client.impl.http.HttpResponse;
+import org.kaazing.gateway.client.impl.ws.CloseCommandMessage;
+import org.kaazing.gateway.client.util.WrappedByteBuffer;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
-import org.kaazing.gateway.client.impl.EncoderOutput;
-import org.kaazing.gateway.client.impl.http.HttpRequest;
-import org.kaazing.gateway.client.impl.http.HttpRequestHandler;
-import org.kaazing.gateway.client.impl.http.HttpRequestListener;
-import org.kaazing.gateway.client.impl.http.HttpRequestTransportHandler;
-import org.kaazing.gateway.client.impl.http.HttpResponse;
-import org.kaazing.gateway.client.impl.http.HttpRequest.Method;
-import org.kaazing.gateway.client.impl.ws.CloseCommandMessage;
-import org.kaazing.gateway.client.util.WrappedByteBuffer;
+import static org.kaazing.gateway.client.impl.Channel.HEADER_SEQUENCE;
 /*
  * WebSocket Emulated Handler Chain
  * EmulateHandler  
@@ -53,12 +53,7 @@ class UpstreamHandlerImpl implements UpstreamHandler {
     static final String CLASS_NAME = UpstreamHandlerImpl.class.getName();
     static final Logger LOG = Logger.getLogger(CLASS_NAME);
     
-    static UpstreamHandlerFactory FACTORY = new UpstreamHandlerFactory() {
-        @Override
-        public UpstreamHandler createUpstreamHandler() {
-            return new UpstreamHandlerImpl();
-        }
-    };
+    static UpstreamHandlerFactory FACTORY = UpstreamHandlerImpl::new;
     
     // command frame with 02 (close) instruction
     private static final byte WSF_COMMAND_FRAME_START = (byte) 0x01;
@@ -67,13 +62,8 @@ class UpstreamHandlerImpl implements UpstreamHandler {
     private static final byte[] RECONNECT_EVENT_BYTES = { WSF_COMMAND_FRAME_START, 0x30, 0x31, WSF_COMMAND_FRAME_END };
     private static final byte[] CLOSE_EVENT_BYTES =     { WSF_COMMAND_FRAME_START, 0x30, 0x32, WSF_COMMAND_FRAME_END };
 
-    WebSocketEmulatedEncoder<UpstreamChannel> encoder = new WebSocketEmulatedEncoderImpl<UpstreamChannel>();
-    private EncoderOutput<UpstreamChannel> out = new EncoderOutput<UpstreamChannel>() {
-        @Override
-        public void write(UpstreamChannel channel, WrappedByteBuffer buf) {
-            processMessageWrite(channel, buf);
-        }
-    };
+    WebSocketEmulatedEncoder<UpstreamChannel> encoder = new WebSocketEmulatedEncoderImpl<>();
+    private EncoderOutput<UpstreamChannel> out = this::processMessageWrite;
 
     HttpRequestHandler nextHandler;
     UpstreamHandlerListener listener;

@@ -56,6 +56,9 @@ public class Responses {
 
             public final String imei;
 
+            @SerializedName("last_iccid")
+            public final String lastIccid;
+
             @SerializedName("current_build_target")
             public final String currentBuild;
 
@@ -81,13 +84,14 @@ public class Responses {
             public final Date lastHeard;
 
             public SimpleDevice(String id, String name, boolean isConnected, boolean cellular,
-                                String imei, String currentBuild, String defaultBuild, int platformId,
+                                String imei, String lastIccid, String currentBuild, String defaultBuild, int platformId,
                                 int productId, String ipAddress, String status, Date lastHeard) {
                 this.id = id;
                 this.name = name;
                 this.isConnected = isConnected;
                 this.cellular = cellular;
                 this.imei = imei;
+                this.lastIccid = lastIccid;
                 this.currentBuild = currentBuild;
                 this.defaultBuild = defaultBuild;
                 this.platformId = platformId;
@@ -111,6 +115,9 @@ public class Responses {
             public final boolean cellular;
 
             public final String imei;
+
+            @SerializedName("last_iccid")
+            public final String lastIccid;
 
             @SerializedName("current_build_target")
             public final String currentBuild;
@@ -150,7 +157,7 @@ public class Responses {
             public final Date lastHeard;
 
             CompleteDevice(String deviceId, String name, boolean isConnected, boolean cellular,
-                           String imei, String currentBuild, String defaultBuild,
+                           String imei, String lastIccid, String currentBuild, String defaultBuild,
                            Map<String, String> variables, List<String> functions, String version,
                            int productId, int platformId, String ipAddress, String lastAppName,
                            String status, boolean requiresUpdate, Date lastHeard) {
@@ -159,6 +166,7 @@ public class Responses {
                 this.isConnected = isConnected;
                 this.cellular = cellular;
                 this.imei = imei;
+                this.lastIccid = lastIccid;
                 this.currentBuild = currentBuild;
                 this.defaultBuild = defaultBuild;
                 this.variables = variables;
@@ -218,32 +226,17 @@ public class Responses {
         @SerializedName("access_token")
         public final String accessToken;
 
-        @SerializedName("token_type")
-        public final String tokenType;
-
-        @SerializedName("scope")
-        public final String scope;
-
         @SerializedName("refresh_token")
         public final String refreshToken;
 
-        public LogInResponse(long expiresInSeconds, String accessToken, String tokenType, String scope, String refreshToken) {
+        @SerializedName("token_type")
+        public final String tokenType;
+
+        public LogInResponse(long expiresInSeconds, String accessToken, String refreshToken, String tokenType) {
             this.expiresInSeconds = expiresInSeconds;
             this.accessToken = accessToken;
-            this.tokenType = tokenType;
-            this.scope = scope;
             this.refreshToken = refreshToken;
-        }
-
-        @Override
-        public String toString() {
-            return "LogInResponse{" +
-                    "expiresInSeconds=" + expiresInSeconds +
-                    ", accessToken=" + accessToken +
-                    ", tokenType=" + tokenType +
-                    ", scope=" + scope +
-                    ", refreshToken=" + refreshToken +
-                    '}';
+            this.tokenType = tokenType;
         }
     }
 
@@ -278,7 +271,6 @@ public class Responses {
             this.deviceIds = deviceIds;
         }
     }
-
 
     public abstract static class ReadVariableResponse<T> {
 

@@ -3,6 +3,7 @@ package com.umarbhutta.xlightcompanion.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,7 +29,9 @@ import com.umarbhutta.xlightcompanion.okHttp.model.Devicenodes;
 import com.umarbhutta.xlightcompanion.okHttp.model.ScenariosResult;
 import com.umarbhutta.xlightcompanion.okHttp.requests.RequestScenarios;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +107,22 @@ public class ControlDeviceActivity extends BaseActivity {
         ImmersionBar.with(this).statusBarDarkFont(true).titleBar(R.id.ll_top_edit).init();
     }
 
+    public boolean isActive() {
+        if (Build.VERSION.SDK_INT >= 17) {
+            if (this.isDestroyed()) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (this.isFinishing() || this == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     public void getScenarioList() {
         Log.e("CCTFragment", "Get ScenarioList");
         RequestScenarios.getInstance().getScenarioInfo(this, new RequestScenarios.OnRequestScenarioInfoCallback() {
@@ -115,7 +134,9 @@ public class ControlDeviceActivity extends BaseActivity {
                         mScenarioList = mScenarioResult;
                         Log.e("CCTFragment", "Get ScenarioList:" + mScenarioList.size());
                         CCTFragment cctFragment = (CCTFragment) mFragments.get(0);
-                        cctFragment.refreshScenario(mScenarioList);
+                        if (isActive()) {
+                            cctFragment.refreshScenario(mScenarioList);
+                        }
                     }
                 });
             }
@@ -179,7 +200,7 @@ public class ControlDeviceActivity extends BaseActivity {
                 // 跳转到新的active，进行灯具信息设置
                 Intent intent = new Intent(getBaseContext(), EditDeviceActivity.class);
                 intent.putExtra("info", devicenodes);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 11);
             }
         });
         btnSure.setVisibility(View.VISIBLE);
@@ -190,11 +211,19 @@ public class ControlDeviceActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 11 && resultCode == Activity.RESULT_OK) {
             devicenodes.devicenodename = data.getStringExtra("name");
             // 更新头部
             tvTitle.setText(devicenodes.devicenodename);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("devicenodes", devicenodes);
+        setResult(2, intent);
+        super.onBackPressed();
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {

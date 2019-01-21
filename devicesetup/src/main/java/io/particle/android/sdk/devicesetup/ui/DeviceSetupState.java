@@ -15,14 +15,14 @@ public class DeviceSetupState {
     static volatile String claimCode;
     static volatile PublicKey publicKey;
     static volatile String deviceToBeSetUpId;
-    static volatile boolean deviceNeedsToBeClaimed = true;
+    static volatile boolean isClaim;
 
     static void reset() {
         claimCode = null;
         claimedDeviceIds.clear();
         publicKey = null;
         deviceToBeSetUpId = null;
-        deviceNeedsToBeClaimed = true;
         previouslyConnectedWifiNetwork = null;
+        isClaim = false;
     }
 }

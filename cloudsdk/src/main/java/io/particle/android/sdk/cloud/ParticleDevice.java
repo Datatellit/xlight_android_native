@@ -8,6 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,12 +28,14 @@ import io.particle.android.sdk.cloud.Responses.ReadIntVariableResponse;
 import io.particle.android.sdk.cloud.Responses.ReadObjectVariableResponse;
 import io.particle.android.sdk.cloud.Responses.ReadStringVariableResponse;
 import io.particle.android.sdk.cloud.Responses.ReadVariableResponse;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 import io.particle.android.sdk.cloud.models.DeviceStateChange;
 import io.particle.android.sdk.utils.ParticleInternalStringUtils;
 import io.particle.android.sdk.utils.Preconditions;
 import io.particle.android.sdk.utils.TLog;
 import okio.Okio;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 
@@ -47,15 +52,34 @@ public class ParticleDevice implements Parcelable {
     public enum ParticleDeviceType {
         CORE,
         PHOTON,
-        ELECTRON;
+        P1,
+        RASPBERRY_PI,
+        RED_BEAR_DUO,
+        BLUZ,
+        DIGISTUMP_OAK,
+        ELECTRON,
+        ARGON,
+        BORON,
+        XENON;
+
+        // FIXME: ADD MESH TYPES BELOW
 
         public static ParticleDeviceType fromInt(int intValue) {
             switch (intValue) {
                 case 0:
                     return CORE;
+                case 8:
+                    return P1;
                 case 10:
                     return ELECTRON;
-                case 5:
+                case 31:
+                    return RASPBERRY_PI;
+                case 82:
+                    return DIGISTUMP_OAK;
+                case 88:
+                    return RED_BEAR_DUO;
+                case 103:
+                    return BLUZ;
                 case 6:
                 default:
                     return PHOTON;
@@ -205,6 +229,10 @@ public class ParticleDevice implements Parcelable {
         return deviceState.imei;
     }
 
+    public String getIccid() {
+        return deviceState.lastIccid;
+    }
+
     public String getCurrentBuild() {
         return deviceState.currentBuild;
     }
@@ -227,6 +255,29 @@ public class ParticleDevice implements Parcelable {
 
     public Date getLastHeard() {
         return deviceState.lastHeard;
+    }
+
+    @WorkerThread
+    public float getCurrentDataUsage() throws ParticleCloudException {
+        float maxUsage = 0;
+        try {
+            Response response = mainApi.getCurrentDataUsage(deviceState.lastIccid);
+            JSONObject result = new JSONObject(new String(((TypedByteArray) response.getBody()).getBytes()));
+            JSONArray usages = result.getJSONArray("usage_by_day");
+
+            for (int i = 0; i < usages.length(); i++) {
+                JSONObject usageElement = usages.getJSONObject(i);
+                if (usageElement.has("mbs_used_cumulative")) {
+                    double usage = usageElement.getDouble("mbs_used_cumulative");
+                    if (usage > maxUsage) {
+                        maxUsage = (float) usage;
+                    }
+                }
+            }
+        } catch (JSONException | RetrofitError e) {
+            throw new ParticleCloudException(e);
+        }
+        return maxUsage;
     }
 
     /**
@@ -591,6 +642,7 @@ public class ParticleDevice implements Parcelable {
         return "ParticleDevice{" +
                 "deviceId=" + deviceState.deviceId +
                 ", isConnected=" + deviceState.isConnected +
+                ", deviceType=" + deviceState.deviceType +
                 '}';
     }
 

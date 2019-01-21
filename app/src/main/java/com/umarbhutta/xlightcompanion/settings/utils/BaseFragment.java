@@ -25,12 +25,14 @@ public class BaseFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //注册网络状态监听广播
-        netWorkChangReceiver = new NetBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
+        netWorkChangReceiver = new NetBroadcastReceiver();
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        getActivity().registerReceiver(netWorkChangReceiver, filter);
+        if (!isRegistered) {
+            getActivity().registerReceiver(netWorkChangReceiver, filter);
+        }
         isRegistered = true;
     }
 
@@ -79,4 +81,10 @@ public class BaseFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(netWorkChangReceiver);
+    }
 }

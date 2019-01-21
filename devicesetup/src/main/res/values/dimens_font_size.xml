@@ -7,13 +7,11 @@
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">22sp</dimen>
 
-    <dimen name="text_size_menu">15sp</dimen>
-
     <dimen name="material_text_size_display4">112sp</dimen>
     <dimen name="material_text_size_display3">56sp</dimen>
     <dimen name="material_text_size_display2">45sp</dimen>
     <dimen name="material_text_size_display1">34sp</dimen>
-    <dimen name="material_text_size_headline">24sp</dimen>
+    <dimen name="material_text_size_headline">22sp</dimen>
     <dimen name="material_text_size_title">20sp</dimen>
     <dimen name="material_text_size_subhead">16sp</dimen>
     <dimen name="material_text_size_body_button">14sp</dimen>

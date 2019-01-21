@@ -59,8 +59,10 @@
     <string name="configure_device_wifi_credentials">Configuring device Wi-Fi credentials</string>
     <string name="wait_for_device_cloud_connection">Waiting for device cloud connection</string>
     <string name="verify_product_ownership">Verifying product ownership</string>
+    <string name="save_device_to_cloud">Save device to cloud</string>
     <string name="action_done">Done</string>
     <string name="title_activity_password_reset">Password Reset</string>
+    <string name="title_activity_two_factor">Two Step Authentication</string>
     <string name="manual_network_name">Manual network name</string>
     <string name="manual_network_name_entry">Manual network name entry</string>
     <string name="hint_network_name">network name</string>
@@ -73,7 +75,7 @@
     <string name="show_password">Show password</string>
     <string name="change_network">Change network</string>
     <string name="done">Done!</string>
-    <string name="get_ready_could_not_connect_to_cloud">Could not communicate with Photon cloud.  Make sure your Android device is connected to the internet and retry.</string>
+    <string name="get_ready_could_not_connect_to_cloud">Could not communicate with XLight cloud.  Make sure your Android device is connected to the internet and retry.</string>
     <string name="error">Error</string>
     <string name="ok">OK</string>
     <string name="access_denied">Access denied</string>
@@ -108,8 +110,14 @@
     <string name="device_naming_label">Name your new device:</string>
     <string name="device_naming_failure">Failed to change device name</string>
     <string name="location_required_message">This access allows you to pair your Android device with
-        your Photon to complete the setup process. Particle will not use location data for any other
+        your XLight controller to complete the setup process. XLight will not use location data for any other
         purposes.
     </string>
+    <string name="enter_login_code_title">Enter a login code</string>
+    <string name="login_code_hint">login code</string>
+    <string name="authentication_info">Open your authenticator app on your mobile device and enter the 6-digit login code</string>
+    <string name="verify_button_text">Verify</string>
+    <string name="recover_link_text">&lt;u&gt;Lost access to your XLight controller? Recover your account.&lt;/u&gt;</string>
+    <string name="recovery_link">https://www.xlight.ca</string>
 
 </resources>

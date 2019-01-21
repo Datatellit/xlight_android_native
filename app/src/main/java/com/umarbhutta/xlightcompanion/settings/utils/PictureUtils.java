@@ -3,6 +3,7 @@ package com.umarbhutta.xlightcompanion.settings.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.util.Log;
@@ -28,12 +29,9 @@ public class PictureUtils {
      * 第二次读取的bitmap是根据比例压缩过的图像，第三次读取的bitmap是所要的缩略图。 2.
      * 缩略图对于原图像来讲没有拉伸，这里使用了2.2版本的新工具ThumbnailUtils，使 用这个工具生成的图像不会被拉伸。
      *
-     * @param imagePath
-     *            图像的路径
-     * @param width
-     *            指定输出图像的宽度
-     * @param height
-     *            指定输出图像的高度
+     * @param imagePath 图像的路径
+     * @param width     指定输出图像的宽度
+     * @param height    指定输出图像的高度
      * @return 生成的缩略图
      */
     public Bitmap getImageThumbnail(String imagePath, int width, int height) {
@@ -75,7 +73,7 @@ public class PictureUtils {
     }
 
     /**
-     * 判断图片是否需要压缩,大于1M的图片都需要压缩
+     * 判断图片是否需要压缩,大于100KB的图片都需要压缩
      *
      * @param path
      * @return
@@ -91,7 +89,7 @@ public class PictureUtils {
                 size = fis.available();
                 DecimalFormat df = new DecimalFormat("#.00");
                 double mbSize = Double.valueOf(df
-                        .format((double) size / 1048576));
+                        .format((double) size / 1024 / 100));
                 Log.i("android", "图片大小 = " + mbSize);
                 if (mbSize > 1) { // 如果图片大于1M需要压缩
                     return true;
@@ -121,9 +119,9 @@ public class PictureUtils {
      * @return 图片的绝对位置
      */
     public String compressPic(Context context, String orifilePath,
-                                  String desPath) {
+                              String desPath) {
 
-        if(!isPictureNeedCompress(orifilePath)){
+        if (!isPictureNeedCompress(orifilePath)) {
             return orifilePath;
         }
 
@@ -134,7 +132,8 @@ public class PictureUtils {
         options.inSampleSize = calculateInSampleSize(options);
 
         options.inJustDecodeBounds = false;
-        Bitmap bitmap = BitmapFactory.decodeFile(orifilePath, options);
+
+        Bitmap bitmap = getResizedBitmap(BitmapFactory.decodeFile(orifilePath, options), 120, 120);
 
         File myCaptureFile = new File(desPath);
         //Log.i("android", "图片保存位置 = " + myCaptureFile.getAbsolutePath());
@@ -158,9 +157,26 @@ public class PictureUtils {
         BitmapFactory.Options compressOption = new BitmapFactory.Options();
         compressOption.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(myCaptureFile.getAbsolutePath(), compressOption);
-        Logger.i("android", "压缩后的图片大小 width = "+compressOption.outWidth+", height = "+compressOption.outHeight);
+        Logger.i("android", "压缩后的图片大小 width = " + compressOption.outWidth + ", height = " + compressOption.outHeight);
 
         return myCaptureFile.getAbsolutePath();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
     }
 
     // 计算图片的缩放值
@@ -170,7 +186,7 @@ public class PictureUtils {
 
         //int reqHeight = FabuActivity.dpTpx;
         //int reqWidth = width / height * reqHeight;
-        int reqHeight =height;
+        int reqHeight = height;
 
         int reqWidth = width;
 

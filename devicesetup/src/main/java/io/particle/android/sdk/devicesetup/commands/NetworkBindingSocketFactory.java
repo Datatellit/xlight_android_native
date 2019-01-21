@@ -1,11 +1,9 @@
 package io.particle.android.sdk.devicesetup.commands;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.net.Network;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.util.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -31,8 +29,8 @@ public class NetworkBindingSocketFactory extends SocketFactory {
     // used as connection timeout and read timeout
     private final int timeoutMillis;
 
-    public NetworkBindingSocketFactory(Context ctx, SSID softAPSSID, int timeoutMillis) {
-        this.wifiFacade = WifiFacade.get(ctx);
+    public NetworkBindingSocketFactory(WifiFacade wifiFacade, SSID softAPSSID, int timeoutMillis) {
+        this.wifiFacade = wifiFacade;
         this.softAPSSID = softAPSSID;
         this.timeoutMillis = timeoutMillis;
     }
@@ -75,17 +73,16 @@ public class NetworkBindingSocketFactory extends SocketFactory {
         Socket socket = new Socket();
         socket.setSoTimeout(timeoutMillis);
 
-//        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-//            bindSocketToSoftAp(socket);
-//        }
+        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+            bindSocketToSoftAp(socket);
+        }
 
         return socket;
     }
 
     @TargetApi(VERSION_CODES.LOLLIPOP)
     private void bindSocketToSoftAp(Socket socket) throws IOException {
-        Log.e("XLight", "softAPSSID:" + softAPSSID.toString());
-        Network softAp = wifiFacade.getNetworkForSSID(softAPSSID);
+        Network softAp = wifiFacade.getNetworkObjectForCurrentWifiConnection();
 
         if (softAp == null) {
             // If this ever fails, fail VERY LOUDLY to make sure we hear about it...

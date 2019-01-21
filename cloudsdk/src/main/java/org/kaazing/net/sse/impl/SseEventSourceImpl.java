@@ -21,16 +21,16 @@
 
 package org.kaazing.net.sse.impl;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.kaazing.net.http.HttpRedirectPolicy;
 import org.kaazing.net.impl.util.BlockingQueueImpl;
 import org.kaazing.net.sse.SseEventReader;
 import org.kaazing.net.sse.SseEventSource;
 import org.kaazing.net.sse.SseException;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SseEventSourceImpl extends SseEventSource {
     private static final String _CLASS_NAME = SseEventSourceImpl.class.getName();
@@ -71,7 +71,7 @@ public class SseEventSourceImpl extends SseEventSource {
         
         // Used by the producer(i.e. the eventSourceListener) and the 
         // consumer(i.e. the SseEventReader).
-        _sharedQueue = new BlockingQueueImpl<Object>();
+        _sharedQueue = new BlockingQueueImpl<>();
 
     }
 
@@ -236,7 +236,7 @@ public class SseEventSourceImpl extends SseEventSource {
     }
     
     private synchronized void connectionFailed(Exception exception) {
-        SseException ex = null;
+        SseException ex;
 
         if (exception == null) {
             ex = new SseException("Connection Failed");

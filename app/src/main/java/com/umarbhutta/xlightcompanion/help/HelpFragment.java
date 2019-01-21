@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.umarbhutta.xlightcompanion.R;
+import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.HttpUtils;
 import com.umarbhutta.xlightcompanion.okHttp.NetConfig;
@@ -96,6 +97,7 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+        mDialog = ProgressDialogUtils.showProgressDialog(getContext(), getString(R.string.loading));
         getHelpUrl();
         return view;
     }
@@ -114,10 +116,8 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
      * 获取帮助的url
      */
     public void getHelpUrl() {
-        mDialog = ProgressDialogUtils.showProgressDialog(getActivity(), getString(R.string.loading));
-        if (mDialog != null) {
+        if (mDialog != null && !mDialog.isShowing())
             mDialog.show();
-        }
         HttpUtils.getInstance().getRequestInfo(NetConfig.URL_GET_HELP_URL, null, new HttpUtils.OnHttpRequestCallBack() {
             @Override
             public void onHttpRequestSuccess(final Object result) {
@@ -134,11 +134,11 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
                             String helpUrl = dataObj.getString("url");
                             webView.loadUrl(helpUrl);
 //                            webView.loadUrl("http://www.baidu.com");
-                            if (mDialog != null) {
+                            if (mDialog != null && mDialog.isShowing())
                                 mDialog.dismiss();
-                            }
                         } catch (JSONException e) {
-                            mDialog.dismiss();
+                            if (mDialog != null && mDialog.isShowing())
+                                mDialog.dismiss();
                             e.printStackTrace();
                         }
                     }
@@ -150,7 +150,8 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mDialog.dismiss();
+                        if (mDialog != null && mDialog.isShowing())
+                            mDialog.dismiss();
                     }
                 });
             }

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.umarbhutta.xlightcompanion.App;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.Tools.Logger;
+import com.umarbhutta.xlightcompanion.Tools.UserUtils;
 
 import org.json.JSONObject;
 

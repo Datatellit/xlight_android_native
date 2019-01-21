@@ -97,6 +97,14 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
         ImmersionBar.with(this).statusBarDarkFont(true).titleBar(R.id.ll_top_edit).init();
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("name", devicenodes.devicenodename);
+        setResult(Activity.RESULT_OK, intent);
+        super.onBackPressed();
+    }
+
     private void initDialog() {
         builder = new AlertDialog.Builder(this);
         dialog = builder.create();
@@ -152,6 +160,9 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onStop() {
         super.onStop();
+//        Intent intent = new Intent();
+//        intent.putExtra("name", devicenodes.devicenodename);
+//        setResult(Activity.RESULT_OK, intent);
     }
 
     @Override
@@ -168,7 +179,7 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
             ToastUtil.showToast(this, R.string.net_error);
             return;
         }
-
+        ToastUtil.showLoading(this);
         final String deviceName = TextUtils.isEmpty(newDeviceName) ? "" : newDeviceName;
         if (TextUtils.isEmpty(deviceName)) {
             ToastUtil.showToast(this, getString(R.string.please_set_lamp_name));
@@ -191,8 +202,10 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                             @Override
                             public void run() {
                                 if (!TextUtils.isEmpty(deviceName)) {
+                                    ToastUtil.dismissLoading();
                                     txtName.setText(deviceName);
                                     devicenodes.devicenodename = deviceName;
+                                    ToastUtil.showToast(getBaseContext(), getString(R.string.deivce_modify_success));
                                 }
                             }
                         });
@@ -204,6 +217,7 @@ public class EditDeviceActivity extends BaseActivity implements View.OnClickList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                ToastUtil.dismissLoading();
                                 ToastUtil.showToast(getBaseContext(), getString(R.string.modify_fail) + errMsg);
                             }
                         });

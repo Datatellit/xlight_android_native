@@ -38,6 +38,7 @@ import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.NetworkUtils;
+import com.umarbhutta.xlightcompanion.Tools.NoFastClickUtils;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.StringUtil;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
@@ -285,6 +286,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
             }
         });
         selectIcon = getResources().getResourceName(R.drawable.scene);
+        progressDialog = ProgressDialogUtils.showProgressDialog(this, getString(R.string.loading));
         initDevice();
         ImmersionBar.with(this).titleBar(R.id.ll_top_edit).statusBarDarkFont(true).init();
     }
@@ -449,8 +451,8 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
 
     public void getDevice() {
         Log.d("XLight", "getDeviceInfo");
-        progressDialog = ProgressDialogUtils.showProgressDialog(this, getString(R.string.loading));
-        if (progressDialog != null)
+
+        if (progressDialog != null && !progressDialog.isShowing())
             progressDialog.show();
         RequestFirstPageInfo.getInstance(this).getBaseInfo(new RequestFirstPageInfo.OnRequestFirstPageInfoCallback() {
             @Override
@@ -459,7 +461,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (progressDialog != null) {
+                        if (progressDialog != null && progressDialog.isShowing()) {
                             progressDialog.dismiss();
                         }
                         deviceList.clear();
@@ -570,6 +572,9 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void saveScene() {
+        if (NoFastClickUtils.isFastClick()) {
+            return;
+        }
         //保存场景
         if (etName.getText().toString().equals("")) {
             ToastUtil.showToast(this, R.string.please_input_scene_name);
@@ -581,6 +586,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
         }
         //转换场景数据
         try {
+            ToastUtil.showLoading(this);
             JSONArray js = new JSONArray();
             List<String> lst = new ArrayList<String>();
             for (Devicenodes d : deviceSures) {
@@ -607,6 +613,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    ToastUtil.dismissLoading();
                                     ToastUtil.showToast(getApplicationContext(), R.string.add_scene_success);
                                     finish();
                                 }
@@ -615,7 +622,14 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
 
                         @Override
                         public void onHttpRequestFail(int code, String errMsg) {
-                            ToastUtil.showToast(getApplicationContext(), R.string.net_error);
+                            //成功提示
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.dismissLoading();
+                                    ToastUtil.showToast(getApplicationContext(), R.string.net_error);
+                                }
+                            });
                         }
                     });
                 else {
@@ -625,6 +639,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    ToastUtil.dismissLoading();
                                     ToastUtil.showToast(getApplicationContext(), R.string.edit_scene_success);
                                     finish();
                                 }
@@ -636,6 +651,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    ToastUtil.dismissLoading();
                                     ToastUtil.showToast(getApplicationContext(), R.string.net_error);
                                 }
                             });
@@ -646,7 +662,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                 //跳转到登录页
             }
         } catch (Exception e) {
-
+            ToastUtil.dismissLoading();
         }
     }
 

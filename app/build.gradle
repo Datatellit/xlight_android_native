@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'bugly'
 
+bugly {
+    appId = 'f4a54b5aa0' // 注册时分配的App ID
+    appKey = '051fa9d9-0dd2-4132-adb9-c6a52d588a9e' // 注册时分配的App Key
+}
 android {
     signingConfigs {
         release {
@@ -9,15 +14,23 @@ android {
             storePassword 'android'
         }
     }
-    compileSdkVersion 23
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+//    buildToolsVersion '26.0.2'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.umarbhutta.xlightcompanion"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 10
+        versionName "1.0.9"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+        ndk {
+            abiFilters 'armeabi', 'x86'
+        }
     }
     useLibrary 'org.apache.http.legacy'
     buildTypes {
@@ -51,7 +64,7 @@ android {
 //    }
 //    configurations {
 //        all*.exclude group: 'com.android.support', module: 'support-v4'
-//        all*.exclude group: 'com.android.support', module: 'support-annotations'
+//        all*.exclude group: 'com.android.support', module: 'support-annotations:27.1.1'
 //    }
 }
 
@@ -60,13 +73,15 @@ android {
 dependencies {
 //    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':devicesetup')
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile project(':cloudsdk')
+    compile project(':push')
+    compile 'com.android.support:appcompat-v7:27.1.0'
+    compile 'com.android.support:cardview-v7:27.1.0'
+    compile 'com.android.support:design:27.1.0'
+    compile 'com.android.support:support-v4:27.1.0'
+    compile 'com.android.support:recyclerview-v7:27.1.0'
     compile 'com.github.clans:fab:1.6.4'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okhttp3:okhttp:3.10.0'
     compile 'me.priyesh:chroma:1.0.2'
     compile 'com.larswerkman:HoloColorPicker:1.5'
     compile 'com.google.code.gson:gson:2.2.1'
@@ -77,32 +92,26 @@ dependencies {
     // BY DEFAULT, BUILD APP AGAINST THE LOCAL SDK SOURCE
     // (i.e.: make modifications to the SDK source in the local repo show up in this app
     // just by rebuilding)
-    compile project(':cloudsdk')
-    compile project(':push')
-    compile 'com.amap.api:location:latest.integration'
+//    compile 'com.amap.api:location:latest.integration'
     compile 'com.xw.repo:bubbleseekbar:3.10-lite'
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.timqi.sectorprogressview:library:2.0.1'
     compile 'com.kaopiz:kprogresshud:1.0.2'
-    compile 'com.baoyz.actionsheet:library:1.1.7'
+    implementation 'com.baoyz.actionsheet:library:1.1.7'
     compile 'com.github.rtugeek:ColorSeekBar:1.5.2'
-    //    compile 'com.github.skydoves:colorpickerview:1.0.8'
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'com.github.skydoves:colorpickerpreference:1.0.4'
     compile 'com.squareup:seismic:1.0.2'
     compile 'me.priyesh:chroma:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
-    compile files('libs/umeng-common-1.4.0.jar')
-    compile files('libs/umerror_android_1.0.0.jar')
+//    compile 'com.umeng.analytics:analytics:latest.integration'
+//    compile files('libs/umeng-common-1.4.0.jar')
+//    compile files('libs/umerror_android_1.0.0.jar')
+//    compile 'com.amap.api:location:latest.integration'
     compile files('libs/immersionbar-2.3.1.jar')
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
-    compile 'com.flyco.roundview:FlycoRoundView_Lib:1.1.4@aar'
-//    compile "org.permissionsdispatcher:permissionsdispatcher:4.2.0"
-//    compile 'com.yanzhenjie:permission:1.1.2'
-//    compile 'com.github.feeeei:CircleSeekbar:v1.1.2'
-//    compile 'com.gcssloop.widget:arc-seekbar:1.7.0'
-//    compile 'com.jaywei:PureVerticalSeekBar:1.0.0'
-    //    compile 'it.neokree:MaterialNavigationDrawer:1.3.3'
+    implementation 'com.flyco.roundview:FlycoRoundView_Lib:1.1.4@aar'
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.tencent.bugly:nativecrashreport:latest.release'
 }

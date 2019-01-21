@@ -1,7 +1,5 @@
 package io.particle.android.sdk.devicesetup.setupsteps;
 
-import android.content.Context;
-
 import io.particle.android.sdk.devicesetup.SetupProcessException;
 import io.particle.android.sdk.devicesetup.ui.DeviceSetupState;
 import io.particle.android.sdk.utils.EZ;
@@ -17,11 +15,11 @@ public class WaitForDisconnectionFromDeviceStep extends SetupStep {
 
     private boolean wasDisconnected = false;
 
-    public WaitForDisconnectionFromDeviceStep(StepConfig stepConfig, SSID softApSSID, Context ctx) {
+    WaitForDisconnectionFromDeviceStep(StepConfig stepConfig, SSID softApSSID, WifiFacade wifiFacade) {
         super(stepConfig);
         Preconditions.checkNotNull(softApSSID, "softApSSID cannot be null.");
         this.softApName = softApSSID;
-        this.wifiFacade = WifiFacade.get(ctx);
+        this.wifiFacade = wifiFacade;
     }
 
     @Override
@@ -31,12 +29,12 @@ public class WaitForDisconnectionFromDeviceStep extends SetupStep {
 
     @Override
     protected void onRunStep() throws SetupStepException, SetupProcessException {
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i <= 8; i++) {
             if (isConnectedToSoftAp()) {
                 // wait and try again
-                EZ.threadSleep(200);
+                EZ.threadSleep(400);
             } else {
-                EZ.threadSleep(1000);
+                EZ.threadSleep(1500);
                 // success, no longer connected.
                 wasDisconnected = true;
                 if (EZ.isUsingOlderWifiStack()) {

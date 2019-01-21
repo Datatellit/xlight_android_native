@@ -36,7 +36,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-
                     <com.umarbhutta.xlightcompanion.views.CircleImageView
                         android:id="@+id/userIcon"
                         android:layout_width="60dp"

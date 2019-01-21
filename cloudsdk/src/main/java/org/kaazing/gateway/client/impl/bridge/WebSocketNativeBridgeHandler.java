@@ -21,17 +21,17 @@
 
 package org.kaazing.gateway.client.impl.bridge;
 
-import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.kaazing.gateway.client.impl.WebSocketChannel;
 import org.kaazing.gateway.client.impl.WebSocketHandler;
 import org.kaazing.gateway.client.impl.WebSocketHandlerListener;
 import org.kaazing.gateway.client.impl.bridge.XoaEvent.XoaEventKind;
-import org.kaazing.gateway.client.impl.wsn.WebSocketNativeChannel;
 import org.kaazing.gateway.client.impl.util.WSURI;
+import org.kaazing.gateway.client.impl.wsn.WebSocketNativeChannel;
 import org.kaazing.gateway.client.util.WrappedByteBuffer;
+
+import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /*
  * WebSocket Native Handler Chain
  * NativeHandler - AuthenticationHandler - HandshakeHandler - ControlFrameHandler - BalanceingHandler - Nodec - {BridgeHandler}
@@ -76,14 +76,14 @@ public class WebSocketNativeBridgeHandler implements WebSocketHandler, ProxyList
             
             String[] params;
             if (protocols != null) {
-                String s = "";
+                StringBuilder s = new StringBuilder();
                 for (int i=0; i<protocols.length; i++) {
                     if (i>0) {
-                        s += ",";
+                        s.append(",");
                     }
-                    s += protocols[i];
+                    s.append(protocols[i]);
                 }
-                params = new String[] { "WEBSOCKET", uri.toString(), s, ""};
+                params = new String[] { "WEBSOCKET", uri.toString(), s.toString(), ""};
             } else {
                 params = new String[] { "WEBSOCKET", uri.toString() };
             }

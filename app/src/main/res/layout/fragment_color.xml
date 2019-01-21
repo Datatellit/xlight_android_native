@@ -107,15 +107,14 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
-
                 <com.flyco.roundview.RoundLinearLayout
                     android:id="@+id/tv_pink"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    app:rv_backgroundColor="#ff6fc0"
+                    app:rv_backgroundColor="#FFBFCC"
                     app:rv_isRadiusHalfHeight="true"
                     app:rv_isWidthHeightEqual="true"
-                    app:rv_strokeColor="#ff6fc0"
+                    app:rv_strokeColor="#FFBFCC"
                     app:rv_strokeWidth="3dp" />
 
                 <TextView
@@ -139,10 +138,10 @@
                     android:id="@+id/tv_purple"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    app:rv_backgroundColor="#cd7eff"
+                    app:rv_backgroundColor="#A021EF"
                     app:rv_isRadiusHalfHeight="true"
                     app:rv_isWidthHeightEqual="true"
-                    app:rv_strokeColor="#cd7eff"
+                    app:rv_strokeColor="#A021EF"
                     app:rv_strokeWidth="3dp" />
 
                 <TextView
@@ -165,10 +164,10 @@
                     android:id="@+id/tv_blue"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    app:rv_backgroundColor="#7181ff"
+                    app:rv_backgroundColor="#0000FF"
                     app:rv_isRadiusHalfHeight="true"
                     app:rv_isWidthHeightEqual="true"
-                    app:rv_strokeColor="#7181ff"
+                    app:rv_strokeColor="#0000FF"
                     app:rv_strokeWidth="3dp" />
 
                 <TextView
@@ -203,10 +202,10 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center"
-                    app:rv_backgroundColor="#FF4343"
+                    app:rv_backgroundColor="#FF0000"
                     app:rv_isRadiusHalfHeight="true"
                     app:rv_isWidthHeightEqual="true"
-                    app:rv_strokeColor="#FF4343"
+                    app:rv_strokeColor="#FF0000"
                     app:rv_strokeWidth="3dp" />
 
                 <TextView
@@ -229,10 +228,10 @@
                     android:id="@+id/tv_green"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    app:rv_backgroundColor="#7affc4"
+                    app:rv_backgroundColor="#00ff00"
                     app:rv_isRadiusHalfHeight="true"
                     app:rv_isWidthHeightEqual="true"
-                    app:rv_strokeColor="#7affc4"
+                    app:rv_strokeColor="#00ff00"
                     app:rv_strokeWidth="3dp" />
 
                 <TextView

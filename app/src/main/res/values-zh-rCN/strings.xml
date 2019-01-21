@@ -18,7 +18,7 @@
     <string name="input_new_pwd">请输入新密码</string>
     <string name="input_new_pwd_again">请再次输入新密码</string>
     <string name="two_pwd_not_same">两次密码不一致</string>
-    <string name="modify_pwd_success">密码修改成功</string>
+    <string name="modify_pwd_success">密码修改成功，请重新登录。</string>
     <string name="commit_img">提交中。。。</string>
     <string name="internal_storage">内部存储</string>
     <string name="photo_set_fail">设置失败，请重试</string>
@@ -67,9 +67,9 @@
     <string name="please_open_wifi">请打开WiFi</string>
     <string name="please_open_blue">请打开蓝牙</string>
     <string name="notfound_bluetooth">未发现蓝牙模块</string>
-    <string name="add_device_end_title">未发现控制器</string>
+    <string name="add_device_end_title">设备绑定失败</string>
     <string name="add_device_end_desc">请尝试以下操作后，重新连接</string>
-    <string name="add_device_end_list1">1、请开启手机蓝牙</string>
+    <string name="add_device_end_list1">1、请按下控制器上的Reset键</string>
     <string name="add_device_end_list2">2、控制器重新通电</string>
     <string name="add_device_end_list3">3、断开控制器与其他手机的连接</string>
     <string name="add_device_end_list4">4、连接过程中将您的手机靠近控制器</string>
@@ -157,7 +157,7 @@
     <string name="set_logout">你确定要退出么？</string>
     <string name="queding">确定</string>
     <string name="delete_this_rule">确定删除此规则吗？</string>
-    <string name="select_main_device">选择主设备</string>
+    <string name="select_main_device">我的网关</string>
     <string name="setting_success">设置成功</string>
     <string name="unbind_device_tap">解绑设备提示</string>
     <string name="sure_unbind_device">确定解绑此设备吗？</string>
@@ -200,8 +200,8 @@
     <string name="input_pwd">请输入密码</string>
     <string name="regist">注册</string>
     <string name="regist_protocal">注册协议</string>
-    <string name="please_select_main_device">请选择主设备</string>
-    <string name="you_have_no_device">您还没有设备请返回到首页,点击“+”添加设备</string>
+    <string name="please_select_main_device">长按解除设备绑定</string>
+    <string name="you_have_no_device">您还没有网关设备请在首页,点击“+”添加设备</string>
     <string name="please_input_pwd_again">请再次输入密码</string>
     <string name="verifycode">验证码</string>
     <string name="please_input_your_email">请输入你的邮箱</string>
@@ -300,10 +300,10 @@
     <string name="filter6">更多</string>
 
 
-    <string name="color1">桃红</string>
-    <string name="color2">淡紫</string>
-    <string name="color3">天蓝</string>
-    <string name="color4">玫红</string>
+    <string name="color1">粉色</string>
+    <string name="color2">紫色</string>
+    <string name="color3">蓝色</string>
+    <string name="color4">红色</string>
     <string name="color5">绿色</string>
     <string name="color6">更多</string>
 
@@ -345,6 +345,8 @@
     <string name="session_timeout">会话超时</string>
 
     <string name="delay">延时时间（分）</string>
+    <string name="delay_remark">* 设置设备需要延时关闭的时间，并启用延时，设备将在指定时间内关闭。</string>
+    <string name="delay_remark1">* 手动调节灯具状态将会触发取消本次延时关闭功能。</string>
     <string name="delay_on">开启延时</string>
     <string name="enabled">已启用</string>
     <string name="delay_0">延时时间必须大于0</string>
@@ -374,4 +376,6 @@
     <string name="defaule_always_message">当前应用缺少相应的权限，您需要设置相应的权限后才可正常相关功。</string>
 
     <string name="parse_error">数据解析异常</string>
+
+    <string name="deivce_modify_success">设备修改成功</string>
 </resources>

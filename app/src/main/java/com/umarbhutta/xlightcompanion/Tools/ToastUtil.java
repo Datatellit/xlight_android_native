@@ -40,7 +40,11 @@ public class ToastUtil {
     }
 
     public static void showLoading(Context context, String title) {
-        showLoading(context, title, null);
+        try {
+            showLoading(context, title, null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void showLoading(Context context, String title, String detail) {
@@ -64,11 +68,11 @@ public class ToastUtil {
                 .setCancellable(true)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
-        if (title == null)
-            kProgressHUD.setLabel(context.getResources().getString(R.string.add_device_wifi_wait));
-        else
+        if (title == null) {
+            // kProgressHUD.setLabel("");
+        } else {
             kProgressHUD.setLabel(title);
-
+        }
         if (detail != null)
             kProgressHUD.setDetailsLabel(detail);
         kProgressHUD.show();

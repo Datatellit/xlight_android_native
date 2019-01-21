@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2007-2014 Kaazing Corporation. All rights reserved.
- * <p>
+ * 
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -21,14 +21,12 @@
 
 package org.kaazing.gateway.client.impl.http;
 
-import android.util.Log;
+import org.kaazing.gateway.client.impl.Channel;
+import org.kaazing.gateway.client.util.HttpURI;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import org.kaazing.gateway.client.impl.Channel;
-import org.kaazing.gateway.client.util.HttpURI;
 
 public class HttpRequest {
 
@@ -38,12 +36,7 @@ public class HttpRequest {
     static volatile int nextId = 1;
     final int id;
 
-    public static final HttpRequestFactory HTTP_REQUEST_FACTORY = new HttpRequestFactory() {
-        @Override
-        public HttpRequest createHttpRequest(Method method, HttpURI uri, boolean async) {
-            return new HttpRequest(method, uri, async);
-        }
-    };
+    public static final HttpRequestFactory HTTP_REQUEST_FACTORY = HttpRequest::new;
 
     /** Possible ready states for the request */
     public enum ReadyState {
@@ -53,7 +46,7 @@ public class HttpRequest {
         READY,
         /** Request is in the process of sending.  No further data can be written at this time. */
         SENDING,
-        /** Request has been sent, but no response has been received */
+        /** Request has been sent, but no response has been received */ 
         SENT,
         /** Response has been partially received.  All headers are available. */
         OPENED,
@@ -72,41 +65,41 @@ public class HttpRequest {
     public enum Method {
         GET, POST
     }
-
+    
     /** Method specified for this request */
     private Method method;
-
+    
     /** URI specified for this request */
     private HttpURI uri;
 
     /** True if progress events are returned as data is received */
     private boolean async;
-
+    
     /** Headers associated with request.  Headers must be set before or during requestReady event */
-    private Map<String, String> headers = new HashMap<String, String>();
+    private Map<String, String> headers = new HashMap<>();
 
     /** Response received for this request */
     private HttpResponse response;
 
     /** Higher layer managing this request */
     public Channel parent;
-
+    
     /** Underlying object representing this request */
     private Object proxy;
 
     /** Handler for this request */
     HttpRequestHandler transportHandler;
-
+    
     /** Creates an HttpRequest with method and uri specified.  Async is true by default. */
     public HttpRequest(Method method, HttpURI uri) {
         this(method, uri, true);
     }
-
+    
     /** Creates an HttpRequest with method and uri specified.
-     * Async true means fire progress events as data is received. */
+      * Async true means fire progress events as data is received. */
     public HttpRequest(Method method, HttpURI uri, boolean async) {
         this.id = nextId++;
-
+        
         if (uri == null) {
             LOG.severe("HTTP request URL is null");
             throw new IllegalArgumentException("HTTP request URL is null");
@@ -116,7 +109,7 @@ public class HttpRequest {
             LOG.severe("Invalid Method in an HTTP request");
             throw new IllegalArgumentException("Invalid Method in an HTTP request");
         }
-        Log.e("XLight", uri.toString());
+
         this.method = method;
         this.uri = uri;
         this.async = async;
@@ -151,14 +144,14 @@ public class HttpRequest {
     public void setHeader(String header, String value) {
         headers.put(header, value);
     }
-
+    
     /** Get all headers for this request */
     public Map<String, String> getHeaders() {
         return headers;
     }
 
     /** Get the response associated with this request.
-     * Returns null if response has not yet been received. */
+      * Returns null if response has not yet been received. */
     public HttpResponse getResponse() {
         return response;
     }
@@ -180,6 +173,6 @@ public class HttpRequest {
 
     @Override
     public String toString() {
-        return "[Request " + id + ": " + method + " " + uri + " async:" + async + "]";
+        return "[Request "+id+": "+method+" "+uri+" async:"+async+"]";
     }
 }

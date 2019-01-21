@@ -4,35 +4,23 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.seismic.ShakeDetector;
@@ -40,11 +28,9 @@ import com.umarbhutta.xlightcompanion.App;
 import com.umarbhutta.xlightcompanion.R;
 import com.umarbhutta.xlightcompanion.SDK.BLE.BLEPairedDeviceList;
 import com.umarbhutta.xlightcompanion.SDK.xltDevice;
-import com.umarbhutta.xlightcompanion.Tools.AndroidBug54971Workaround;
 import com.umarbhutta.xlightcompanion.Tools.SharedPreferencesUtils;
 import com.umarbhutta.xlightcompanion.Tools.ToastUtil;
 import com.umarbhutta.xlightcompanion.Tools.UserUtils;
-import com.umarbhutta.xlightcompanion.control.ControlRuleFragment;
 import com.umarbhutta.xlightcompanion.glance.GlanceMainFragment;
 import com.umarbhutta.xlightcompanion.help.AlexaFragment;
 import com.umarbhutta.xlightcompanion.help.HelpFragment;
@@ -60,13 +46,10 @@ import com.umarbhutta.xlightcompanion.room.RoomMainFragment;
 import com.umarbhutta.xlightcompanion.rule.RuleMainFragment;
 import com.umarbhutta.xlightcompanion.scenario.ScenarioMainFragment;
 import com.umarbhutta.xlightcompanion.settings.BaseActivity;
-import com.umarbhutta.xlightcompanion.settings.BaseFragmentActivity;
 import com.umarbhutta.xlightcompanion.settings.SettingFragment;
 import com.umarbhutta.xlightcompanion.settings.UserMsgModifyActivity;
 import com.umarbhutta.xlightcompanion.userManager.LoginActivity;
 import com.umarbhutta.xlightcompanion.views.CircleImageView;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.PushAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -114,17 +97,17 @@ public class SlidingMenuMainActivity extends BaseActivity implements View.OnClic
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         relativeLayoutMenu = (RelativeLayout) findViewById(R.id.ll_menu);
         initSlidingMenu(savedInstanceState);
-        PushAgent.getInstance(this).onAppStart();
+//        PushAgent.getInstance(this).onAppStart();
         ImmersionBar.with(this).statusBarDarkFont(true).init();
         // Check Bluetooth
-        BLEPairedDeviceList.init(this);
-        if (!App.isRequestBlue && BLEPairedDeviceList.IsSupported() && !BLEPairedDeviceList.IsEnabled()) {
-            App.isRequestBlue = true;
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, BLEPairedDeviceList.REQUEST_ENABLE_BT);
-        }
+//        BLEPairedDeviceList.init(this);
+//        if (!App.isRequestBlue && BLEPairedDeviceList.IsSupported() && !BLEPairedDeviceList.IsEnabled()) {
+//            App.isRequestBlue = true;
+//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBtIntent, BLEPairedDeviceList.REQUEST_ENABLE_BT);
+//        }
         xltDeviceMaps = new HashMap<String, xltDevice>();
-        if (null == sensorManager) {
+        if (null == sensorManager && sd == null) {
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             Log.e("XLight", "listen shake event");
@@ -135,6 +118,7 @@ public class SlidingMenuMainActivity extends BaseActivity implements View.OnClic
                     shakeAction();
                 }
             });
+            sd.stop();
             sd.start(sensorManager);
         }
     }
@@ -319,9 +303,9 @@ public class SlidingMenuMainActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BLEPairedDeviceList.REQUEST_ENABLE_BT) {
-            BLEPairedDeviceList.init(this);
-        }
+//        if (requestCode == BLEPairedDeviceList.REQUEST_ENABLE_BT) {
+//            BLEPairedDeviceList.init(this);
+//        }
     }
 
     @Override
@@ -437,7 +421,7 @@ public class SlidingMenuMainActivity extends BaseActivity implements View.OnClic
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
         getShakeInfo();
         if (UserUtils.isLogin(this)) {
             LoginResult userInfo = UserUtils.getUserInfo(this);
@@ -449,6 +433,7 @@ public class SlidingMenuMainActivity extends BaseActivity implements View.OnClic
             }
             tv_userName.setText("Welcome, " + nickName);
             textView.setText(UserUtils.getUserInfo(this).getEmail());
+//            userIcon.setImageDrawable(getBaseContext().getResources().getDrawable(R.drawable.ic_account_circle));
             ImageLoader.getInstance().displayImage(userInfo.getImage(), userIcon, ImageLoaderOptions.getImageLoaderOptions());
         } else {
             // ImageLoader.getInstance().displayImage("", userIcon, ImageLoaderOptions.getImageLoaderOptions());
@@ -475,7 +460,7 @@ public class SlidingMenuMainActivity extends BaseActivity implements View.OnClic
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -522,7 +507,7 @@ public class SlidingMenuMainActivity extends BaseActivity implements View.OnClic
                     @Override
                     public void run() {
                         SlidingMenuMainActivity.this.cancelProgressDialog();
-                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.executing));
+                        ToastUtil.showToast(SlidingMenuMainActivity.this, getString(R.string.add_device_bulb_ok));
                     }
                 });
             }

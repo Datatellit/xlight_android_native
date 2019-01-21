@@ -23,7 +23,7 @@ public class LoginResult implements Serializable {
     /**
      * 0代表女  1代表男   2代表保密
      */
-    public String sex;
+    public int sex = 2;
     public String nickname;
     public String email;
     public String image;
@@ -109,11 +109,11 @@ public class LoginResult implements Serializable {
         this.lastname = lastname;
     }
 
-    public String getSex() {
+    public int getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(int sex) {
         this.sex = sex;
     }
 

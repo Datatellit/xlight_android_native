@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -75,7 +76,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
     private ArrayList<String> sexList = new ArrayList<String>();
     private String usernameResult;
     private String nickNameResult;
-    private String sexResResult;
+    private int sexResResult;
     private final int WRITE_PERMISSION_REQ_CODE = 100;
 
     public static final MediaType MEDIA_TYPE_MARKDOWN
@@ -94,7 +95,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
     private void uploadPic2(String picPath) {
 
         client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();
 
@@ -104,17 +105,20 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
         } else {
             RequestBody fileBody = RequestBody.create(MediaType.parse(TYPE), file);
             RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("lightscrop.jpg", file.getName(), fileBody).build();
-
+            String url = NetConfig.URL_UPLOAD_IMG + UserUtils.getUserInfo(this).getId() + "/uploadimg?access_token=" + UserUtils.getAccessToken(this);
+            Log.d("XLight", url);
             Request requestPostFile = new Request.Builder()
-                    .url(NetConfig.URL_UPLOAD_IMG + UserUtils.getUserInfo(this).getId() + "/uploadimg?access_token=" + UserUtils.getAccessToken(this))
+                    .url(url)
                     .post(requestBody)
                     .build();
+            ToastUtil.showLoading(this);
             client.newCall(requestPostFile).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            ToastUtil.dismissLoading();
                             ToastUtil.showToast(UserMsgModifyActivity.this, getString(R.string.avar_set_fail));
                         }
                     });
@@ -128,6 +132,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
                         public void run() {
                             Logger.i("图片地址=" + jsonResult);
                             try {
+                                ToastUtil.dismissLoading();
                                 JSONObject object = new JSONObject(jsonResult);
                                 if (object.has("filePath")) {
                                     String filePath = object.getString("filePath");
@@ -257,7 +262,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
         LoginResult info = UserUtils.getUserInfo(this);
         user_name.setText("" + info.username);
         nick_name.setText("" + ((TextUtils.isEmpty(info.nickname) ? "" : info.nickname)));
-        sex.setText("" + ((TextUtils.isEmpty(info.sex)) ? getString(R.string.bu_queding) : ("0".equals(info.sex) ? getString(R.string.women) : getString(R.string.man))));
+        sex.setText("" + ((info.sex == 2) ? getString(R.string.bu_queding) : (0 == info.sex) ? getString(R.string.women) : getString(R.string.man)));
         if (StringUtil.isNotEmpty(info.username, false)) {
             user_name.setText(info.username);
         } else {
@@ -269,11 +274,11 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
             nick_name.setText("");
         }
         if (StringUtil.isNotEmpty(info.sex, true)) {
-            if (info.sex.equals("0")) {
+            if (info.sex == 0) {
                 sex.setText(R.string.women);
-            } else if (info.sex.equals("1")) {
+            } else if (info.sex == 1) {
                 sex.setText(R.string.man);
-            } else if (info.sex.equals("2")) {
+            } else if (info.sex == 2) {
                 sex.setText(R.string.bu_queding);
             }
         } else {
@@ -322,7 +327,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
         LoginResult userInfo = UserUtils.getUserInfo(this);
         usernameResult = userInfo.getUsername();
         nickNameResult = userInfo.getNickname();
-        sexResResult = TextUtils.isEmpty(userInfo.getSex()) ? "0" : "1";//sex=0代表女，1代表男，没选的话就不传这个参数
+        sexResResult = userInfo.getSex();//sex=0代表女，1代表男，没选的话就不传这个参数
         Logger.e(TAG, userInfo.toString());
         this.type = type;
 
@@ -334,7 +339,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
                 nickNameResult = result;
                 break;
             case 2:
-                sexResResult = String.valueOf(sexPosition);
+                sexResResult = sexPosition;
                 break;
         }
 
@@ -344,7 +349,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
             object.put("username", usernameResult);
             object.put("nickname", nickNameResult);
             if ("2".equals(sexResResult)) {  //不确定，性别不确定时不用传此参数
-                object.put("sex", "");
+                object.put("sex", 2);
             } else {
                 object.put("sex", sexResResult);
             }
@@ -389,13 +394,7 @@ public class UserMsgModifyActivity extends ShowPicSelectBaseActivity implements 
                 nick_name.setText(nickNameResult);
                 break;
             case 2:
-                if ("0".equals(sexResResult)) {
-                    mLoginResult.sex = "0";
-                } else if ("1".equals(sexResResult)) {
-                    mLoginResult.sex = "1";
-                } else {
-                    mLoginResult.sex = "2";
-                }
+                mLoginResult.sex = sexResResult;
                 break;
         }
         UserUtils.saveUserInfo(this, mLoginResult);

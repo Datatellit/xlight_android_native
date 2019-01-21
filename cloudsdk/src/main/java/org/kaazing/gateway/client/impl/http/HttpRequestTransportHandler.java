@@ -21,32 +21,28 @@
 
 package org.kaazing.gateway.client.impl.http;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.kaazing.gateway.client.impl.bridge.HttpRequestBridgeHandler;
 import org.kaazing.gateway.client.impl.ws.WebSocketTransportHandler;
 import org.kaazing.gateway.client.util.WrappedByteBuffer;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HttpRequestTransportHandler extends HttpRequestHandlerAdapter {
 
     private static final String CLASS_NAME = HttpRequestTransportHandler.class.getName();
     private static final Logger LOG = Logger.getLogger(CLASS_NAME);
 
-    public static HttpRequestHandlerFactory DEFAULT_FACTORY = new HttpRequestHandlerFactory() {
-        
-        @Override
-        public HttpRequestHandler createHandler() {
-            HttpRequestHandler requestHandler = new HttpRequestTransportHandler();
-            
-            if (LOG.isLoggable(Level.FINE)) {
-                HttpRequestLoggingHandler loggingHandler = new HttpRequestLoggingHandler();
-                loggingHandler.setNextHandler(requestHandler);
-                requestHandler = loggingHandler;
-            }
-            
-            return requestHandler;
+    public static HttpRequestHandlerFactory DEFAULT_FACTORY = () -> {
+        HttpRequestHandler requestHandler = new HttpRequestTransportHandler();
+
+        if (LOG.isLoggable(Level.FINE)) {
+            HttpRequestLoggingHandler loggingHandler = new HttpRequestLoggingHandler();
+            loggingHandler.setNextHandler(requestHandler);
+            requestHandler = loggingHandler;
         }
+
+        return requestHandler;
     };
 
     @Override

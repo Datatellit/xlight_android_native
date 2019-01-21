@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.util.Attributes;
 import com.umarbhutta.xlightcompanion.R;
+import com.umarbhutta.xlightcompanion.okHttp.model.IntegratedDevice;
 import com.umarbhutta.xlightcompanion.okHttp.model.Rows;
 import com.umarbhutta.xlightcompanion.scenario.ScenarioListAdapter;
 
@@ -75,10 +77,13 @@ public class DeviceListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.main_devices_list_item, null);
 
             holder.deviceName = (TextView) convertView.findViewById(R.id.deviceName);
-            holder.main_device = (TextView) convertView.findViewById(R.id.main_device);
-            holder.swipeLayout = (SwipeLayout) convertView.findViewById(R.id.slItem);
-            holder.ivShare = (ImageView) convertView.findViewById(R.id.ivShare);
-            holder.ivIsShare = (ImageView) convertView.findViewById(R.id.ivIsShare);
+            holder.llAlexa = (LinearLayout) convertView.findViewById(R.id.ll_alexa);
+            holder.llGoogle = (LinearLayout) convertView.findViewById(R.id.ll_google);
+            holder.llTmall = (LinearLayout) convertView.findViewById(R.id.ll_tmall);
+//            holder.main_device = (TextView) convertView.findViewById(R.id.main_device);
+//            holder.swipeLayout = (SwipeLayout) convertView.findViewById(R.id.slItem);
+//            holder.ivShare = (ImageView) convertView.findViewById(R.id.ivShare);
+//            holder.ivIsShare = (ImageView) convertView.findViewById(R.id.ivIsShare);
             convertView.setTag(holder);
 
         } else {
@@ -87,74 +92,85 @@ public class DeviceListAdapter extends BaseAdapter {
 
         Rows deviceInfo = deviceList.get(position);
         holder.deviceName.setText(TextUtils.isEmpty(deviceInfo.devicename) ? context.getString(R.string.lamp) : deviceInfo.devicename);
-        holder.main_device.setVisibility(0 == deviceInfo.maindevice || deviceInfo.isShare == 1 ? View.GONE : View.VISIBLE);
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, deviceInfo.isShare == 1 ? null : convertView.findViewById(R.id.bottom_wrapper));
-        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, null);
-        holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
-            @Override
-            public void onStartOpen(SwipeLayout layout) {
-
-            }
-
-            @Override
-            public void onOpen(SwipeLayout layout) {
-                lvh.put(position, false);
-            }
-
-            @Override
-            public void onStartClose(SwipeLayout layout) {
-
-            }
-
-            @Override
-            public void onClose(SwipeLayout layout) {
-                index = position;
-                if (timer != null && tt != null) {
-                    tt.cancel();
-                    timer.cancel();
-                }
-                timer = new Timer();
-                tt = new CustTask();
-                timer.schedule(tt, 100);
-            }
-
-            @Override
-            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-
-            }
-
-            @Override
-            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-
-            }
-        });
-        final SwipeLayout swipeLayout = holder.swipeLayout;
-        holder.ivShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //进入分享页面
-                if (mOnShareClickCallBack != null) {
-                    swipeLayout.close();
-                    mOnShareClickCallBack.OnShareClickCallBack(position);
+        if (deviceInfo.integrateddevices != null && deviceInfo.integrateddevices.size() > 0) {
+            for (IntegratedDevice integratedDevice : deviceInfo.integrateddevices) {
+                if (integratedDevice.type == 1) {
+                    holder.llAlexa.setVisibility(View.VISIBLE);
+                } else if (integratedDevice.type == 2) {
+                    holder.llTmall.setVisibility(View.VISIBLE);
+                } else if (integratedDevice.type == 3) {
+                    holder.llGoogle.setVisibility(View.VISIBLE);
                 }
             }
-        });
-        holder.swipeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //触发外部Click事件，添加冗余时间200ms
-                if (swipeLayout.getOpenStatus() == SwipeLayout.Status.Close && (lvh.get(index) == null || (Boolean) lvh.get(index))) {
-                    if (mOnClickCallBack != null) {
-                        mOnClickCallBack.onClickCallBack(position);
-                    }
-                }
-            }
-        });
-        if (deviceInfo.isShare == 1) {
-            holder.ivIsShare.setVisibility(View.VISIBLE);
-        } else {
-            holder.ivIsShare.setVisibility(View.GONE);
         }
+//        holder.main_device.setVisibility(0 == deviceInfo.maindevice || deviceInfo.isShare == 1 ? View.GONE : View.VISIBLE);
+//        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, deviceInfo.isShare == 1 ? null : convertView.findViewById(R.id.bottom_wrapper));
+//        holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, null);
+//        holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+//            @Override
+//            public void onStartOpen(SwipeLayout layout) {
+//
+//            }
+//
+//            @Override
+//            public void onOpen(SwipeLayout layout) {
+//                lvh.put(position, false);
+//            }
+//
+//            @Override
+//            public void onStartClose(SwipeLayout layout) {
+//
+//            }
+//
+//            @Override
+//            public void onClose(SwipeLayout layout) {
+//                index = position;
+//                if (timer != null && tt != null) {
+//                    tt.cancel();
+//                    timer.cancel();
+//                }
+//                timer = new Timer();
+//                tt = new CustTask();
+//                timer.schedule(tt, 100);
+//            }
+//
+//            @Override
+//            public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+//
+//            }
+//
+//            @Override
+//            public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+//
+//            }
+//        });
+//        final SwipeLayout swipeLayout = holder.swipeLayout;
+//        holder.ivShare.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //进入分享页面
+//                if (mOnShareClickCallBack != null) {
+//                    swipeLayout.close();
+//                    mOnShareClickCallBack.OnShareClickCallBack(position);
+//                }
+//            }
+//        });
+//        holder.swipeLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //触发外部Click事件，添加冗余时间200ms
+//                if (swipeLayout.getOpenStatus() == SwipeLayout.Status.Close && (lvh.get(index) == null || (Boolean) lvh.get(index))) {
+//                    if (mOnClickCallBack != null) {
+//                        mOnClickCallBack.onClickCallBack(position);
+//                    }
+//                }
+//            }
+//        });
+//        if (deviceInfo.isShare == 1) {
+//            holder.ivIsShare.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.ivIsShare.setVisibility(View.GONE);
+//        }
         return convertView;
     }
 
@@ -180,9 +196,12 @@ public class DeviceListAdapter extends BaseAdapter {
 
     class ViewHolder {
         public TextView deviceName;
-        public TextView main_device;
-        public SwipeLayout swipeLayout;
-        public ImageView ivShare;
-        public ImageView ivIsShare;
+        public LinearLayout llAlexa;
+        public LinearLayout llGoogle;
+        public LinearLayout llTmall;
+//        public TextView main_device;
+//        public SwipeLayout swipeLayout;
+//        public ImageView ivShare;
+//        public ImageView ivIsShare;
     }
 }

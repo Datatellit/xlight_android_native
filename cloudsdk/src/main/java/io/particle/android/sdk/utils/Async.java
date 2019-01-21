@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.concurrent.RejectedExecutionException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.particle.android.sdk.cloud.ParticleCloud;
-import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
+import io.particle.android.sdk.cloud.exceptions.ParticleCloudException;
 
 
 /**
@@ -64,9 +66,13 @@ public class Async {
 
 
     public static <T> AsyncApiWorker<ParticleDevice, T> executeAsync(ParticleDevice particleDevice,
-                                                                     ApiWork<ParticleDevice, T> work) {
-        return (AsyncApiWorker<ParticleDevice, T>) new AsyncApiWorker<>(particleDevice, work)
-                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                                                     ApiWork<ParticleDevice, T> work) throws ParticleCloudException {
+        try {
+            return (AsyncApiWorker<ParticleDevice, T>) new AsyncApiWorker<>(particleDevice, work)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (RejectedExecutionException ex) {
+            throw new ParticleCloudException(ex);
+        }
     }
 
 
@@ -75,7 +81,7 @@ public class Async {
         private final ApiCaller caller;
         private final ApiWork<ApiCaller, Result> work;
 
-        private Activity activity;
+        private WeakReference<Activity> activityReference;
 
         private volatile ParticleCloudException exception;
         // FIXME: this is Bad and Wrong, but this needs to SHIP, so I'm leaving it for now.
@@ -95,7 +101,7 @@ public class Async {
          * care about the )
          */
         public AsyncApiWorker<ApiCaller, Result> andIgnoreCallbacksIfActivityIsFinishing(Activity activity) {
-            this.activity = activity;
+            this.activityReference = new WeakReference<>(activity);
             return this;
         }
 
@@ -129,7 +135,7 @@ public class Async {
             work.onTaskFinished();
             if (exception == null && ioException == null) {
                 work.onSuccess(result);
-                
+
             } else {
                 // FIXME: this error handling isn't quite right; fix it.
                 if (exception == null) {
@@ -141,10 +147,10 @@ public class Async {
         }
 
         private boolean shouldCallCallbacks() {
-            if (activity == null) {
+            if (activityReference == null || activityReference.get() == null) {
                 return true;
             }
-            boolean shouldCall = !activity.isFinishing();
+            boolean shouldCall = !activityReference.get().isFinishing();
             if (!shouldCall) {
                 log.d("Refusing to call callbacks, was told to ignore them if the activity was finishing");
             }

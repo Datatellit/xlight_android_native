@@ -21,19 +21,19 @@
 
 package org.kaazing.gateway.client.impl.wseb;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.kaazing.gateway.client.impl.Channel;
 import org.kaazing.gateway.client.impl.http.HttpRequest;
 import org.kaazing.gateway.client.util.HttpURI;
 import org.kaazing.gateway.client.util.WrappedByteBuffer;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 class UpstreamChannel extends Channel {
     HttpURI location;
     String cookie;
 
-    ConcurrentLinkedQueue<WrappedByteBuffer> sendQueue = new ConcurrentLinkedQueue<WrappedByteBuffer>();
+    ConcurrentLinkedQueue<WrappedByteBuffer> sendQueue = new ConcurrentLinkedQueue<>();
     AtomicBoolean sendInFlight = new AtomicBoolean(false);
     HttpRequest request;
     
