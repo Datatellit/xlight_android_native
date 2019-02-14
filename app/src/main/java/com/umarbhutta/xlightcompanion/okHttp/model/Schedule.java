@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 
 public class Schedule implements Serializable {
+    public int id;
     public String ruleconditionname;
     public int devicenodeId;
     public String weekdays;
@@ -24,7 +25,8 @@ public class Schedule implements Serializable {
     @Override
     public String toString() {
         return "Schedule{" +
-                "ruleconditionname='" + ruleconditionname + '\'' +
+                "id=" + id +
+                ",ruleconditionname='" + ruleconditionname + '\'' +
                 ", devicenodeId=" + devicenodeId +
                 ", weekdays='" + weekdays + '\'' +
                 ", hour=" + hour +

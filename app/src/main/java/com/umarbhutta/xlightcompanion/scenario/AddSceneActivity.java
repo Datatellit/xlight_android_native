@@ -25,11 +25,13 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -87,12 +89,14 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
     private DialogPlus dialogPlus;
     private DialogPlus dialogIcon;
     private View mPopupHeadViewy;
-    private View mIconView;
-    private int curIndex;
     private ColorSeekBar colorSeekBar;
     private LinearLayout llColor;
     private LinearLayout llCCT;
     private LinearLayout llChange;
+    private RadioGroup rbGroup;
+    private View mIconView;
+    private int curIndex;
+
     private GridView gvIcon;
     private String selectIcon;
     private SceneResult sceneResult;
@@ -155,6 +159,7 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
         llColor = (LinearLayout) mPopupHeadViewy.findViewById(R.id.ll_color);
         llCCT = (LinearLayout) mPopupHeadViewy.findViewById(R.id.ll_cct);
         llChange = (LinearLayout) mPopupHeadViewy.findViewById(R.id.llChange);
+        rbGroup = (RadioGroup) mPopupHeadViewy.findViewById(R.id.rb_group);
         //txtColor = (TextView) mPopupHeadViewy.findViewById(R.id.txtColor);
         dialogPlus = DialogPlus.newDialog(this)
                 .setContentHolder(new ViewHolder(mPopupHeadViewy))
@@ -195,15 +200,37 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                 chkSwitch.setChecked(deviceSures.get(position).ison == 1 ? true : false);
                 brightness.setProgress(deviceSures.get(position).brightness);
                 cct.setProgress(deviceSures.get(position).cct - 2700);
+                if (deviceSures.get(position).filter > 0) {
+                    // 进行设置选中
+                    int filter = deviceSures.get(position).filter;
+                    if (filter == 1) {
+                        ((RadioButton) mPopupHeadViewy.findViewById(R.id.rb_1)).setChecked(true);
+                    } else if (filter == 2) {
+                        ((RadioButton) mPopupHeadViewy.findViewById(R.id.rb_2)).setChecked(true);
+                    } else if (filter == 3) {
+                        ((RadioButton) mPopupHeadViewy.findViewById(R.id.rb_3)).setChecked(true);
+                    } else if (filter == 4) {
+                        ((RadioButton) mPopupHeadViewy.findViewById(R.id.rb_4)).setChecked(true);
+                    }
+                }
                 if (deviceSures.get(position).devicetype > 1) { // 彩灯控制
                     llChange.setVisibility(View.VISIBLE);
-                    llColor.setVisibility(View.VISIBLE);
                     int[] color = deviceSures.get(position).color;
+                    if (sceneResult == null || (color.length == 3 && (color[0] != 0 || color[1] != 0 || color[2] != 0))) {
+                        llColor.setVisibility(View.VISIBLE);
+                        llCCT.setVisibility(View.GONE);
+                        txtChange.setText(getString(R.string.txt_cct));
+                    } else {
+                        llColor.setVisibility(View.GONE);
+                        llCCT.setVisibility(View.VISIBLE);
+                        deviceSures.get(position).scenarioId = "CCT";
+                        txtChange.setText(getString(R.string.txt_color));
+                    }
                     colorSeekBar.setColor(Color.rgb(color[0], color[1], color[2]));
-                    llCCT.setVisibility(View.GONE);
                 } else {
                     llColor.setVisibility(View.GONE);
                     llCCT.setVisibility(View.VISIBLE);
+                    deviceSures.get(position).scenarioId = "CCT";
                     llChange.setVisibility(View.GONE);
                 }
                 // 弹出设置按钮
@@ -546,7 +573,10 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                             break;
                         case 5:
                             devicenodes.get(j).cct = cmd.getInt("value");
+                            devicenodes.get(j).color = new int[]{0, 0, 0};
                             break;
+                        case 7:
+                            devicenodes.get(j).filter = cmd.getInt("filter");
                         default:
                             break;
                     }
@@ -708,7 +738,6 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                     }
                     jb.putOpt("ring", j_array);
                     ljb.add(jb.toString());
-                    return ljb;
                 } else {
                     // 添加其他属性
                     jb = new JSONObject();
@@ -723,11 +752,31 @@ public class AddSceneActivity extends BaseActivity implements View.OnClickListen
                     jb.put("nd", (int) device.nodeno);
                     jb.put("value", (int) device.cct);
                     ljb.add(jb.toString());
-                    return ljb;
                 }
+                RadioButton rb = (RadioButton) mPopupHeadViewy.findViewById(rbGroup.getCheckedRadioButtonId());
+                if (rb != null && rb.getId() != mPopupHeadViewy.findViewById(R.id.rb_0).getId()) {
+                    jb = new JSONObject();
+                    jb.put("deviceId", device.coreid);
+                    jb.put("cmd", 7);
+                    jb.put("nd", (int) device.nodeno);
+                    jb.put("filter", getFilterValue());
+                    ljb.add(jb.toString());
+                }
+                return ljb;
             }
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private int getFilterValue() {
+        if (rbGroup.getCheckedRadioButtonId() == mPopupHeadViewy.findViewById(R.id.rb_1).getId()) {
+            return 1;
+        } else if (rbGroup.getCheckedRadioButtonId() == mPopupHeadViewy.findViewById(R.id.rb_2).getId()) {
+            return 2;
+        } else if (rbGroup.getCheckedRadioButtonId() == mPopupHeadViewy.findViewById(R.id.rb_3).getId()) {
+            return 3;
+        }
+        return 4;
     }
 }

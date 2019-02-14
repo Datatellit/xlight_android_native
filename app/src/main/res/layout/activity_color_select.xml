@@ -38,7 +38,7 @@
         android:id="@+id/tv_selected"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="22dp"
         app:rv_backgroundColor="#ff6fc0"
         app:rv_isRadiusHalfHeight="true"
@@ -48,18 +48,20 @@
 
     <com.skydoves.colorpickerpreference.ColorPickerView
         android:id="@+id/colorPickerView"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
+        android:layout_width="195dp"
+        android:layout_height="195dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        app:palette="@drawable/palette"
-        app:selector="@drawable/hdan" />
+        app:selector="@drawable/hdan"
+        app:palette="@drawable/palette" />
+
+    <!--app:selector="@drawable/hdan" -->
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="20dp"
         android:gravity="center">
 
         <com.flyco.roundview.RoundLinearLayout

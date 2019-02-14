@@ -57,18 +57,18 @@
         <!--<service android:name="com.amap.api.location.APSService"></service>-->
         <!--高德appkey，上线时请替换成正式的-->
         <!--<meta-data-->
-            <!--android:name="com.amap.api.v2.apikey"-->
-            <!--android:value="52842bdcc68adcece59f5d75cc1fc2f5"></meta-data>-->
+        <!--android:name="com.amap.api.v2.apikey"-->
+        <!--android:value="52842bdcc68adcece59f5d75cc1fc2f5"></meta-data>-->
         <!--<meta-data-->
-            <!--android:name="UMENG_APPKEY"-->
-            <!--android:value="5916f9dc310c935a8a000a10" />-->
+        <!--android:name="UMENG_APPKEY"-->
+        <!--android:value="5916f9dc310c935a8a000a10" />-->
         <!--<meta-data-->
-            <!--android:name="UMENG_MESSAGE_SECRET"-->
-            <!--android:value="da3853872705530561e9bd6901092ccd" />-->
+        <!--android:name="UMENG_MESSAGE_SECRET"-->
+        <!--android:value="da3853872705530561e9bd6901092ccd" />-->
 
         <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="XLight" />-->
+        <!--android:name="UMENG_CHANNEL"-->
+        <!--android:value="XLight" />-->
         <meta-data
             android:name="BUGLY_APPID"
             android:value="f4a54b5aa0" />
@@ -92,7 +92,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <activity
@@ -181,6 +181,31 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".scenario.AddSceneActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".rule.AddRuleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".rule.RuleTimeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".rule.RuleSensorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".rule.RuleActionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".rule.RuleConditionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden" />

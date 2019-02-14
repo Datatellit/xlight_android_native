@@ -61,7 +61,7 @@ public class SettingListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tv_setting_name.setText(mSettingStr.get(position));
-        if (position == mSettingStr.size() - 1) {
+        if (position == mSettingStr.size() - 1 && mSettingStr.get(position).equals(mActivity.getString(R.string.logout))) {
             holder.iv.setVisibility(View.INVISIBLE);
         } else {
             holder.iv.setVisibility(View.VISIBLE);

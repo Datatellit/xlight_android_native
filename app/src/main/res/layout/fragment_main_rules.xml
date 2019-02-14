@@ -24,15 +24,26 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/txtNone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center"
+                    android:paddingTop="20dp"
+                    android:text="@string/no_add_rules"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
                 <com.umarbhutta.xlightcompanion.gridView.MyGridView
                     android:id="@+id/gvRules"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:paddingBottom="15dp"
                     android:gravity="center"
                     android:horizontalSpacing="15dp"
                     android:numColumns="1"
+                    android:paddingBottom="15dp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:scrollbars="none"

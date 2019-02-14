@@ -13,6 +13,7 @@ import android.os.Build;
 import com.umarbhutta.xlightcompanion.SDK.CloudAccount;
 
 import org.json.JSONObject;
+import org.kaazing.gateway.client.impl.bridge.BridgeUtil;
 
 import static android.content.Context.TELEPHONY_SERVICE;
 
@@ -92,11 +93,13 @@ public class DeviceInfo {
             jb.put("SDK", Build.VERSION.SDK);
             jb.put("SDK_INT", Build.VERSION.SDK_INT);
             jb.put("RELEASE", Build.VERSION.RELEASE);
-            jb.put("BASE_OS", Build.VERSION.BASE_OS);
+            if (Build.VERSION.SDK_INT >= 23) {
+                jb.put("BASE_OS", Build.VERSION.BASE_OS);
+            }
             jb.put("CODENAME", Build.VERSION.CODENAME);
             jb.put("INCREMENTAL", Build.VERSION.INCREMENTAL);
             return jb.toString();
-        } catch (Exception e) {
+        } catch (NoSuchFieldError | Exception e) {
             return "";
         }
     }
@@ -117,7 +120,7 @@ public class DeviceInfo {
             jb.put("CPU", Build.CPU_ABI);
             jb.put("BOARD", Build.BOARD);
             return jb.toString();
-        } catch (Exception e) {
+        } catch (NoSuchFieldError | Exception e) {
             return "";
         }
     }

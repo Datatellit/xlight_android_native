@@ -127,7 +127,7 @@ public class DeviceRulesListAdapter extends BaseAdapter {
                 if (mRuleconditions.ruleconditiontype == 1) {//定时
                     textView.setText((getText(mRuleconditions.attribute) + getText(mRuleconditions.operator) + getText(mRuleconditions.rightValue)
                             + getText(mRuleconditions.starttime) + getText(mRuleconditions.endtime) + getweekdays(mRuleconditions.weekdays)
-                            + (getText(mRuleconditions.hour).trim() + ":") + (getText(mRuleconditions.minute))
+                            + (mRuleconditions.hour + ":") + (mRuleconditions.minute)
                     ).trim());
                 } else if (mRuleconditions.ruleconditiontype == 2) {//亮度
                     textView.setText((getText(mRuleconditions.attribute)

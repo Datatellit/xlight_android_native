@@ -309,7 +309,7 @@ public class ColorFragment extends Fragment implements View.OnClickListener {
             if (ControlDeviceActivity.devicenodes.color != null) {
                 // 设置颜色
                 int color = Color.rgb(ControlDeviceActivity.devicenodes.color[0], ControlDeviceActivity.devicenodes.color[1], ControlDeviceActivity.devicenodes.color[2]);
-                colorSelected.getDelegate().setBackgroundColor(color);
+                colorSelected.getDelegate().setBackgroundColor(color == -16777216 ? -22 : color);
 
             }
             if (ControlDeviceActivity.devicenodes.filter != 0) {

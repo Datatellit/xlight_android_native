@@ -1414,33 +1414,64 @@ public class xltDevice {
     //-------------------------------------------------------------------------
     // Device Manipulate Interfaces (DMI)
     //-------------------------------------------------------------------------
-    public int sceAddScenario(final int scenarioId, final int br, final int cw, final int ww, final int r, final int g, final int b, final int filter) {
-        int rc = -1;
-
-        // Can only use Cloud Bridge
-        if (isCloudOK()) {
-            rc = cldBridge.JSONConfigScenario(scenarioId, br, cw, ww, r, g, b, filter);
-        }
-        return rc;
+    public int sceAddScenario(final int scenarioId, final int state, final int br, final int cct, final int r, final int g, final int b, final int filter) {
+        return sceAddScenario(scenarioId, state, br, cct, r, g, b, filter, false);
     }
 
-    public int sceAddSchedule(final int scheduleId, final boolean isRepeat, final String weekdays, final int hour, final int minute, final int alarmId) {
-        int rc = -1;
-
+    public int sceAddScenario(final int scenarioId, final int state, final int br, final int cct, final int r, final int g, final int b, final int filter, final boolean update) {
         // Can only use Cloud Bridge
         if (isCloudOK()) {
-            rc = cldBridge.JSONConfigSchudle(scheduleId, isRepeat, weekdays, hour, minute, alarmId);
+            Thread rc = cldBridge.JSONConfigScenario(scenarioId, state, br, cct, r, g, b, filter, update);
+            cldBridge.pushSequential(rc);
+        } else {
+            return -1;
         }
-        return rc;
+        return 1;
     }
 
-    public int sceAddRule(final int ruleId, final int scheduleId, final int scenarioId) {
-        int rc = -1;
+    public int sceAddSchedule(final int scheduleId, final boolean isRepeat, final int weekdays, final int hour, final int minute, final int alarmId) {
+        return sceAddSchedule(scheduleId, isRepeat, weekdays, hour, minute, 0, false);
+    }
+
+    public int sceAddSchedule(final int scheduleId, final boolean isRepeat, final int weekdays, final int hour, final int minute, final int alarmId, final boolean update) {
+        // Can only use Cloud Bridge
+        if (isCloudOK()) {
+            Thread rc = cldBridge.JSONConfigSchudle(scheduleId, isRepeat, weekdays, hour, minute, alarmId, update);
+            cldBridge.pushSequential(rc);
+        } else {
+            return -1;
+        }
+        return 1;
+    }
+
+    public int sceAddRule(final int ruleId, final int[][] cond, final int scheduleId, final int scenarioId) {
+        return sceAddRule(ruleId, cond, scheduleId, scenarioId, false);
+    }
+
+    public int sceAddRule(final int ruleId, final int[][] cond, final int scheduleId, final int scenarioId, final boolean update) {
 
         // Can only use Cloud Bridge
         if (isCloudOK()) {
-            rc = cldBridge.JSONConfigRule(ruleId, scheduleId, scenarioId);
+            Thread rc = cldBridge.JSONConfigRule(ruleId, cond, scenarioId, scheduleId, update);
+            cldBridge.pushSequential(rc);
+        } else {
+            return -1;
         }
-        return rc;
+        return 1;
+    }
+
+    public void clearSequential() {
+        if (isCloudOK()) {
+            cldBridge.clearSequential();
+        }
+    }
+
+    public int sequentialExecutor() {
+        if (isCloudOK()) {
+            cldBridge.execSequential();
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }

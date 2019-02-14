@@ -12,17 +12,17 @@ public class Ruleconditions implements Serializable {
     public String ruleconditionname;
     public int ruleId;
     public int devicenodeId;
-    public String sensorId;
+    public int sensorId;
     public String attribute;
     public String operator;
     public String rightValue;
     public String starttime;
     public String endtime;
     public String weekdays;
-    public String hour;
-    public String minute;
-    public String isrepeat;
-    public String status;
+    public int hour;
+    public int minute;
+    public int isrepeat;
+    public int status;
     public String createdAt;
     public String updatedAt;
     /**
@@ -37,17 +37,17 @@ public class Ruleconditions implements Serializable {
                 ", ruleconditionname='" + ruleconditionname + '\'' +
                 ", ruleId=" + ruleId +
                 ", devicenodeId=" + devicenodeId +
-                ", sensorId='" + sensorId + '\'' +
+                ", sensorId='" + sensorId +
                 ", attribute='" + attribute + '\'' +
                 ", operator='" + operator + '\'' +
                 ", rightValue='" + rightValue + '\'' +
                 ", starttime='" + starttime + '\'' +
                 ", endtime='" + endtime + '\'' +
                 ", weekdays='" + weekdays + '\'' +
-                ", hour='" + hour + '\'' +
-                ", minute='" + minute + '\'' +
-                ", isrepeat='" + isrepeat + '\'' +
-                ", status='" + status + '\'' +
+                ", hour=" + hour +
+                ", minute=" + minute +
+                ", isrepeat=" + isrepeat +
+                ", status=" + status +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 '}';

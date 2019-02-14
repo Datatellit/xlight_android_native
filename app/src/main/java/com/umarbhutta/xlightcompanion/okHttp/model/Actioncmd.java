@@ -8,7 +8,8 @@ import java.util.List;
  * 灯具控制
  */
 
-public class Actioncmd implements Serializable{
+public class Actioncmd implements Serializable {
+    public int id;
     public int devicenodeId;
     public List<Actioncmdfield> actioncmdfield;
     public int actioncmdType;
@@ -20,7 +21,8 @@ public class Actioncmd implements Serializable{
     @Override
     public String toString() {
         return "Actioncmd{" +
-                "devicenodeId=" + devicenodeId +
+                "id=" + id +
+                ",devicenodeId=" + devicenodeId +
                 ", actioncmdfield=" + actioncmdfield +
                 ", actioncmdType=" + actioncmdType +
                 '}';

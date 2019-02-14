@@ -24,8 +24,8 @@ android {
         applicationId "com.umarbhutta.xlightcompanion"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 10
-        versionName "1.0.9"
+        versionCode 11
+        versionName "1.0.10"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         ndk {
@@ -38,6 +38,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
     sourceSets {
         main {
@@ -74,7 +78,8 @@ dependencies {
 //    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':devicesetup')
     compile project(':cloudsdk')
-    compile project(':push')
+    compile project(':colorpickerpreference')
+//    compile project(':push')
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:cardview-v7:27.1.0'
     compile 'com.android.support:design:27.1.0'
@@ -83,7 +88,7 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.squareup.okhttp3:okhttp:3.10.0'
     compile 'me.priyesh:chroma:1.0.2'
-    compile 'com.larswerkman:HoloColorPicker:1.5'
+//    compile 'com.larswerkman:HoloColorPicker:1.5'
     compile 'com.google.code.gson:gson:2.2.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.android.support.constraint:constraint-layout:+'
@@ -100,7 +105,7 @@ dependencies {
     implementation 'com.baoyz.actionsheet:library:1.1.7'
     compile 'com.github.rtugeek:ColorSeekBar:1.5.2'
     compile 'org.greenrobot:eventbus:3.1.1'
-    compile 'com.github.skydoves:colorpickerpreference:1.0.4'
+//    implementation "com.github.skydoves:colorpickerpreference:1.0.7"
     compile 'com.squareup:seismic:1.0.2'
     compile 'me.priyesh:chroma:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
@@ -114,4 +119,5 @@ dependencies {
     implementation 'com.flyco.roundview:FlycoRoundView_Lib:1.1.4@aar'
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
 }

@@ -23,9 +23,9 @@ import com.umarbhutta.xlightcompanion.control.adapter.DeviceRulesListAdapter;
 import com.umarbhutta.xlightcompanion.main.SlidingMenuMainActivity;
 import com.umarbhutta.xlightcompanion.okHttp.model.DeviceGetRules;
 import com.umarbhutta.xlightcompanion.okHttp.model.RuleInfo;
-import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeleteRuleDevice;
-import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeviceRulesInfo;
-import com.umarbhutta.xlightcompanion.okHttp.requests.RequestRuleSwitchDevice;
+import com.umarbhutta.xlightcompanion.okHttp.requests.RequestDeleteRule;
+import com.umarbhutta.xlightcompanion.okHttp.requests.RequestRulesInfo;
+import com.umarbhutta.xlightcompanion.okHttp.requests.RequestRuleSwitch;
 import com.umarbhutta.xlightcompanion.okHttp.requests.imp.CommentRequestCallback;
 import com.umarbhutta.xlightcompanion.views.ProgressDialogUtils;
 
@@ -89,7 +89,7 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
         if (mDialog != null) {
             mDialog.show();
         }
-        RequestDeviceRulesInfo.getInstance().getRules(getActivity(), new RequestDeviceRulesInfo.OnRequestFirstPageInfoCallback() {
+        RequestRulesInfo.getInstance().getRules(getActivity(), new RequestRulesInfo.OnRequestFirstPageInfoCallback() {
 
             @Override
             public void onRequestFirstPageInfoSuccess(final DeviceGetRules deviceInfoResult) {
@@ -103,7 +103,7 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
                             mRuleInfoList.clear();
                             if (null != deviceInfoResult && null != deviceInfoResult.rows) {
                                 Logger.e(TAG, "deviceInfoResult=" + deviceInfoResult.toString());
-                                mRuleInfoList.addAll(deviceInfoResult.rows);
+                                // mRuleInfoList.addAll(deviceInfoResult.rows);
                                 initList();
                             } else {
                                 ToastUtil.showToast(getActivity(), getString(R.string.data_is_null));
@@ -206,7 +206,7 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
         } else {
             isCheckedInt = 0;
         }
-        RequestRuleSwitchDevice.getInstance().switchRule(getActivity(), mRuleInfoList.get(position).id, isCheckedInt,  new CommentRequestCallback() {
+        RequestRuleSwitch.getInstance().switchRule(getActivity(), mRuleInfoList.get(position).id, isCheckedInt, new CommentRequestCallback() {
             @Override
             public void onCommentRequestCallbackSuccess() {
                 getActivity().runOnUiThread(new Runnable() {
@@ -254,7 +254,7 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
 
                 mDialog.show();
 
-                RequestDeleteRuleDevice.getInstance().deleteRule(getActivity(), mRuleInfoList.get(position).id + "", new CommentRequestCallback() {
+                RequestDeleteRule.getInstance().deleteRule(getActivity(), mRuleInfoList.get(position).id, new CommentRequestCallback() {
                     @Override
                     public void onCommentRequestCallbackSuccess() {
                         getActivity().runOnUiThread(new Runnable() {
@@ -267,6 +267,7 @@ public class ControlRuleFragment extends Fragment implements View.OnClickListene
                             }
                         });
                     }
+
                     @Override
                     public void onCommentRequestCallbackFail(int code, final String errMsg) {
                         getActivity().runOnUiThread(new Runnable() {

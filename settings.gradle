@@ -1,2 +1,2 @@
-include ':app', ':cloudsdk', ':push',':devicesetup'
+include ':app', ':cloudsdk', ':devicesetup',':colorpickerpreference'
 

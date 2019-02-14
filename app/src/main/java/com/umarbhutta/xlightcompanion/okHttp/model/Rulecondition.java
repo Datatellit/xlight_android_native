@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class Rulecondition implements Serializable {
-    public List<Condition> condition;
+    public List<ConditionOld> condition;
     public List<Schedule> schedule;
 
     @Override

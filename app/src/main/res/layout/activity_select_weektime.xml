@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/top_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/margin_l_r"
+                android:paddingLeft="@dimen/margin_l_r"
+                android:paddingTop="@dimen/margin_l_r">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ys_h" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/chkRepeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_l_r"
+                    android:checked="true"
+                    android:text="@string/isrepeat" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_l_r"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/pickerview_week" />
+
+                    <com.aigestudio.wheelpicker.WheelPicker
+                        android:id="@+id/wp_week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="180dp"
+                        android:minWidth="80dp"
+                        app:wheel_item_align="center"
+                        app:wheel_item_space="12dp"
+                        app:wheel_item_text_color="#C3C3C3"
+                        app:wheel_selected_item_text_color="@color/color_menu_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/pickerview_hours" />
+
+                    <com.aigestudio.wheelpicker.WheelPicker
+                        android:id="@+id/wp_hour"
+                        android:layout_width="80dp"
+                        android:layout_height="180dp"
+                        app:wheel_item_align="center"
+                        app:wheel_item_space="12dp"
+                        app:wheel_item_text_color="#C3C3C3"
+                        app:wheel_selected_item_text_color="@color/color_menu_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/pickerview_minutes" />
+
+                    <com.aigestudio.wheelpicker.WheelPicker
+                        android:id="@+id/wp_minute"
+                        android:layout_width="80dp"
+                        android:layout_height="180dp"
+                        app:wheel_item_align="center"
+                        app:wheel_item_space="12dp"
+                        app:wheel_item_text_color="#c3c3c3"
+                        app:wheel_selected_item_text_color="@color/color_menu_text" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

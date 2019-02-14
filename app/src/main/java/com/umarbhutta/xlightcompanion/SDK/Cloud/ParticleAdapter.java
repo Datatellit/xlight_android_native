@@ -115,7 +115,13 @@ public class ParticleAdapter {
                 if (devID.equalsIgnoreCase(device.getID())) {
                     return true;
                 }
-
+            }
+            // 如果没找到，重试一次即可
+            queryDevices();
+            for (ParticleDevice device : m_devices) {
+                if (devID.equalsIgnoreCase(device.getID())) {
+                    return true;
+                }
             }
         }
         return false;

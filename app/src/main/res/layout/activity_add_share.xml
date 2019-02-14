@@ -31,7 +31,8 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 tools:layout_margin="10dp"
-                tools:text="@string/share_desc" />
+                tools:text="@string/share_desc"
+                android:gravity="start" />
 
             <LinearLayout
                 android:layout_width="265dp"

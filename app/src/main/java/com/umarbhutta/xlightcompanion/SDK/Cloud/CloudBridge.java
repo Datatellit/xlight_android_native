@@ -12,6 +12,8 @@ import com.umarbhutta.xlightcompanion.SDK.xltDevice;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 //import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleCloudSDK;
@@ -30,10 +32,25 @@ public class CloudBridge extends BaseBridge {
     public ParticleDevice currDevice;
     private static int resultCode;
     private long subscriptionId = 0;
+    private static ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public CloudBridge() {
         super();
         setName(TAG);
+    }
+
+    public int pushSequential(Thread t) {
+        executor.submit(t);
+        return resultCode;
+    }
+
+    public void clearSequential() {
+        executor.shutdownNow();
+        executor = Executors.newSingleThreadExecutor();
+    }
+
+    public void execSequential() {
+        executor.shutdown();
     }
 
     public boolean connectCloud(final String devID) {
@@ -259,14 +276,14 @@ public class CloudBridge extends BaseBridge {
         return resultCode;
     }
 
-    public int JSONConfigScenario(final int scenarioId, final int brightness, final int cw, final int ww, final int r, final int g, final int b, final int filter) {
-        new Thread() {
+    public Thread JSONConfigScenario(final int scenarioId, final int state, final int brightness, final int cct, final int r, final int g, final int b, final int filter, final boolean update) {
+        return new Thread() {
             @Override
             public void run() {
                 boolean x[] = {false, false, false};
 
                 //construct first part of string input, and store it in arraylist (of size 1)
-                String json = "{'x0': '{\"op\":1,\"fl\":0,\"run\":0,\"uid\":\"s" + scenarioId + "\",\"ring1\":" + " '}";
+                String json = "{'x0': '{\"op\":" + (update ? 2 : 1) + ",\"fl\":0,\"run\":0,\"uid\":\"s" + scenarioId + "\",'}";
                 ArrayList<String> message = new ArrayList<>();
                 message.add(json);
                 //send in first part of string
@@ -279,25 +296,25 @@ public class CloudBridge extends BaseBridge {
                 }
                 message.clear();
 
-                if (x[0]) {
-                    //construct second part of string input, store in arraylist
-                    json = "{'x1': '[" + xltDevice.STATE_ON + "," + cw + "," + ww + "," + r + "," + g + "," + b + "],\"ring2\":[" + xltDevice.STATE_ON + "," + cw + "," + ww + "," + r + "," + g + "," + b + "], '}";
-                    message.add(json);
-                    //send in second part of string
-                    try {
-                        Log.e(TAG, "JSONConfigScenario " + message.get(0));
-                        resultCode = currDevice.callFunction("JSONConfig", message);
-                        x[1] = true;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    message.clear();
-                }
+//                if (x[0]) {
+//                    //construct second part of string input, store in arraylist
+//                    json = "{'x1': '[" + xltDevice.STATE_ON + "," + cw + "," + ww + "," + r + "," + g + "," + b + "],\"ring2\":[" + xltDevice.STATE_ON + "," + cw + "," + ww + "," + r + "," + g + "," + b + "], '}";
+//                    message.add(json);
+//                    //send in second part of string
+//                    try {
+//                        Log.e(TAG, "JSONConfigScenario " + message.get(0));
+//                        resultCode = currDevice.callFunction("JSONConfig", message);
+//                        x[1] = true;
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    message.clear();
+//                }
 
-                if (x[1]) {
+                if (x[0]) {
                     //construct last part of string input, store in arraylist
                     //json = "\"ring3\":[" + xltDevice.STATE_ON + "," + cw + "," + ww + "," + r + "," + g + "," + b + "],\"brightness\":" + brightness + ",\"filter\":" + DEFAULT_FILTER_ID + "}";
-                    json = "\"ring3\":[" + xltDevice.STATE_ON + "," + cw + "," + ww + "," + r + "," + g + "," + b + "],\"brightness\":" + brightness + ",\"filter\":" + filter + "}";
+                    json = "\"ring0\":[" + state + "," + brightness + "," + cct + "," + r + "," + g + "," + b + "],\"filter\":" + filter + "}";
                     message.add(json);
                     //send in last part of string
                     try {
@@ -309,13 +326,12 @@ public class CloudBridge extends BaseBridge {
                     message.clear();
                 }
             }
-        }.start();
-        return resultCode;
+        };
     }
 
-    public int JSONConfigSchudle(final int scheduleId, final boolean isRepeat, final String weekdays, final int hour, final int minute, final int alarmId) {
+    public Thread JSONConfigSchudle(final int scheduleId, final boolean isRepeat, final int weekdays, final int hour, final int minute, final int alarmId, final boolean update) {
         final int[] doneSending = {0};
-        new Thread() {
+        return new Thread() {
             @Override
             public void run() {
                 boolean x[] = {false, false};
@@ -324,7 +340,7 @@ public class CloudBridge extends BaseBridge {
                 int repeat = isRepeat ? 1 : 0;
 
                 //construct first part of string input, and store it in arraylist (of size 1)
-                String json = "{'x0': '{\"op\":1,\"fl\":0,\"run\":0,\"uid\":\"a" + scheduleId + "\",\"isRepeat\":" + "1" + ", '}";
+                String json = "{'x0': '{\"op\":" + (update ? 2 : 1) + ",\"fl\":0,\"run\":0,\"uid\":\"a" + scheduleId + "\",'}";
                 ArrayList<String> message = new ArrayList<>();
                 message.add(json);
                 //send in first part of string
@@ -339,7 +355,7 @@ public class CloudBridge extends BaseBridge {
 
                 if (x[0]) {
                     //construct second part of string input, store in arraylist
-                    json = "\"weekdays\":" + "0" + ",\"hour\":" + hour + ",\"min\":" + minute + ",\"alarm_id\":" + alarmId + "}";
+                    json = "\"isRepeat\":" + (isRepeat ? 1 : 0) + ",\"weekdays\":" + weekdays + ",\"hour\":" + hour + ",\"min\":" + minute + "}";
                     message.add(json);
                     //send in second part of string
                     try {
@@ -353,18 +369,17 @@ public class CloudBridge extends BaseBridge {
                     message.clear();
                 }
             }
-        }.start();
-        return resultCode;
+        };
     }
 
-    public int JSONConfigRule(final int ruleId, final int scheduleId, final int scenarioId) {
-        new Thread() {
+    public Thread JSONConfigRule(final int ruleId, final int[][] cond, final int scenarioId, final int scheduleId, final boolean update) {
+        return new Thread() {
             @Override
             public void run() {
                 boolean x[] = {false, false};
 
                 //construct first part of string input, and store it in arraylist (of size 1)
-                String json = "{'x0': '{\"op\":1,\"fl\":0,\"run\":0,\"uid\":\"r" + ruleId + "\",\"nd\":" + getNodeID() + ", '}";
+                String json = "{'x0': '{\"op\":" + (update ? 2 : 1) + ",\"fl\":0,\"run\":0,\"uid\":\"r" + ruleId + "\",'}";
                 ArrayList<String> message = new ArrayList<>();
                 message.add(json);
                 //send in first part of string
@@ -376,10 +391,37 @@ public class CloudBridge extends BaseBridge {
                     e.printStackTrace();
                 }
                 message.clear();
+                if (x[0] && cond.length > 0) {
+                    json = "{'x1': '";
+                    for (int i = 0; i < cond.length; i++) {
+                        if (cond[i] != null && cond[i].length > 0) {
+                            // symbol , connector , sensor id , value , value
+                            json = json + "\"cond" + i + "\":[1,0," + cond[i][0] + "," + cond[i][1] + "," + cond[i][2] + "," + cond[i][3] + "," + cond[i][4] + "],";
+                        }
+                    }
+                    json = json + "'}";
+                    // sensor condition
+                    message.add(json);
+                    try {
+                        Log.e(TAG, "JSONConfigRule" + message.get(0));
+                        resultCode = currDevice.callFunction("JSONConfig", message);
+                        x[1] = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    message.clear();
+                } else {
+                    x[1] = true;
+                }
 
-                if (x[0]) {
+                if (x[1]) {
                     //construct second part of string input, store in arraylist
-                    json = "\"SCT_uid\":\"a" + scheduleId + "\",\"SNT_uid\":\"s" + scenarioId + "\",\"notif_uid\":\"n" + ruleId + "\"}";
+                    json = "\"SNT_uid\":" + scenarioId + "," + "\"tmr_int\":1,\"node_uid\":" + getNodeID();
+                    if (scheduleId > 0) {
+                        json = json + ",\"SCT_uid\":" + scheduleId + "}";
+                    } else {
+                        json = json + "}";
+                    }
                     message.add(json);
                     //send in second part of string
                     try {
@@ -391,6 +433,64 @@ public class CloudBridge extends BaseBridge {
                     }
                     message.clear();
                 }
+            }
+        };
+    }
+
+//    public int JSONConfigRule(final int ruleId, final int scheduleId, final int scenarioId) {
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                boolean x[] = {false, false};
+//
+//                //construct first part of string input, and store it in arraylist (of size 1)
+//                String json = "{'x0': '{\"op\":1,\"fl\":0,\"run\":0,\"uid\":\"r" + ruleId + "\",\"nd\":" + getNodeID() + ", '}";
+//                ArrayList<String> message = new ArrayList<>();
+//                message.add(json);
+//                //send in first part of string
+//                try {
+//                    Log.e(TAG, "JSONConfigRule" + message.get(0));
+//                    resultCode = currDevice.callFunction("JSONConfig", message);
+//                    x[0] = true;
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                message.clear();
+//
+//                if (x[0]) {
+//                    //construct second part of string input, store in arraylist
+//                    json = "\"SCT_uid\":\"a" + scheduleId + "\",\"SNT_uid\":\"s" + scenarioId + "\",\"notif_uid\":\"n" + ruleId + "\"}";
+//                    message.add(json);
+//                    //send in second part of string
+//                    try {
+//                        Log.i(TAG, "JSONConfigRule" + message.get(0));
+//                        resultCode = currDevice.callFunction("JSONConfig", message);
+//                        x[1] = true;
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    message.clear();
+//                }
+//            }
+//        }.start();
+//        return resultCode;
+//    }
+
+    public int JSONConfigDelete(final int type, final int id) {
+        new Thread() {
+            @Override
+            public void run() {
+                String json = "{\"op\":3,\"fl\":0,\"run\":0,\"uid\":\"" + (type == 1 ? "r" : type == 2 ? "a" : "s") + id + "\",\"nd\":" + getNodeID() + ", '}";
+                ArrayList<String> message = new ArrayList<>();
+                message.add(json);
+                //send in first part of string
+                try {
+                    Log.d(TAG, "JSONConfigDelete " + message.get(0));
+                    resultCode = currDevice.callFunction("JSONConfig", message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                message.clear();
             }
         }.start();
         return resultCode;

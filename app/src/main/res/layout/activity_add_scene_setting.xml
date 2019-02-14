@@ -75,8 +75,7 @@
                 app:bsb_section_count="1"
                 app:bsb_show_progress_in_float="false"
                 app:bsb_show_section_mark="false"
-                app:bsb_show_section_text="true"
-                />
+                app:bsb_show_section_text="true" />
             <!--app:bsb_track_color="@color/colorSeekBarDefault"-->
             <!--app:bsb_bubble_color="@color/colorSeekBarDefault"-->
         </LinearLayout>
@@ -89,17 +88,16 @@
         android:layout_marginTop="10dp"
         android:gravity="right"
         android:paddingLeft="@dimen/margin_l_r"
-        android:paddingRight="@dimen/margin_l_r"
-      >
+        android:paddingRight="@dimen/margin_l_r">
 
         <TextView
             android:id="@+id/txtChange"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:padding="0dp"
+            android:paddingBottom="2dp"
             android:paddingLeft="10dp"
             android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:text="@string/txt_cct"
             android:textColor="#4d90fe" />
     </LinearLayout>
@@ -108,8 +106,8 @@
         android:id="@+id/ll_cct"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:gravity="center_vertical"
         android:layout_marginBottom="@dimen/margin_l_r"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/margin_l_r"
         android:paddingRight="@dimen/margin_l_r">
@@ -177,6 +175,78 @@
                 android:layout_height="wrap_content"
                 app:barHeight="14dp"
                 app:colorSeeds="@array/material_colors" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/margin_l_r"
+        android:paddingRight="@dimen/margin_l_r">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/tab_4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <RadioGroup
+                    android:id="@+id/rb_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:scrollbars="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/filter0" />
+
+                    <RadioButton
+                        android:id="@+id/rb_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter1" />
+
+                    <RadioButton
+                        android:id="@+id/rb_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter2" />
+
+                    <RadioButton
+                        android:id="@+id/rb_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter3" />
+
+                    <RadioButton
+                        android:id="@+id/rb_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter4" />
+                </RadioGroup>
+            </HorizontalScrollView>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

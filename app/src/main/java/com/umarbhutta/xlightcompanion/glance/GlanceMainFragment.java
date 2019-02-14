@@ -178,8 +178,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
                 getLocation(getContext());
             }
         }, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION});
-        getBaseInfo();
-        initHandler();
         return view;
     }
 
@@ -189,6 +187,8 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         if (view != null) {
             initImmersionBar();
         }
+        getBaseInfo();
+        initHandler();
     }
 
     // the meat of switching the above fragment
@@ -278,6 +278,7 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
             case R.id.txtRefresh:
                 // 重新加载
                 getBaseInfo();
+                getLocation(getContext());
                 break;
         }
     }
@@ -474,8 +475,6 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
 
     public void resolveScene(final SceneResult scene) {
         try {
-//            CrashReport.testJavaCrash();
-//            CrashReport.testNativeCrash();
             HttpUtils.getInstance().putRequestInfo(String.format(NetConfig.URL_CHANGE_SCENE, scene.id, UserUtils.getAccessToken(getContext())), "", null, new HttpUtils.OnHttpRequestCallBack() {
                 @Override
                 public void onHttpRequestSuccess(Object result) {
@@ -899,9 +898,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     private void getWeather(Location location) {
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
+            txtCity.setVisibility(View.GONE);
             return;
         } else {
             txtRefresh.setVisibility(View.GONE);
+            txtCity.setVisibility(View.VISIBLE);
         }
 
         String forecastUrl = NetConfig.WEATHER_API + NetConfig.DarkSKY_Key + "/" + location.getLatitude() + "," + location.getLongitude() + "?" + (isZh() ? "lang=zh" : "lang=en");
@@ -966,9 +967,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     private void getCityByGoogleAPI(Location location) {
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
+            txtCity.setVisibility(View.GONE);
             return;
         } else {
             txtRefresh.setVisibility(View.GONE);
+            txtCity.setVisibility(View.VISIBLE);
         }
 
         String getCity = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + location.getLatitude() + "," + location.getLongitude() + "&sensor=false&key=" + NetConfig.GOOGLE_KEY;
@@ -1033,9 +1036,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     private void getCityByAmapAPI(Location location) {
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
+            txtCity.setVisibility(View.GONE);
             return;
         } else {
             txtRefresh.setVisibility(View.GONE);
+            txtCity.setVisibility(View.VISIBLE);
         }
 
         String getCity = NetConfig.AMAP_API + "?location=" + location.getLongitude() + "," + location.getLatitude() + "&output=json&key=" + NetConfig.AMAP_KEY;
@@ -1127,9 +1132,11 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
     private void getCityByLocationiqAPI(Location location) {
         if (!NetworkUtils.isNetworkAvaliable(getActivity())) {
             txtRefresh.setVisibility(View.VISIBLE);
+            txtCity.setVisibility(View.GONE);
             return;
         } else {
             txtRefresh.setVisibility(View.GONE);
+            txtCity.setVisibility(View.VISIBLE);
         }
 
         String getCity = NetConfig.Locationiq_API + "?key=" + NetConfig.Locationiq_KEY + "&lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&format=json&zoom=10";
@@ -1337,5 +1344,18 @@ public class GlanceMainFragment extends BaseFragment implements ImageView.OnClic
         super.onHiddenChanged(hidden);
         if (!hidden && mImmersionBar != null)
             mImmersionBar.init();
+    }
+
+    public boolean isNetworkOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("ping -c 3 www.baidu.com");
+            int exitValue = ipProcess.waitFor();
+            Log.i("Avalible", "Process:" + exitValue);
+            return (exitValue == 0);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

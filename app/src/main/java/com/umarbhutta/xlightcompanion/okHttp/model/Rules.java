@@ -8,12 +8,14 @@ import java.util.List;
  * 创建规则
  */
 
-public class Rules implements Serializable{
+public class Rules implements Serializable {
+    public int id;
     public String rulename;
     public int relationtype;
     public int type;
     public int status;
     public int userId;
+    public String deviceId;
     public List<Rulecondition> rulecondition;
     public List<Ruleresult> ruleresult;
 
@@ -21,6 +23,7 @@ public class Rules implements Serializable{
     public String toString() {
         return "Rules{" +
                 "rulename='" + rulename + '\'' +
+                ", deviceId='" + deviceId + '\'' +
                 ", relationtype=" + relationtype +
                 ", type=" + type +
                 ", status=" + status +

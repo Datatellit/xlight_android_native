@@ -28,6 +28,7 @@
     <string name="pickerview_submit">确定</string>
     <string name="pickerview_year">年</string>
     <string name="pickerview_month">月</string>
+    <string name="pickerview_week">周</string>
     <string name="pickerview_day">日</string>
     <string name="pickerview_hours">时</string>
     <string name="pickerview_minutes">分</string>
@@ -292,6 +293,7 @@
     <string name="tab_6">定时</string>
 
 
+    <string name="filter0">无</string>
     <string name="filter1">呼吸</string>
     <string name="filter2">闪烁</string>
     <string name="filter3">变换呼吸</string>
@@ -378,4 +380,64 @@
     <string name="parse_error">数据解析异常</string>
 
     <string name="deivce_modify_success">设备修改成功</string>
+
+    <string name="choose_condition">选择条件</string>
+    <string name="choose_condition_desc">选择执行任务的条件</string>
+
+    <string name="sensor">传感器</string>
+    <string name="time">时间周期</string>
+
+    <string name="dhtt">温度</string>
+    <string name="dhth">湿度</string>
+
+    <string name="choose_device">选择设备</string>
+
+    <string name="isrepeat">是否重复执行</string>
+    <string name="schedule">时间表</string>
+
+    <string name="week0">每天</string>
+    <string name="week1">周一</string>
+    <string name="week2">周二</string>
+    <string name="week3">周三</string>
+    <string name="week4">周四</string>
+    <string name="week5">周五</string>
+    <string name="week6">周六</string>
+    <string name="week7">周日</string>
+
+    <string name="edit_name">编辑名称</string>
+
+    <string name="min">最小值</string>
+    <string name="max">最大值</string>
+    <string name="value">值</string>
+    <string name="operator">运算符</string>
+
+    <string name="minthanmax">最大值必须大于最小值</string>
+
+    <string name="ifall">当以下条件全部满足</string>
+    <string name="ifany">当以下条件任一满足</string>
+    <string name="exec_action">就执行以下动作</string>
+
+    <string name="between">介于</string>
+    <string name="notbetween">不介于</string>
+
+    <string name="once">单次</string>
+    <string name="repeat">循环</string>
+
+    <string name="delete_notify_title">删除提示</string>
+
+    <string name="delete_notify">是否确定删除此项？</string>
+    <string name="and">-</string>
+
+    <string name="add_condition">添加触发条件</string>
+    <string name="add_action">添加执行动作</string>
+
+    <string name="device_action">设备设定</string>
+
+    <string name="rule_name_empty">规则名称不能为空</string>
+    <string name="rule_condition_empty">请至少添加一个条件</string>
+    <string name="rule_action_empty">请至少添加一个动作</string>
+    <string name="rule_device_offline">规则包含的设备已离线</string>
+    <string name="rule_max_length">每个用户仅支持6个规则</string>
+    <string name="save_success">保存成功</string>
+    <string name="save_error">保存失败</string>
 </resources>
