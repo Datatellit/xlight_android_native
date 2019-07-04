@@ -11,13 +11,13 @@ public class NetConfig {
 //    public static final String DCI_ADDRESS_DOMAIN = "http://iot.dev.datatellit.com";
 
 
-    public static final String SERVER_IP = "www.baidu.com";
-    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.datatellit.com";
-    public static final String DCI_ADDRESS_DOMAIN = "http://iot.datatellit.com";
-
 //    public static final String SERVER_IP = "www.baidu.com";
-//    public static final String SERVER_ADDRESS_DOMAIN = "https://dmi.xlight.io";
-//    public static final String DCI_ADDRESS_DOMAIN = "https://iot.xlight.io";
+//    public static final String SERVER_ADDRESS_DOMAIN = "http://dmi.datatellit.com";
+//    public static final String DCI_ADDRESS_DOMAIN = "http://iot.datatellit.com";
+
+    public static final String SERVER_IP = "www.baidu.com";
+    public static final String SERVER_ADDRESS_DOMAIN = "https://dmi.xlight.io";
+    public static final String DCI_ADDRESS_DOMAIN = "https://iot.xlight.io";
 
     public static final String GOOGLE_KEY = "AIzaSyAgx9S4tDrNqhs4gtmO-wsYzOXroHXCToo";
     public static final String AMAP_KEY = "cb76d881acf1c0e2b92dab0aa8e2fb45";

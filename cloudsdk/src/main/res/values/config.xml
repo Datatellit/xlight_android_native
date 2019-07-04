@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--<string name="api_base_uri">http://iot.xlight.io</string>-->
-    <!--<string name="dmi_url">https://dmi.xlight.io</string>-->
+    <string name="api_base_uri">http://iot.xlight.io</string>
+    <string name="dmi_url">https://dmi.xlight.io</string>
 
     <!--<string name="api_base_uri">http://iot.dev.datatellit.com</string>-->
     <!--<string name="dmi_url">http://dmi.dev.datatellit.com</string>-->
 
-    <string name="api_base_uri">http://iot.datatellit.com</string>
-    <string name="dmi_url">http://dmi.datatellit.com</string>
+    <!--<string name="api_base_uri">http://iot.datatellit.com</string>-->
+    <!--<string name="dmi_url">http://dmi.datatellit.com</string>-->
 
     <!-- This value should match one of the members of Retrofit's LogLevel class:
     NONE, BASIC, HEADERS, HEADERS_AND_ARGS, or FULL

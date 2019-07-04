@@ -35,7 +35,7 @@ ext {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 
     dexOptions {
         javaMaxHeapSize "2g"
@@ -80,8 +80,8 @@ android {
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile project(':cloudsdk')
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation project(':cloudsdk')
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     api 'com.squareup.phrase:phrase:1.0.3'
     api 'uk.co.chrisjenx:calligraphy:2.3.0'
     api 'com.segment.analytics.android:analytics:4.3.1'
